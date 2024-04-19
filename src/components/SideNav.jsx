@@ -22,7 +22,7 @@ const SideNav = () => {
     <div>
       <aside
         class="main-sidebar elevation-4 text-left"
-        style={{ backgroundColor: "#256f98" }}
+        style={{ backgroundColor: "#256f98",height: "auto" }}
       >
         {/* <!-- Brand Logo --> */}
         <Link to="/" class="brand-link sidebar-light-primary">
