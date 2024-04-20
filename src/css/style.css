@@ -21,17 +21,17 @@
   background-color: #ffffff37 !important;
 }
 
-/* .main-footer {
+.main-footer {
   background-color: #fff;
   border-top: 1px solid #dee2e6;
   color: #869099;
   padding: 1rem;
-  position: fixed;
+  /* position: fixed; */
   z-index: 111;
   bottom: 0;
   right: 0;
   left: 0;
-} */
+}
 
 .form-dlt-btn:hover {
   background-color: #007bff !important;

@@ -84,11 +84,12 @@ const Gallary = () => {
                         </div>
                         <div class="form-group">
                           <label>Meta Description</label>
-                          <textarea
+                          <input
+                            type="text"
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
-                          ></textarea>
+                          />
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
