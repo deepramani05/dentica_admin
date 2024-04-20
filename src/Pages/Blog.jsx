@@ -2,6 +2,7 @@ import React from "react";
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Blog = () => {
   return (
@@ -13,15 +14,20 @@ const Blog = () => {
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-6 text-left">
                   <h1>Blog</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <a href="#">Home</a>
+                      <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active">Blog</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Blog
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -41,7 +47,7 @@ const Blog = () => {
                     >
                       <h3 class="card-title">Blog List</h3>
                       <div>
-                        <button
+                        <button className="form-dlt-btn"
                           style={{
                             border: "0",
                             backgroundColor: "#ca629d",
@@ -74,14 +80,38 @@ const Blog = () => {
                             <td>Internet Explorer 4.0</td>
                             <td>Win 95+</td>
                             <td>
-                              <button style={{border:"1px solid #17a2b8",padding:"5px",backgroundColor:"white"}}>
-                                <span style={{color:"#17a2b8"}}><FaEye /></span>
+                              <button className="form-btn"
+                                style={{
+                                  border: "1px solid #17a2b8",
+                                  padding: "5px",
+                                  backgroundColor: "white",
+                                }}
+                              >
+                                <span style={{ color: "#17a2b8" }}>
+                                  <FaEye />
+                                </span>
                               </button>
-                              <button style={{border:"1px solid #17a2b8",padding:"5px",backgroundColor:"white"}}>
-                                <span style={{color:"#17a2b8"}}><BiSolidEdit /></span>
+                              <button className="form-btn"
+                                style={{
+                                  border: "1px solid #17a2b8",
+                                  padding: "5px",
+                                  backgroundColor: "white",
+                                }}
+                              >
+                                <span style={{ color: "#17a2b8" }}>
+                                  <BiSolidEdit />
+                                </span>
                               </button>
-                              <button style={{border:"1px solid red",padding:"5px",backgroundColor:"white"}}>
-                                <span style={{color:"red"}}><MdDelete /></span>
+                              <button className="form-btn-dlt"
+                                style={{
+                                  border: "1px solid red",
+                                  padding: "5px",
+                                  backgroundColor: "white",
+                                }}
+                              >
+                                <span style={{ color: "red" }}>
+                                  <MdDelete />
+                                </span>
                               </button>
                             </td>
                           </tr>

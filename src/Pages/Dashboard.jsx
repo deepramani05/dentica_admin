@@ -17,7 +17,7 @@ const Dashboard = () => {
                   <li className="breadcrumb-item">
                     <Link to="/">Home</Link>
                   </li>
-                  <li className="breadcrumb-item active">Dashboard</li>
+                  <li className="breadcrumb-item active" style={{color:"#ca629d"}}>Dashboard</li>
                 </ol>
               </div>
             </div>

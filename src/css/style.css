@@ -1,14 +1,14 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .side-ul li a {
-    color: white !important;
+  color: white !important;
 }
 
 .side-ul li a p {
-    margin-left: 10px !important;
+  margin-left: 10px !important;
 }
 
 .nav-pills .nav-link.active,
@@ -36,4 +36,26 @@
 .form-dlt-btn:hover {
   background-color: #007bff !important;
   transition: 0.3s all;
+}
+
+.breadcrumb-item a {
+  color: #256f98 !important;
+}
+
+.form-btn:hover {
+  background-color: rgb(23, 162, 184) !important;
+  transition: 0.3s;
+}
+
+.form-btn:hover span {
+  color: white !important;
+}
+
+.form-btn-dlt:hover {
+  background-color: red !important;
+  transition: 0.3s;
+}
+
+.form-btn-dlt:hover span {
+  color: white !important;
 }

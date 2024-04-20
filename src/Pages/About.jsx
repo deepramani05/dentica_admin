@@ -2,6 +2,7 @@ import React from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -19,9 +20,9 @@ const About = () => {
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <a href="#">Home</a>
+                      <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active">About</li>
+                    <li class="breadcrumb-item active" style={{color:"#ca629d"}}>About</li>
                   </ol>
                 </div>
               </div>
@@ -61,36 +62,36 @@ const About = () => {
                             <td>Internet Explorer 4.0</td>
                             <td>Win 95+</td>
                             <td className="align-middle">
-                              <button
+                              <button className="form-btn"
                                 style={{
                                   border: "1px solid #17a2b8",
                                   backgroundColor: "white",
                                   padding: "2px 5px",
                                 }}
                               >
-                                <span>
+                                <span style={{color:"#17a2b8"}}>
                                   <FaRegEye />
                                 </span>
                               </button>
-                              <button
+                              <button className="form-btn"
                                 style={{
                                   border: "1px solid #17a2b8",
                                   backgroundColor: "white",
                                   padding: "2px 5px",
                                 }}
                               >
-                                <span>
+                                <span style={{color:"#17a2b8"}}>
                                   <FiEdit />
                                 </span>
                               </button>
-                              <button
+                              <button className="form-btn-dlt"
                                 style={{
                                   border: "1px solid red",
                                   backgroundColor: "white",
                                   padding: "2px 5px",
                                 }}
                               >
-                                <span>
+                                <span style={{color:"red"}}>
                                   <MdDelete />
                                 </span>
                               </button>

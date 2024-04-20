@@ -2,6 +2,7 @@ import React from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Gallary = () => {
   return (
@@ -19,9 +20,14 @@ const Gallary = () => {
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <a href="#">Home</a>
+                      <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active">Gallary</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Gallary
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -77,15 +83,12 @@ const Gallary = () => {
                           />
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputPassword1">
-                            Meta Description
-                          </label>
-                          <input
-                            type="password"
+                          <label>Meta Description</label>
+                          <textarea
                             class="form-control"
-                            id="exampleInputPassword1"
-                            placeholder="Meta Description"
-                          />
+                            rows="3"
+                            placeholder="Enter ..."
+                          ></textarea>
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
@@ -125,7 +128,7 @@ const Gallary = () => {
                       <div class="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary text-light border-0"
+                          class="btn btn-primary text-light border-0 form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
                           Submit
@@ -146,7 +149,7 @@ const Gallary = () => {
                             class="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">About</h3>
+                            <h3 class="card-title">Gallary List</h3>
                           </div>
                           {/* <!-- /.card-header --> */}
                           <div class="card-body">
@@ -156,10 +159,10 @@ const Gallary = () => {
                             >
                               <thead>
                                 <tr>
-                                  <th style={{ width: "1%" }}>SL</th>
-                                  <th style={{ width: "40%" }}>Image</th>
-                                  <th style={{ width: "40%" }}>Catagory</th>
-                                  <th style={{ width: "19%" }}>Action</th>
+                                  <th>SL</th>
+                                  <th>Image</th>
+                                  <th>Catagory</th>
+                                  <th>Action</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -171,35 +174,38 @@ const Gallary = () => {
                                   <td>Win 95+</td>
                                   <td className="align-middle">
                                     <button
+                                      className="form-btn"
                                       style={{
                                         border: "1px solid #17a2b8",
                                         backgroundColor: "white",
                                         padding: "2px 5px",
                                       }}
                                     >
-                                      <span>
+                                      <span style={{ color: "#17a2b8" }}>
                                         <FaRegEye />
                                       </span>
                                     </button>
                                     <button
+                                      className="form-btn"
                                       style={{
                                         border: "1px solid #17a2b8",
                                         backgroundColor: "white",
                                         padding: "2px 5px",
                                       }}
                                     >
-                                      <span>
+                                      <span style={{ color: "#17a2b8" }}>
                                         <FiEdit />
                                       </span>
                                     </button>
                                     <button
+                                      className="form-btn-dlt"
                                       style={{
                                         border: "1px solid red",
                                         backgroundColor: "white",
                                         padding: "2px 5px",
                                       }}
                                     >
-                                      <span>
+                                      <span style={{ color: "red" }}>
                                         <MdDelete />
                                       </span>
                                     </button>

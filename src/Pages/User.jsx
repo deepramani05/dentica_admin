@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const User = () => {
@@ -19,7 +19,12 @@ const User = () => {
                     <li class="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active">User</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      User
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -109,7 +114,7 @@ const User = () => {
                       <div class="card-footer text-left">
                         <button
                           type="submit"
-                          class="btn text-white"
+                          class="btn text-white form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
                           Submit
@@ -126,7 +131,10 @@ const User = () => {
                     <div class="row">
                       <div class="col-12">
                         <div class="card">
-                          <div class="card-header text-light" style={{backgroundColor:"rgb(37, 111, 152)"}}>
+                          <div
+                            class="card-header text-light"
+                            style={{ backgroundColor: "rgb(37, 111, 152)" }}
+                          >
                             <h3 class="card-title">User List</h3>
                           </div>
                           {/* <!-- /.card-header --> */}

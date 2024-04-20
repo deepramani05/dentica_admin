@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../images/Logo.png";
-import '../css/style.css';
+import "../css/style.css";
 import { FaUsers } from "react-icons/fa";
 import { BiHome } from "react-icons/bi";
 import { BsInfoCircle } from "react-icons/bs";
@@ -17,12 +17,11 @@ import { SlCalender } from "react-icons/sl";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
-
   return (
     <div>
       <aside
         class="main-sidebar elevation-4 text-left"
-        style={{ backgroundColor: "#256f98",height: "auto" }}
+        style={{ backgroundColor: "#256f98", height: "auto" }}
       >
         {/* <!-- Brand Logo --> */}
         <Link to="/" class="brand-link sidebar-light-primary">
@@ -42,13 +41,13 @@ const SideNav = () => {
               {/* <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library --> */}
               <li class="nav-item menu-open">
-                <Link to='/dashboard' class="nav-link">
+                <Link to="/dashboard" class="nav-link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/users' class="nav-link">
+                <Link to="/users" class="nav-link">
                   <i class="nav-icon">
                     <FaUsers />
                   </i>
@@ -56,7 +55,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/' class="nav-link">
+                <Link to="/" class="nav-link">
                   <i class="nav-icon">
                     <BiHome />
                   </i>
@@ -64,7 +63,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/about-us' class="nav-link">
+                <Link to="/about-us" class="nav-link">
                   <i class="nav-icon">
                     <BsInfoCircle />
                   </i>
@@ -72,7 +71,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/gallary' class="nav-link">
+                <Link to="/gallary" class="nav-link">
                   <i class="nav-icon">
                     <BsFillImageFill />
                   </i>
@@ -80,7 +79,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/contact' class="nav-link">
+                <Link to="/contact" class="nav-link">
                   <i class="nav-icon">
                     <BsFillTelephoneFill />
                   </i>
@@ -88,7 +87,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/career' class="nav-link">
+                <Link to="/career" class="nav-link">
                   <i class="nav-icon">
                     <BsBagFill />
                   </i>
@@ -96,7 +95,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/blog' class="nav-link">
+                <Link to="/blog" class="nav-link">
                   <i class="nav-icon">
                     <FaPencilAlt />
                   </i>
@@ -104,7 +103,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/product' class="nav-link">
+                <Link to="/product" class="nav-link">
                   <i class="nav-icon">
                     <AiOutlineShoppingCart />
                   </i>
@@ -112,7 +111,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/review' class="nav-link">
+                <Link to="/review" class="nav-link">
                   <i class="nav-icon">
                     <AiFillStar />
                   </i>
@@ -120,7 +119,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/meta' class="nav-link">
+                <Link to="/meta" class="nav-link">
                   <i class="nav-icon">
                     <TbCylinder />
                   </i>
@@ -128,7 +127,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/team' class="nav-link">
+                <Link to="/team" class="nav-link">
                   <i class="nav-icon">
                     <FaUserDoctor />
                   </i>
@@ -136,7 +135,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/stl' class="nav-link">
+                <Link to="/stl" class="nav-link">
                   <i class="nav-icon">
                     <BsBagDash />
                   </i>
@@ -144,7 +143,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/event-catagory' class="nav-link">
+                <Link to="/event-catagory" class="nav-link">
                   <i class="nav-icon">
                     <SlCalender />
                   </i>
@@ -152,7 +151,7 @@ const SideNav = () => {
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to='/event' class="nav-link">
+                <Link to="/event" class="nav-link">
                   <i class="nav-icon">
                     <SlCalender />
                   </i>

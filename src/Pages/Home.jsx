@@ -19,7 +19,12 @@ const Home = () => {
                     <li class="breadcrumb-item">
                       <Link to="/dashboard">Dashboard</Link>
                     </li>
-                    <li class="breadcrumb-item active">Home</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Home
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -48,7 +53,7 @@ const Home = () => {
                         <div class="form-group">
                           <label for="exampleInputEmail1">Title</label>
                           <input
-                            type="email"
+                            type="text"
                             class="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter title"
@@ -57,23 +62,19 @@ const Home = () => {
                         <div class="form-group">
                           <label for="exampleInputPassword1">Sub Title</label>
                           <input
-                            type="password"
+                            type="text"
                             class="form-control"
                             id="exampleInputSubtitle"
                             placeholder="Enter SubTitle"
                           />
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputEmail1">Description</label>
-                          <div>
-                            <textarea
-                              name=""
-                              id=""
-                              cols="58"
-                              rows="5"
-                              style={{ border: "1px solid #ced4da" }}
-                            ></textarea>
-                          </div>
+                          <label>Description</label>
+                          <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Enter ..."
+                          ></textarea>
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
@@ -102,7 +103,7 @@ const Home = () => {
                       <div class="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary"
+                          class="btn btn-primary form-dlt-btn"
                           style={{ backgroundColor: "#ca629d", border: "0" }}
                         >
                           Submit
@@ -161,7 +162,7 @@ const Home = () => {
                       <div class="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary"
+                          class="btn btn-primary form-dlt-btn"
                           style={{ backgroundColor: "#ca629d", border: "0" }}
                         >
                           Submit

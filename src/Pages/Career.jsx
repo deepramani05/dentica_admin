@@ -1,6 +1,7 @@
 import React from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Career = () => {
   return (
@@ -18,9 +19,9 @@ const Career = () => {
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <a href="#">Home</a>
+                      <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active">Career</li>
+                    <li class="breadcrumb-item active" style={{color:"#ca629d"}}>Career</li>
                   </ol>
                 </div>
               </div>
@@ -65,7 +66,7 @@ const Career = () => {
                             </td>
                             <td>Accountant</td>
                             <td>
-                              <button
+                              <button className="form-btn-dlt"
                                 style={{
                                   backgroundColor: "white",
                                   border: "1px solid red",
@@ -81,7 +82,7 @@ const Career = () => {
                                   <BsFileEarmarkPdfFill />
                                 </span>
                               </button>
-                              <button
+                              <button className="form-btn-dlt"
                                 style={{
                                   backgroundColor: "white",
                                   border: "1px solid red",
