@@ -26,7 +26,7 @@ const Gallary = () => {
                       class="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      Gallary
+                      Gallery
                     </li>
                   </ol>
                 </div>
@@ -96,17 +96,7 @@ const Gallary = () => {
                           </label>
                           <div class="input-group">
                             <div class="custom-file">
-                              <input
-                                type="file"
-                                class="custom-file-input"
-                                id="exampleInputFile"
-                              />
-                              <label
-                                class="custom-file-label"
-                                for="exampleInputFile"
-                              >
-                                Choose file
-                              </label>
+                              <input type="file" />
                             </div>
                           </div>
                         </div>
@@ -149,7 +139,7 @@ const Gallary = () => {
                             class="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">Gallary List</h3>
+                            <h3 class="card-title">Gallery List</h3>
                           </div>
                           {/* <!-- /.card-header --> */}
                           <div class="card-body">

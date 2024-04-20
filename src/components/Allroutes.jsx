@@ -15,6 +15,7 @@ import Stl from '../Pages/Stl'
 import EventCat from '../Pages/EventCat'
 import Event from '../Pages/Event'
 import Team from '../Pages/Team'
+import Edit from '../Pages/Edit'
 
 
 const Allroutes = () => {
@@ -36,6 +37,7 @@ const Allroutes = () => {
             <Route path='/stl' element={<Stl/>}/>
             <Route path='/event-catagory' element={<EventCat/>}/>
             <Route path='/event' element={<Event/>}/>
+            <Route path='/about/edit' element={<Edit/>}/>
         </Routes>
     </div>
   )

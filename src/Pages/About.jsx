@@ -15,7 +15,7 @@ const About = () => {
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6 text-left">
-                  <h1>About</h1>
+                  <h1>About - us</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
@@ -62,7 +62,7 @@ const About = () => {
                             <td>Internet Explorer 4.0</td>
                             <td>Win 95+</td>
                             <td className="align-middle">
-                              <button className="form-btn"
+                              <Link className="form-btn"
                                 style={{
                                   border: "1px solid #17a2b8",
                                   backgroundColor: "white",
@@ -72,8 +72,8 @@ const About = () => {
                                 <span style={{color:"#17a2b8"}}>
                                   <FaRegEye />
                                 </span>
-                              </button>
-                              <button className="form-btn"
+                              </Link>
+                              <Link to='/about/edit' className="form-btn"
                                 style={{
                                   border: "1px solid #17a2b8",
                                   backgroundColor: "white",
@@ -83,8 +83,8 @@ const About = () => {
                                 <span style={{color:"#17a2b8"}}>
                                   <FiEdit />
                                 </span>
-                              </button>
-                              <button className="form-btn-dlt"
+                              </Link>
+                              <Link className="form-btn-dlt"
                                 style={{
                                   border: "1px solid red",
                                   backgroundColor: "white",
@@ -94,7 +94,7 @@ const About = () => {
                                 <span style={{color:"red"}}>
                                   <MdDelete />
                                 </span>
-                              </button>
+                              </Link>
                             </td>
                           </tr>
                         </tbody>

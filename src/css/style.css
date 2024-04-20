@@ -59,3 +59,8 @@
 .form-btn-dlt:hover span {
   color: white !important;
 }
+
+.nav-item.active .nav-link {
+  background-color: #ca629d !important;
+  color: #ca629d !important; /* Change text color for better visibility */
+}

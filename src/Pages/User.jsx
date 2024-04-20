@@ -1,7 +1,50 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const User = () => {
+  let [name, setName] = useState("");
+  let [uname, setUname] = useState("");
+  let [email, setEmail] = useState("");
+  let [roll, setRoll] = useState("");
+  let [pass, setPass] = useState("");
+
+  let [data, setData] = useState([]);
+
+  let obj = {
+    name: name,
+    uname: uname,
+    email: email,
+    roll: roll,
+    pass: pass,
+  };
+
+  const handleUsersubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:5000/userForm`, obj)
+      .then((res) => {
+        // console.log(res);
+        alert("Added !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/userForm`)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div>
       <div class="wrapper">
@@ -48,7 +91,7 @@ const User = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form>
+                    <form onSubmit={handleUsersubmit}>
                       <div class="card-body text-left">
                         <div class="form-group">
                           <label for="exampleInputName">
@@ -60,6 +103,7 @@ const User = () => {
                             id="exampleInputName"
                             placeholder="Enter your name ..."
                             required
+                            onChange={(e) => setName(e.target.value)}
                           />
                         </div>
                         <div class="form-group">
@@ -71,6 +115,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputUsername"
                             placeholder="Enter your username ..."
+                            onChange={(e) => setUname(e.target.value)}
                           />
                         </div>
                         <div class="form-group">
@@ -83,6 +128,7 @@ const User = () => {
                             id="exampleInputEmail"
                             placeholder="Enter  your email ..."
                             required
+                            onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
                         <div class="form-group">
@@ -90,10 +136,11 @@ const User = () => {
                             Roll <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
-                            type="password"
+                            type="text"
                             class="form-control"
-                            id="exampleInputPassword"
+                            id="exampleInputRoll"
                             placeholder="Enter your Roll ..."
+                            onChange={(e) => setRoll(e.target.value)}
                           />
                         </div>
                         <div class="form-group">
@@ -106,6 +153,7 @@ const User = () => {
                             id="exampleInputPassword"
                             placeholder="Password ..."
                             required
+                            onChange={(e) => setPass(e.target.value)}
                           />
                         </div>
                       </div>
@@ -154,27 +202,29 @@ const User = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>Admin</td>
-                                  <td></td>
-                                  <td>admin@gmail.com</td>
-                                  <td></td>
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="text-light form-dlt-btn"
-                                      style={{
-                                        border: "0",
-                                        backgroundColor: "#ca629d",
-                                        padding: "5px 10px",
-                                        borderRadius: "5px",
-                                      }}
-                                    >
-                                      Delete
-                                    </button>
-                                  </td>
-                                </tr>
+                                {data.map((ele, id) => (
+                                  <tr key={id}>
+                                    <td>{id + 1}</td>
+                                    <td>{ele.name}</td>
+                                    <td>{ele.uname}</td>
+                                    <td>{ele.email}</td>
+                                    <td>{ele.roll}</td>
+                                    <td>
+                                      <button
+                                        type="button"
+                                        className="text-light form-dlt-btn"
+                                        style={{
+                                          border: "0",
+                                          backgroundColor: "#ca629d",
+                                          padding: "5px 10px",
+                                          borderRadius: "5px",
+                                        }}
+                                      >
+                                        Delete
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>

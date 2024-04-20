@@ -1,0 +1,61 @@
+{
+  "homedata": [
+    {
+      "id": "06d7",
+      "title": "Deep",
+      "subtitle": "Deep Ramani",
+      "desc": "rgfrgeg",
+      "image": "C:\\fakepath\\dent_page.png"
+    }
+  ],
+  "socialMedia": [
+    {
+      "id": "6405",
+      "wp": "http://localhost:5000/socialMedia",
+      "insta": "http://localhost:5000/socialMedia",
+      "fb": "http://localhost:5000/socialMedia"
+    }
+  ],
+  "userForm": [
+    {
+      "id": "d351",
+      "name": "Deep",
+      "uname": "deep05",
+      "email": "deep@gmail.com",
+      "roll": "web developer",
+      "pass": "123456789"
+    },
+    {
+      "id": "3481",
+      "name": "wef",
+      "uname": "gegegeger",
+      "email": "gergerg@gmail.com",
+      "roll": "weiyfgw",
+      "pass": "13456789"
+    },
+    {
+      "id": "82f2",
+      "name": "wef",
+      "uname": "deep05",
+      "email": "deep@gmail.com",
+      "roll": "web developer",
+      "pass": "1234578"
+    },
+    {
+      "id": "e7cb",
+      "name": "ferg",
+      "uname": "ferfe",
+      "email": "gwe@gmail.com",
+      "roll": "fytrwfwef",
+      "pass": "123456789"
+    },
+    {
+      "id": "4504",
+      "name": "Deep",
+      "uname": "gegegeger",
+      "email": "deep@gmail.com",
+      "roll": "web developer",
+      "pass": "1234567890"
+    }
+  ]
+}

@@ -1,7 +1,48 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  let [title, setTitle] = useState("");
+  let [subtitle, setSubtitle] = useState("");
+  let [desc, setDesc] = useState("");
+  let [image, setImage] = useState("");
+
+  let [wp, setWp] = useState("");
+  let [insta, setInsta] = useState("");
+  let [fb, setFb] = useState("");
+
+  let obj = {
+    title: title,
+    subtitle: subtitle,
+    desc: desc,
+    image: image,
+  };
+
+  let obj2 = {
+    wp: wp,
+    insta: insta,
+    fb: fb,
+  };
+
+  const handleFormsubmit = () => {
+    axios
+      .post(`http://localhost:5000/homedata`, obj)
+      .then((res) => {
+        console.log(res.data);
+        alert("Form Submited");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Error");
+      });
+    window.location.reload();
+  };
+
+  const handleSocialsubmit = () => {
+    axios.post(`http://localhost:5000/socialMedia`,obj2);
+  };
+
   return (
     <div>
       <div class="wrapper">
@@ -48,11 +89,13 @@ const Home = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handleFormsubmit}>
                       <div class="card-body">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Title</label>
                           <input
+                            onChange={(e) => setTitle(e.target.value)}
+                            value={title}
                             type="text"
                             class="form-control"
                             id="exampleInputTitle"
@@ -62,6 +105,8 @@ const Home = () => {
                         <div class="form-group">
                           <label for="exampleInputPassword1">Sub Title</label>
                           <input
+                            onChange={(e) => setSubtitle(e.target.value)}
+                            value={subtitle}
                             type="text"
                             class="form-control"
                             id="exampleInputSubtitle"
@@ -71,6 +116,8 @@ const Home = () => {
                         <div class="form-group">
                           <label>Description</label>
                           <textarea
+                            onChange={(e) => setDesc(e.target.value)}
+                            value={desc}
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
@@ -84,16 +131,9 @@ const Home = () => {
                             <div class="custom-file">
                               <input
                                 type="file"
-                                class="custom-file-input"
-                                id="exampleInputFile"
-                                required
+                                onChange={(e) => setImage(e.target.value)}
+                                value={image}
                               />
-                              <label
-                                class="custom-file-label"
-                                for="exampleInputFile"
-                              >
-                                Choose file
-                              </label>
                             </div>
                           </div>
                         </div>
@@ -125,7 +165,7 @@ const Home = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handleSocialsubmit}>
                       <div class="card-body">
                         <div class="form-group">
                           <label for="exampleInputWhatsappLink">Whatsapp</label>
@@ -134,6 +174,8 @@ const Home = () => {
                             class="form-control"
                             id="exampleInputWhatsappLink"
                             placeholder="Enter Whatsapp Link"
+                            onChange={(e) => setWp(e.target.value)}
+                            value={wp}
                           />
                         </div>
                         <div class="form-group">
@@ -141,19 +183,23 @@ const Home = () => {
                             Instagram
                           </label>
                           <input
-                            type="password"
+                            type="url"
                             class="form-control"
                             id="exampleInputInstagramLink"
                             placeholder="Enter Instagram Link"
+                            onChange={(e) => setInsta(e.target.value)}
+                            value={insta}
                           />
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFacebookLink">Facebook</label>
                           <input
-                            type="password"
+                            type="url"
                             class="form-control"
                             id="exampleInputFacebookLink"
                             placeholder="Enter Facebook Link"
+                            onChange={(e) => setFb(e.target.value)}
+                            value={fb}
                           />
                         </div>
                       </div>

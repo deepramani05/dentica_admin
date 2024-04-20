@@ -75,7 +75,7 @@ const SideNav = () => {
                   <i class="nav-icon">
                     <BsFillImageFill />
                   </i>
-                  <p>Gallary</p>
+                  <p>Gallery</p>
                 </Link>
               </li>
               <li class="nav-item">
