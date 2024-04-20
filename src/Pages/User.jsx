@@ -31,7 +31,7 @@ const User = () => {
         console.log(err);
         alert("error !");
       });
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {
