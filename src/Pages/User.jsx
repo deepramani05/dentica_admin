@@ -29,6 +29,7 @@ const User = () => {
       })
       .catch((err) => {
         console.log(err);
+        alert("error !");
       });
     window.location.reload();
   };
