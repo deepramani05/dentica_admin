@@ -34,7 +34,7 @@ const User = () => {
     // window.location.reload();
   };
 
-  useEffect(() => {
+  const fetchData = () => {
     axios
       .get(`http://localhost:5000/userForm`)
       .then((res) => {
@@ -44,7 +44,26 @@ const User = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchData(); // Fetch data initially
   }, []);
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/userForm/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        alert("Deleted !");
+        fetchData(); // Fetch data again after successful deletion
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Error occurred while deleting !");
+      });
+  };
+
 
   return (
     <div>
@@ -220,6 +239,7 @@ const User = () => {
                                           padding: "5px 10px",
                                           borderRadius: "5px",
                                         }}
+                                        onClick={()=> {handleDelete(ele.id)}}
                                       >
                                         Delete
                                       </button>

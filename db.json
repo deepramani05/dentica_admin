@@ -18,14 +18,6 @@
   ],
   "userForm": [
     {
-      "id": "d351",
-      "name": "Deep",
-      "uname": "deep05",
-      "email": "deep@gmail.com",
-      "roll": "web developer",
-      "pass": "123456789"
-    },
-    {
       "id": "3481",
       "name": "wef",
       "uname": "gegegeger",
@@ -48,14 +40,6 @@
       "email": "gwe@gmail.com",
       "roll": "fytrwfwef",
       "pass": "123456789"
-    },
-    {
-      "id": "4504",
-      "name": "Deep",
-      "uname": "gegegeger",
-      "email": "deep@gmail.com",
-      "roll": "web developer",
-      "pass": "1234567890"
     }
   ]
 }
