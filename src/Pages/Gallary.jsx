@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
@@ -11,7 +11,9 @@ const Gallary = () => {
   let [keyword, setKeyword] = useState("");
   let [desc, setDesc] = useState("");
   let [image, setImage] = useState("");
-  let [cat, setCat] = useState('');
+  let [cat, setCat] = useState("");
+
+  let [data, setData] = useState([]);
 
   let obj = {
     title: title,
@@ -20,20 +22,32 @@ const Gallary = () => {
     desc: desc,
     image: image,
     cat: cat,
-  }
+  };
 
   const handlegallarySubmit = (e) => {
     e.preventDefault();
 
-    axios.post(`http://localhost:5000/gallaryImage`,obj)
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-
+    axios
+      .post(`http://localhost:5000/gallaryImage`, obj)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/gallaryImage`)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
@@ -155,10 +169,14 @@ const Gallary = () => {
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
-                            <option value="">Select Catagory</option>
-                            <option value="">Before & After</option>
-                            <option value="">Products</option>
-                            <option value="">Team</option>
+                            <option value="Select Catagory">
+                              Select Catagory
+                            </option>
+                            <option value="Before & After">
+                              Before & After
+                            </option>
+                            <option value="Products">Products</option>
+                            <option value="Team">Team</option>
                           </select>
                         </div>
                       </div>
@@ -205,51 +223,53 @@ const Gallary = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>
-                                    <img src="" alt="" />
-                                  </td>
-                                  <td>Win 95+</td>
-                                  <td className="align-middle">
-                                    <button
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FaRegEye />
-                                      </span>
-                                    </button>
-                                    <button
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FiEdit />
-                                      </span>
-                                    </button>
-                                    <button
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
+                                {data.map((ele,id) => (
+                                  <tr>
+                                    <td>{id+1}</td>
+                                    <td>
+                                      <img src={ele.image} alt="" />
+                                    </td>
+                                    <td>{ele.cat}</td>
+                                    <td className="align-middle">
+                                      <button
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FaRegEye />
+                                        </span>
+                                      </button>
+                                      <button
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FiEdit />
+                                        </span>
+                                      </button>
+                                      <button
+                                        className="form-btn-dlt"
+                                        style={{
+                                          border: "1px solid red",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "red" }}>
+                                          <MdDelete />
+                                        </span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>
