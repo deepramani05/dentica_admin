@@ -16,30 +16,25 @@
       "fb": "http://localhost:5000/socialMedia"
     }
   ],
-  "userForm": [
+  "userForm": [],
+  "gallaryImage": [
     {
-      "id": "3481",
-      "name": "wef",
-      "uname": "gegegeger",
-      "email": "gergerg@gmail.com",
-      "roll": "weiyfgw",
-      "pass": "13456789"
+      "id": "cf27",
+      "title": "",
+      "mtitle": "",
+      "keyword": "",
+      "desc": "",
+      "image": "",
+      "cat": ""
     },
     {
-      "id": "82f2",
-      "name": "wef",
-      "uname": "deep05",
-      "email": "deep@gmail.com",
-      "roll": "web developer",
-      "pass": "1234578"
-    },
-    {
-      "id": "e7cb",
-      "name": "ferg",
-      "uname": "ferfe",
-      "email": "gwe@gmail.com",
-      "roll": "fytrwfwef",
-      "pass": "123456789"
+      "id": "49d8",
+      "title": "",
+      "mtitle": "",
+      "keyword": "",
+      "desc": "",
+      "image": "",
+      "cat": ""
     }
   ]
 }

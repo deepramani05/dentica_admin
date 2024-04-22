@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Gallary = () => {
+  let [title, setTitle] = useState("");
+  let [mtitle, setMtitle] = useState("");
+  let [keyword, setKeyword] = useState("");
+  let [desc, setDesc] = useState("");
+  let [image, setImage] = useState("");
+  let [cat, setCat] = useState('');
+
+  let obj = {
+    title: title,
+    mtitle: mtitle,
+    keyword: keyword,
+    desc: desc,
+    image: image,
+    cat: cat,
+  }
+
+  const handlegallarySubmit = (e) => {
+    e.preventDefault();
+
+    axios.post(`http://localhost:5000/gallaryImage`,obj)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
+  };
+
   return (
     <div>
       <div class="wrapper">
@@ -51,24 +81,28 @@ const Gallary = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handlegallarySubmit}>
                       <div class="card-body">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Title</label>
                           <input
-                            type="email"
+                            type="text"
                             class="form-control"
-                            id="exampleInputEmail1"
+                            id="exampleInputtitle"
                             placeholder="Title"
+                            onChange={(e) => setTitle(e.target.value)}
+                            value={title}
                           />
                         </div>
                         <div class="form-group">
                           <label for="exampleInputPassword1">Meta Title</label>
                           <input
-                            type="password"
+                            type="text"
                             class="form-control"
-                            id="exampleInputPassword1"
+                            id="exampleInputMetaTitle"
                             placeholder="Meta Title"
+                            onChange={(e) => setMtitle(e.target.value)}
+                            value={mtitle}
                           />
                         </div>
                         <div class="form-group">
@@ -76,10 +110,12 @@ const Gallary = () => {
                             Meta Keyword
                           </label>
                           <input
-                            type="password"
+                            type="text"
                             class="form-control"
-                            id="exampleInputPassword1"
+                            id="exampleInputMetakeyword"
                             placeholder="Meta Keyword"
+                            onChange={(e) => setKeyword(e.target.value)}
+                            value={keyword}
                           />
                         </div>
                         <div class="form-group">
@@ -89,6 +125,8 @@ const Gallary = () => {
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
+                            onChange={(e) => setDesc(e.target.value)}
+                            value={desc}
                           />
                         </div>
                         <div class="form-group">
@@ -97,7 +135,11 @@ const Gallary = () => {
                           </label>
                           <div class="input-group">
                             <div class="custom-file">
-                              <input type="file" />
+                              <input
+                                type="file"
+                                onChange={(e) => setImage(e.target.value)}
+                                value={image}
+                              />
                             </div>
                           </div>
                         </div>
@@ -106,7 +148,13 @@ const Gallary = () => {
                             Catagory <span style={{ color: "red" }}>*</span>
                           </label>
                           <br />
-                          <select name="" id="" className="w-100 p-2">
+                          <select
+                            name=""
+                            id=""
+                            className="w-100 p-2"
+                            onChange={(e) => setCat(e.target.value)}
+                            value={cat}
+                          >
                             <option value="">Select Catagory</option>
                             <option value="">Before & After</option>
                             <option value="">Products</option>
