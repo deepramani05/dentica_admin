@@ -16,6 +16,7 @@ import EventCat from '../Pages/EventCat'
 import Event from '../Pages/Event'
 import Team from '../Pages/Team'
 import Edit from '../Pages/Edit'
+import Gallaryedit from '../Pages/Gallaryedit'
 
 
 const Allroutes = () => {

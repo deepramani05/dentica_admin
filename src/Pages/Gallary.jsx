@@ -35,6 +35,7 @@ const Gallary = () => {
       .catch((err) => {
         console.log(err);
       });
+      window.location.reload()
   };
 
   useEffect(() => {
@@ -231,7 +232,7 @@ const Gallary = () => {
                                     </td>
                                     <td>{ele.cat}</td>
                                     <td className="align-middle">
-                                      <button
+                                      <Link
                                         className="form-btn"
                                         style={{
                                           border: "1px solid #17a2b8",
@@ -242,8 +243,9 @@ const Gallary = () => {
                                         <span style={{ color: "#17a2b8" }}>
                                           <FaRegEye />
                                         </span>
-                                      </button>
-                                      <button
+                                      </Link>
+                                      <Link
+                                        to={`/gallary/edit/${id}`}
                                         className="form-btn"
                                         style={{
                                           border: "1px solid #17a2b8",
@@ -254,8 +256,8 @@ const Gallary = () => {
                                         <span style={{ color: "#17a2b8" }}>
                                           <FiEdit />
                                         </span>
-                                      </button>
-                                      <button
+                                      </Link>
+                                      <Link
                                         className="form-btn-dlt"
                                         style={{
                                           border: "1px solid red",
@@ -266,7 +268,7 @@ const Gallary = () => {
                                         <span style={{ color: "red" }}>
                                           <MdDelete />
                                         </span>
-                                      </button>
+                                      </Link>
                                     </td>
                                   </tr>
                                 ))}
