@@ -1,15 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPowerOff } from "react-icons/fa";
 
 const Header = () => {
+  const [isMenuOpen,setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if(window.innerWidth < 1000){
+        // console.log("opened",isMenuOpen);
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize",handleResize);
+
+    return () => {
+      window.removeEventListener("resize",handleResize);
+    };
+  },[]);
+
+  const toggleMenu = () =>{
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
     <div>
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         {/* <!-- Left navbar links --> */}
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+            <a 
+              class="nav-link" 
+              data-widget="pushmenu" 
+              href="#" 
+              role="button"
+              onClick={toggleMenu}
+              >
               <i class="fas fa-bars"></i>
             </a>
           </li>

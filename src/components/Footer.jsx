@@ -1,7 +1,7 @@
 import React from "react";
 
 const Footer = ({isDashboardPage}) => {
-  console.log(isDashboardPage);
+  // console.log(isDashboardPage);
   return (
     <div>
       <footer style={isDashboardPage ? { backgroundColor: "#fff", borderTop: "1px solid #dee2e6", color: "#869099", padding: "1rem", position: "fixed", zIndex: 111, bottom: 0, right: 0, left: 0 } :
