@@ -38,17 +38,35 @@ const Gallary = () => {
       window.location.reload()
   };
 
-  useEffect(() => {
+  const fetchData = () =>{
     axios
-      .get(`http://localhost:5000/gallaryImage`)
-      .then((res) => {
-        console.log(res.data);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+       .get(`http://localhost:5000/gallaryImage`)
+       .then((res) =>{
+          console.log(res.data);
+          setData(res.data);
+        })
+
+       .catch((err)=>{
+          console.log(err);
+       });
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const handleDelete = (id) =>{
+    axios
+       .delete(`http://localhost:5000/gallaryImage/${id}`)
+       .then((res) =>{
+          console.log(res.data);
+          alert("Deleted!");
+          fetchData();
+        })
+        .catch((err) =>{
+          console.log(err);
+          alert("Error occurred while deleting !")
+        });
+  };
 
   return (
     <div>
@@ -264,6 +282,7 @@ const Gallary = () => {
                                           backgroundColor: "white",
                                           padding: "2px 5px",
                                         }}
+                                        onClick={() => {handleDelete(ele.id)}}
                                       >
                                         <span style={{ color: "red" }}>
                                           <MdDelete />
