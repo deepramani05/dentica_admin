@@ -13,7 +13,6 @@ const User = () => {
   let [searchQuery, setSearchQuery] = useState("");
   let [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  
 
   let obj = {
     name: name,
@@ -67,12 +66,20 @@ const User = () => {
       .delete(`http://localhost:5000/userForm/${id}`)
       .then((res) => {
         console.log(res.data);
-        alert("Deleted !");
+        Swal.fire({
+          title: "Data Deleted Successfully !",
+          icon: "success",
+          confirmButtonText: "Close",
+        });
         fetchData(); // Fetch data again after successful deletion
       })
       .catch((err) => {
         console.log(err);
-        alert("Error occurred while deleting !");
+        Swal.fire({
+          title: "Error occurred while deleting !",
+          icon: "error",
+          confirmButtonText: "Close",
+        });
       });
   };
   const itemsPerPage = 10;
@@ -102,25 +109,30 @@ const User = () => {
     );
   }
 
+  // Slice the data array to show only the relevant entries based on pagination
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = data.slice(startIndex, endIndex);
+
   return (
     <div>
-      <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
-        <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2 text-left">
-                <div class="col-sm-6">
+      <div className="wrapper">
+        {/* Content Wrapper. Contains page content */}
+        <div className="content-wrapper">
+          {/* Content Header (Page header) */}
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2 text-left">
+                <div className="col-sm-6">
                   <h1>General Form</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
                       User
@@ -129,84 +141,84 @@ const User = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
+            {/* /.container-fluid */}
           </section>
 
-          {/* <!-- Main content --> */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                {/* <!-- left column --> */}
-                <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
-                  <div class="card">
+          {/* Main content */}
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                {/* left column */}
+                <div className="col-md-4">
+                  {/* general form elements */}
+                  <div className="card">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "rgb(37, 111, 152)" }}
                     >
-                      <h3 class="card-title text-white">Add User</h3>
+                      <h3 className="card-title text-white">Add User</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
+                    {/* /.card-header */}
+                    {/* form start */}
                     <form onSubmit={handleUsersubmit}>
-                      <div class="card-body text-left">
-                        <div class="form-group">
-                          <label for="exampleInputName">
+                      <div className="card-body text-left">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputName">
                             Name <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputName"
                             placeholder="Enter your name ..."
                             // required
                             onChange={(e) => setName(e.target.value)}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputUsername">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputUsername">
                             Username <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputUsername"
                             placeholder="Enter your username ..."
                             onChange={(e) => setUname(e.target.value)}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputEmail">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail">
                             Email <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="email"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputEmail"
-                            placeholder="Enter  your email ..."
+                            placeholder="Enter your email ..."
                             // required
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputRoll">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputRoll">
                             Role <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputRoll"
                             placeholder="Enter your Role ..."
                             onChange={(e) => setRoll(e.target.value)}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword">
                             Password <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="password"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputPassword"
                             placeholder="Password ..."
                             // required
@@ -214,12 +226,12 @@ const User = () => {
                           />
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
+                      {/* /.card-body */}
 
-                      <div class="card-footer text-left">
+                      <div className="card-footer text-left">
                         <button
                           type="submit"
-                          class="btn text-white form-dlt-btn"
+                          className="btn text-white form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
                           Submit
@@ -227,37 +239,37 @@ const User = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
+                  {/* /.card */}
                 </div>
-                {/* <!--/./</br>col (right) --> */}
+                {/* /./</br>col (right) */}
                 {/* <div> */}
-                <section class="content col-8">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
+                <section className="content col-8">
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card">
                           <div
-                            class="card-header text-light"
+                            className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">User List</h3>
-                            </div>  
-                              <div class="search-bar">
-                                {/* <label>Search: </label> */}
-                                <OutlinedInput
-                                  type="text"
-                                  variant="outlined"
-                                  placeholder="Search.."
-                                  value={searchQuery}
-                                  onChange={(e) => handleSearch(e.target.value)}
-                                  style={{ height:"30px", margin:"10px 0"}}
-                                />
-                              </div>
-                          {/* <!-- /.card-header --> */}
-                          <div class="card-body">
+                            <h3 className="card-title">User List</h3>
+                          </div>
+                          <div className="search-bar">
+                            {/* <label>Search: </label> */}
+                            <OutlinedInput
+                              type="text"
+                              variant="outlined"
+                              placeholder="Search.."
+                              value={searchQuery}
+                              onChange={(e) => handleSearch(e.target.value)}
+                              style={{ height: "30px", margin: "10px 0" }}
+                            />
+                          </div>
+                          {/* /.card-header */}
+                          <div className="card-body">
                             <table
                               id="example2"
-                              class="table table-bordered table-hover"
+                              className="table table-bordered table-hover"
                             >
                               <thead>
                                 <tr>
@@ -270,9 +282,13 @@ const User = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {data.map((ele, id) => (
+                                {displayedData.map((ele, id) => (
                                   <tr key={id}>
-                                    <td>{id + 1}</td>
+                                    <td>
+                                      {(currentPage - 1) * itemsPerPage +
+                                        id +
+                                        1}
+                                    </td>
                                     <td>{ele.name}</td>
                                     <td>{ele.uname}</td>
                                     <td>{ele.email}</td>
@@ -299,82 +315,94 @@ const User = () => {
                               </tbody>
                             </table>
                           </div>
-                          {/* <!-- /.card-body --> */}
-                       
-                        {/* <!-- /.card --> */}
-                        {/* pagination started */}
-                       <div class="row" style={{ display:"flex"}}>
-                       <div className="col-sm-12 col-md-5">
-                            <div
-                              className="dataTables_info"
-                              id="example1_info"
-                              role="status"
-                              aria-live="polite"
-                            >
-                              Showing {currentPage * itemsPerPage - itemsPerPage + 1} to{' '}
-                              {currentPage * itemsPerPage} of {data.length} entries
+                          {/* /.card-body */}
+
+                          {/* /.card */}
+                          {/* pagination started */}
+                          <div className="row" style={{ display: "flex" }}>
+                            <div className="col-sm-12 col-md-5">
+                              <div
+                                className="dataTables_info"
+                                id="example1_info"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                Showing{" "}
+                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
+                                to{" "}
+                                {Math.min(
+                                  currentPage * itemsPerPage,
+                                  data.length
+                                )}{" "}
+                                of {data.length} entries
+                              </div>
                             </div>
-                        </div>
-                        <div className="col-sm-12 col-md-7">
-                            <div
-                              className="dataTables_paginate paging_simple_numbers"
-                              id="example1_paginate"
-                            >
-                              <ul className="pagination">
-                                <li
-                                  className={`paginate_button page-item previous ${
-                                    currentPage === 1 ? 'disabled' : ''
-                                  }`}
-                                  id="example1_previous"
-                                >
-                                  <a
-                                    href="#"
-                                    aria-controls="example1"
-                                    data-dt-idx="0"
-                                    tabIndex="0"
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
+                            <div className="col-sm-12 col-md-7">
+                              <div
+                                className="dataTables_paginate paging_simple_numbers"
+                                id="example1_paginate"
+                              >
+                                <ul className="pagination">
+                                  <li
+                                    className={`paginate_button page-item previous ${
+                                      currentPage === 1 ? "disabled" : ""
+                                    }`}
+                                    id="example1_previous"
                                   >
-                                    Previous
-                                  </a>
-                                </li>
-                                {paginationButtons}
-                                <li
-                                  className={`paginate_button page-item next ${
-                                    currentPage === totalPages ? 'disabled' : ''
-                                  }`}
-                                  id="example1_next"
-                                >
-                                  <a
-                                    href="#"
-                                    aria-controls="example1"
-                                    data-dt-idx="0"
-                                    tabIndex="0"
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="10"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                      }
+                                    >
+                                      Previous
+                                    </a>
+                                  </li>
+                                  {paginationButtons}
+                                  <li
+                                    className={`paginate_button page-item next ${
+                                      currentPage === totalPages
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    id="example1_next"
                                   >
-                                    Next
-                                  </a>
-                                </li>
-                              </ul>
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="0"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                      }
+                                    >
+                                      Next
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
+                          </div>
                         </div>
                       </div>
-                      </div>
-                      </div>
-                      {/* <!-- /.col --> */}
+                      {/* /.col */}
                     </div>
-                    {/* <!-- //.row --> */}
+                    {/* //.row */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
+                  {/* /.container-fluid */}
                 </section>
                 {/* </div> */}
               </div>
-              {/* <!-- /.row --> */}
+              {/* /.row */}
             </div>
-            {/* <!-- /.container-fluid --> */}
+            {/* /.container-fluid */}
           </section>
-          {/* <!-- /.content --> */}
+          {/* /.content */}
         </div>
       </div>
     </div>
