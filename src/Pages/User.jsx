@@ -75,7 +75,32 @@ const User = () => {
         alert("Error occurred while deleting !");
       });
   };
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
+  // Generate pagination buttons
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <a
+          href="#"
+          aria-controls="example1"
+          data-dt-idx="0"
+          tabIndex="0"
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </a>
+      </li>
+    );
+  }
 
   return (
     <div>
