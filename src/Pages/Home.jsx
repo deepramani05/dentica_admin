@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Home = () => {
   let [title, setTitle] = useState("");
@@ -30,17 +31,26 @@ const Home = () => {
       .post(`http://localhost:5000/homedata`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Form Submited");
+        Swal.fire("Form Submited !");
       })
       .catch((err) => {
         console.log(err);
-        alert("Error");
+        Swal.fire("Error !");
       });
-    window.location.reload();
   };
 
-  const handleSocialsubmit = () => {
-    axios.post(`http://localhost:5000/socialMedia`,obj2);
+  const handleSocialsubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:5000/socialMedia`, obj2)
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire("Link Saved !");
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire("Error !");
+      });
   };
 
   return (

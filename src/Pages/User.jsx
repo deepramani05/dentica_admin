@@ -2,6 +2,7 @@ import { Input, OutlinedInput } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 const User = () => {
   let [name, setName] = useState("");
@@ -32,11 +33,14 @@ const User = () => {
       .post(`http://localhost:5000/userForm`, obj)
       .then((res) => {
         // console.log(res);
-        alert("Added !");
+        Swal.fire({
+          title: "Data Saved Successfully !",
+          icon: "success",
+          confirmButtonText: "Close",
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert("error !");
       });
     window.location.reload();
   };
@@ -47,7 +51,7 @@ const User = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
-      })  
+      })
 
       .catch((err) => {
         console.log(err);
@@ -71,28 +75,7 @@ const User = () => {
         alert("Error occurred while deleting !");
       });
   };
-  const itemsPerPage = 10; // Assuming 10 items per page
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <li
-        key={i}
-        className={`paginate_button page-item ${currentPage === i ? 'active' : ''}`}
-      >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </a>
-      </li>
-    );
-  }
+
 
   return (
     <div>
@@ -151,7 +134,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputName"
                             placeholder="Enter your name ..."
-                            required
+                            // required
                             onChange={(e) => setName(e.target.value)}
                           />
                         </div>
@@ -176,7 +159,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputEmail"
                             placeholder="Enter  your email ..."
-                            required
+                            // required
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
@@ -201,7 +184,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputPassword"
                             placeholder="Password ..."
-                            required
+                            // required
                             onChange={(e) => setPass(e.target.value)}
                           />
                         </div>
@@ -279,7 +262,9 @@ const User = () => {
                                           padding: "5px 10px",
                                           borderRadius: "5px",
                                         }}
-                                        onClick={()=> {handleDelete(ele.id)}}
+                                        onClick={() => {
+                                          handleDelete(ele.id);
+                                        }}
                                       >
                                         Delete
                                       </button>
