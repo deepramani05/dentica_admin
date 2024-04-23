@@ -64,3 +64,11 @@
   background-color: #ca629d !important;
   color: #ca629d !important; /* Change text color for better visibility */
 }
+.search-bar{
+  padding-top: 5px;
+  margin-right: 25px;
+  margin-left: auto;
+}
+.row{
+  display: flex;
+}

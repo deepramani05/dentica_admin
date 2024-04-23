@@ -1,3 +1,4 @@
+import { Input, OutlinedInput } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,8 +9,10 @@ const User = () => {
   let [email, setEmail] = useState("");
   let [roll, setRoll] = useState("");
   let [pass, setPass] = useState("");
-
+  let [searchQuery, setSearchQuery] = useState("");
   let [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  
 
   let obj = {
     name: name,
@@ -19,6 +22,10 @@ const User = () => {
     pass: pass,
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    // You can perform the search logic here, like filtering the data based on the query
+  };
   const handleUsersubmit = (e) => {
     e.preventDefault();
     axios
@@ -41,7 +48,7 @@ const User = () => {
         console.log(res.data);
         setData(res.data);
       })  
-      
+
       .catch((err) => {
         console.log(err);
       });
@@ -64,7 +71,28 @@ const User = () => {
         alert("Error occurred while deleting !");
       });
   };
-
+  const itemsPerPage = 10; // Assuming 10 items per page
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${currentPage === i ? 'active' : ''}`}
+      >
+        <a
+          href="#"
+          aria-controls="example1"
+          data-dt-idx="0"
+          tabIndex="0"
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </a>
+      </li>
+    );
+  }
 
   return (
     <div>
@@ -154,13 +182,13 @@ const User = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputRoll">
-                            Roll <span style={{ color: "red" }}>*</span>
+                            Role <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="text"
                             class="form-control"
                             id="exampleInputRoll"
-                            placeholder="Enter your Roll ..."
+                            placeholder="Enter your Role ..."
                             onChange={(e) => setRoll(e.target.value)}
                           />
                         </div>
@@ -205,7 +233,18 @@ const User = () => {
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
                             <h3 class="card-title">User List</h3>
-                          </div>
+                            </div>  
+                              <div class="search-bar">
+                                {/* <label>Search: </label> */}
+                                <OutlinedInput
+                                  type="text"
+                                  variant="outlined"
+                                  placeholder="Search.."
+                                  value={searchQuery}
+                                  onChange={(e) => handleSearch(e.target.value)}
+                                  style={{ height:"30px", margin:"10px 0"}}
+                                />
+                              </div>
                           {/* <!-- /.card-header --> */}
                           <div class="card-body">
                             <table
@@ -218,7 +257,7 @@ const User = () => {
                                   <th>Name</th>
                                   <th>Username</th>
                                   <th>Email Address</th>
-                                  <th>Roll</th>
+                                  <th>Role</th>
                                   <th>Actions</th>
                                 </tr>
                               </thead>
@@ -251,8 +290,67 @@ const User = () => {
                             </table>
                           </div>
                           {/* <!-- /.card-body --> */}
-                        </div>
+                       
                         {/* <!-- /.card --> */}
+                        {/* pagination started */}
+                       <div class="row" style={{ display:"flex"}}>
+                       <div className="col-sm-12 col-md-5">
+                            <div
+                              className="dataTables_info"
+                              id="example1_info"
+                              role="status"
+                              aria-live="polite"
+                            >
+                              Showing {currentPage * itemsPerPage - itemsPerPage + 1} to{' '}
+                              {currentPage * itemsPerPage} of {data.length} entries
+                            </div>
+                        </div>
+                        <div className="col-sm-12 col-md-7">
+                            <div
+                              className="dataTables_paginate paging_simple_numbers"
+                              id="example1_paginate"
+                            >
+                              <ul className="pagination">
+                                <li
+                                  className={`paginate_button page-item previous ${
+                                    currentPage === 1 ? 'disabled' : ''
+                                  }`}
+                                  id="example1_previous"
+                                >
+                                  <a
+                                    href="#"
+                                    aria-controls="example1"
+                                    data-dt-idx="0"
+                                    tabIndex="0"
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(currentPage - 1)}
+                                  >
+                                    Previous
+                                  </a>
+                                </li>
+                                {paginationButtons}
+                                <li
+                                  className={`paginate_button page-item next ${
+                                    currentPage === totalPages ? 'disabled' : ''
+                                  }`}
+                                  id="example1_next"
+                                >
+                                  <a
+                                    href="#"
+                                    aria-controls="example1"
+                                    data-dt-idx="0"
+                                    tabIndex="0"
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(currentPage + 1)}
+                                  >
+                                    Next
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                        </div>
+                      </div>
+                      </div>
                       </div>
                       {/* <!-- /.col --> */}
                     </div>
