@@ -249,6 +249,7 @@ const User = () => {
                                   variant="outlined"
                                   placeholder="Search.."
                                   value={searchQuery}
+                                  
                                   onChange={(e) => handleSearch(e.target.value)}
                                   style={{ height:"30px", margin:"10px 0"}}
                                 />
