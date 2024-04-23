@@ -14,45 +14,52 @@
       "wp": "http://localhost:5000/socialMedia",
       "insta": "http://localhost:5000/socialMedia",
       "fb": "http://localhost:5000/socialMedia"
+    },
+    {
+      "id": "6d9a",
+      "wp": "",
+      "insta": "",
+      "fb": ""
     }
   ],
-  "userForm": [],
+  "userForm": [
+    {
+      "id": "9786",
+      "name": "Deep",
+      "uname": "deep05",
+      "email": "deep05@gmail.com",
+      "roll": "web dveloper",
+      "pass": ""
+    }
+  ],
   "gallaryImage": [
     {
-      "id": "ca9b",
-      "title": "ec",
-      "mtitle": "ewdw",
-      "keyword": "wefwef",
-      "desc": "fwefccfrec",
-      "image": "C:\\fakepath\\Quick Links.png",
-      "cat": "Products"
-    },
-    {
-      "id": "6277",
-      "title": "ec",
-      "mtitle": "ewdw",
-      "keyword": "wefwef",
-      "desc": "fwefccfrec",
-      "image": "C:\\fakepath\\Quick Links.png",
-      "cat": "Products"
-    },
-    {
-      "id": "cc4a",
-      "title": "wrf",
-      "mtitle": "",
-      "keyword": "",
-      "desc": "",
-      "image": "",
-      "cat": ""
-    },
-    {
-      "id": "5002",
+      "id": "6bc7",
       "title": "",
       "mtitle": "",
       "keyword": "",
       "desc": "",
       "image": "C:\\fakepath\\Quick Links.png",
       "cat": "Products"
+    }
+  ],
+  "aboutEdit": [
+    {
+      "title": "",
+      "sdesc": "",
+      "mtitle": "",
+      "keyword": "",
+      "mdesc": "",
+      "image": "",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit magna orci, sed consectetur velit euismod non.",
+      "haddress": "",
+      "address": "",
+      "num1": "",
+      "num2": "",
+      "mail": "",
+      "mon": "",
+      "sun": "",
+      "id": "a269"
     }
   ]
 }

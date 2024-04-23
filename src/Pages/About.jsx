@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const About = () => {
+  let [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/aboutEdit`).then((res) => {
+      console.log(res.data);
+      setData(res.data);
+    });
+  }, []);
+
   return (
     <div>
       <div class="wrapper">
@@ -22,7 +32,12 @@ const About = () => {
                     <li class="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active" style={{color:"#ca629d"}}>About</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      About
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -57,46 +72,52 @@ const About = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Internet Explorer 4.0</td>
-                            <td>Win 95+</td>
-                            <td className="align-middle">
-                              <Link className="form-btn"
-                                style={{
-                                  border: "1px solid #17a2b8",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"#17a2b8"}}>
-                                  <FaRegEye />
-                                </span>
-                              </Link>
-                              <Link to='/about/edit' className="form-btn"
-                                style={{
-                                  border: "1px solid #17a2b8",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"#17a2b8"}}>
-                                  <FiEdit />
-                                </span>
-                              </Link>
-                              <Link className="form-btn-dlt"
-                                style={{
-                                  border: "1px solid red",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"red"}}>
-                                  <MdDelete />
-                                </span>
-                              </Link>
-                            </td>
-                          </tr>
+                          {data.map((ele, id) => (
+                            <tr>
+                              <td>{id + 1}</td>
+                              <td>{ele.title}</td>
+                              <td>{ele.desc}</td>
+                              <td className="align-middle">
+                                <Link
+                                  className="form-btn"
+                                  style={{
+                                    border: "1px solid #17a2b8",
+                                    backgroundColor: "white",
+                                    padding: "2px 5px",
+                                  }}
+                                >
+                                  <span style={{ color: "#17a2b8" }}>
+                                    <FaRegEye />
+                                  </span>
+                                </Link>
+                                <Link
+                                  to="/about/edit"
+                                  className="form-btn"
+                                  style={{
+                                    border: "1px solid #17a2b8",
+                                    backgroundColor: "white",
+                                    padding: "2px 5px",
+                                  }}
+                                >
+                                  <span style={{ color: "#17a2b8" }}>
+                                    <FiEdit />
+                                  </span>
+                                </Link>
+                                <Link
+                                  className="form-btn-dlt"
+                                  style={{
+                                    border: "1px solid red",
+                                    backgroundColor: "white",
+                                    padding: "2px 5px",
+                                  }}
+                                >
+                                  <span style={{ color: "red" }}>
+                                    <MdDelete />
+                                  </span>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>

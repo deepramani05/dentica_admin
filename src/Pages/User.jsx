@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 const User = () => {
   let [name, setName] = useState("");
@@ -25,11 +26,14 @@ const User = () => {
       .post(`http://localhost:5000/userForm`, obj)
       .then((res) => {
         // console.log(res);
-        alert("Added !");
+        Swal.fire({
+          title: "Data Saved Successfully !",
+          icon: "success",
+          confirmButtonText: "Close",
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert("error !");
       });
     window.location.reload();
   };
@@ -40,8 +44,8 @@ const User = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
-      })  
-      
+      })
+
       .catch((err) => {
         console.log(err);
       });
@@ -64,7 +68,6 @@ const User = () => {
         alert("Error occurred while deleting !");
       });
   };
-
 
   return (
     <div>
@@ -123,7 +126,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputName"
                             placeholder="Enter your name ..."
-                            required
+                            // required
                             onChange={(e) => setName(e.target.value)}
                           />
                         </div>
@@ -148,7 +151,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputEmail"
                             placeholder="Enter  your email ..."
-                            required
+                            // required
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
@@ -173,7 +176,7 @@ const User = () => {
                             class="form-control"
                             id="exampleInputPassword"
                             placeholder="Password ..."
-                            required
+                            // required
                             onChange={(e) => setPass(e.target.value)}
                           />
                         </div>
@@ -240,7 +243,9 @@ const User = () => {
                                           padding: "5px 10px",
                                           borderRadius: "5px",
                                         }}
-                                        onClick={()=> {handleDelete(ele.id)}}
+                                        onClick={() => {
+                                          handleDelete(ele.id);
+                                        }}
                                       >
                                         Delete
                                       </button>

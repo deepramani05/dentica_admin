@@ -22,7 +22,12 @@ const Contact = () => {
                     <li class="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active" style={{color:"#ca629d"}}>Contacts</li>
+                    <li
+                      class="breadcrumb-item"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Contacts
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -36,7 +41,10 @@ const Contact = () => {
               <div class="row">
                 <div class="col-12">
                   <div class="card">
-                    <div class="card-header text-light" style={{backgroundColor: "#256f98"}}>
+                    <div
+                      class="card-header text-light"
+                      style={{ backgroundColor: "#256f98" }}
+                    >
                       <h3 class="card-title">User List</h3>
                     </div>
                     {/* <!-- /.card-header --> */}
@@ -63,36 +71,27 @@ const Contact = () => {
                             <td>Win 95+</td>
                             <td>Win 95+</td>
                             <td className="align-middle">
-                              <button className="form-btn"
+                              <button
+                                className="form-btn"
                                 style={{
                                   border: "1px solid #17a2b8",
                                   backgroundColor: "white",
                                   padding: "2px 5px",
                                 }}
                               >
-                                <span style={{color:"#17a2b8"}}>
+                                <span style={{ color: "#17a2b8" }}>
                                   <FaRegEye />
                                 </span>
                               </button>
-                              <button className="form-btn"
-                                style={{
-                                  border: "1px solid #17a2b8",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"#17a2b8"}}>
-                                  <FiEdit />
-                                </span>
-                              </button>
-                              <button className="form-btn-dlt"
+                              <button
+                                className="form-btn-dlt"
                                 style={{
                                   border: "1px solid red",
                                   backgroundColor: "white",
                                   padding: "2px 5px",
                                 }}
                               >
-                                <span style={{color:"red"}}>
+                                <span style={{ color: "red" }}>
                                   <MdDelete />
                                 </span>
                               </button>
