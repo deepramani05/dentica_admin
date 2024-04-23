@@ -17,6 +17,8 @@ import Event from '../Pages/Event'
 import Team from '../Pages/Team'
 import Edit from '../Pages/Edit'
 import Gallaryedit from '../Pages/Gallaryedit'
+import Blogedit from '../Pages/Blogedit'
+import Blogadd from '../Pages/Blogadd'
 
 
 const Allroutes = () => {
@@ -40,6 +42,8 @@ const Allroutes = () => {
             <Route path='/event' element={<Event/>}/>
             <Route path='/about/edit' element={<Edit/>}/>
             <Route path='/gallary/edit/:id' element={<Gallaryedit/>}/>
+            <Route path='/blog/edit' element={<Blogedit/>}/>
+            <Route path='/blog/add' element={<Blogadd/>}/>
         </Routes>
     </div>
   )
