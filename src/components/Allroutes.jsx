@@ -22,6 +22,7 @@ import Blogadd from '../Pages/Blogadd'
 import ProductAdd from '../Pages/ProductAdd'
 import ProductEdit from '../Pages/ProductEdit'
 import ReviewEdit from '../Pages/ReviewEdit'
+import MetaEdit from '../Pages/MetaEdit'
 
 
 const Allroutes = () => {
@@ -50,6 +51,7 @@ const Allroutes = () => {
             <Route path='/product/add' element={<ProductAdd/>}/>
             <Route path='/product/edit/:id' element={<ProductEdit/>}/>
             <Route path='/review/edit/:id' element={<ReviewEdit/>}/>
+            <Route path='/meta/edit/:id' element={<MetaEdit/>}/>
         </Routes>
     </div>
   )
