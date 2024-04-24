@@ -4,7 +4,7 @@ import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Input, OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 const Gallary = () => {
   let [title, setTitle] = useState("");
@@ -33,7 +33,12 @@ const Gallary = () => {
     axios
       .post(`http://localhost:5000/gallaryImage`, obj)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
+        Swal.fire({
+          title: "Data Saved Successfully !",
+          icon: "sucess",
+          confirmButtionText: "Close",
+        });
       })
       .catch((err) => {
         console.log(err);
