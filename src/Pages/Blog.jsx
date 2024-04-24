@@ -28,7 +28,7 @@ const Blog = () => {
       });
   }, []);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // Generate pagination buttons
@@ -102,7 +102,8 @@ const Blog = () => {
                     >
                       <h3 className="card-title">Blog List</h3>
                       <div>
-                        <Link to='/blog/add'
+                        <Link
+                          to="/blog/add"
                           className="form-dlt-btn"
                           style={{
                             border: "0",
@@ -137,11 +138,9 @@ const Blog = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {displayedData.map((ele, id) => (
-                            <tr key={id}>
-                              <td>
-                                {(currentPage - 1) * itemsPerPage + id + 1}
-                              </td>
+                          {data.map((ele,id) => (
+                            <tr>
+                              <td>{id + 1}</td>
                               <td>{ele.title}</td>
                               <td>{ele.desc}</td>
                               <td width={"15%"}>

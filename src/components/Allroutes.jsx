@@ -42,7 +42,7 @@ const Allroutes = () => {
             <Route path='/event' element={<Event/>}/>
             <Route path='/about/edit' element={<Edit/>}/>
             <Route path='/gallary/edit/:id' element={<Gallaryedit/>}/>
-            <Route path='/blog/edit' element={<Blogedit/>}/>
+            <Route path='/blog/edit/:id' element={<Blogedit/>}/>
             <Route path='/blog/add' element={<Blogadd/>}/>
         </Routes>
     </div>

@@ -1,7 +1,40 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Blogadd = () => {
+  let [title, setTitle] = useState("");
+  let [image, setImage] = useState("");
+  let [desc, setDesc] = useState("");
+  let [sdesc, setSdesc] = useState("");
+  let [mdesc, setMdesc] = useState("");
+  let [mtitle, setMtitle] = useState("");
+  let [keyword, setKeyword] = useState("");
+  let [tag, setTag] = useState("");
+
+  let obj = {
+    title: title,
+    image: image,
+    desc: desc,
+    sdesc: sdesc,
+    mdesc: mdesc,
+    mtitle: mtitle,
+    keyword: keyword,
+    tag: tag,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:5000/blog`, obj)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <div className="wrapper">
@@ -48,7 +81,7 @@ const Blogadd = () => {
                     <form
                       // key={index}
                       className="text-left"
-                      // onSubmit={handleSubmit}
+                      onSubmit={handleSubmit}
                     >
                       <div className="card-body">
                         <div className="form-group">
@@ -59,6 +92,8 @@ const Blogadd = () => {
                             id="exampleInputTitle"
                             placeholder="Enter title"
                             name="title"
+                            onChange={(e) => setTitle(e.target.value)}
+                            value={title}
                           />
                         </div>
                         <div className="form-group">
@@ -69,6 +104,8 @@ const Blogadd = () => {
                               className="custom-file-input"
                               id="exampleInputFile"
                               name="image"
+                              onChange={(e) => setImage(e.target.value)}
+                              value={image}
                             />
                             <label
                               className="custom-file-label"
@@ -76,9 +113,6 @@ const Blogadd = () => {
                             >
                               Choose file
                             </label>
-                            <div style={{ width: "200px" }}>
-                              <img src="" alt="" width={"100%"} />
-                            </div>
                           </div>
                         </div>
                         <div className="form-group">
@@ -91,6 +125,8 @@ const Blogadd = () => {
                             rows="3"
                             placeholder="Place Some Text Here"
                             name="desc"
+                            onChange={(e) => setDesc(e.target.value)}
+                            value={desc}
                           ></textarea>
                         </div>
                         <div className="form-group">
@@ -103,6 +139,8 @@ const Blogadd = () => {
                             id="exampleInputShortDescription"
                             placeholder="Enter Short Description"
                             name="sdesc"
+                            onChange={(e) => setSdesc(e.target.value)}
+                            value={sdesc}
                           />
                         </div>
                         <div className="form-group">
@@ -115,6 +153,8 @@ const Blogadd = () => {
                             id="exampleInputMetaDescription"
                             placeholder="Enter meta Description"
                             name="mdesc"
+                            onChange={(e) => setMdesc(e.target.value)}
+                            value={mdesc}
                           />
                         </div>
                         <div className="form-group">
@@ -127,6 +167,8 @@ const Blogadd = () => {
                             id="exampleInputMetaTitle"
                             placeholder="Enter meta title"
                             name="mtitle"
+                            onChange={(e) => setMtitle(e.target.value)}
+                            value={mtitle}
                           />
                         </div>
                         <div className="form-group">
@@ -139,6 +181,8 @@ const Blogadd = () => {
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
                             name="keyword"
+                            onChange={(e) => setKeyword(e.target.value)}
+                            value={keyword}
                           />
                         </div>
                         <div className="form-group">
@@ -149,6 +193,8 @@ const Blogadd = () => {
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
                             name="keyword"
+                            onChange={(e) => setTag(e.target.value)}
+                            value={tag}
                           />
                         </div>
                       </div>
