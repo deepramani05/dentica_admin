@@ -72,3 +72,26 @@
 .row{
   display: flex;
 }
+.table-container{
+  overflow-x: auto;
+}
+.table-container table thead th {
+  background-color: #fff; 
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.pagination{
+  margin-top: 10px;
+}
+
+.pagination li{
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.pagination li.active a{
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}

@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import "../css/style.css"
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -267,81 +268,84 @@ const Gallary = () => {
                             <h3 class="card-title">Gallery List</h3>
                           </div>
                           {/* <!-- /.card-header --> */}
-                          <div class="card-body">
-                            <table
-                              id="example2"
-                              class="table table-bordered table-hover"
-                            >
-                              <thead>
-                                <tr>
-                                  <th>SL</th>
-                                  <th>Image</th>
-                                  <th>Catagory</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {displayedData.map((ele, id) => (
-                                  <tr key={id}>
-                                    <td>
-                                      {(currentPage - 1) * itemsPerPage +
-                                        id +
-                                        1}
-                                    </td>
-                                    <td style={{ width: "150px" }}>
-                                      <img
-                                        src={ele.image}
-                                        alt=""
-                                        style={{ width: "100%" }}
-                                      />
-                                    </td>
-                                    <td>{ele.cat}</td>
-                                    <td className="align-middle">
-                                      <Link
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FaRegEye />
-                                        </span>
-                                      </Link>
-                                      <Link
-                                        to={`/gallary/edit/${id}`}
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FiEdit />
-                                        </span>
-                                      </Link>
-                                      <Link
-                                        className="form-btn-dlt"
-                                        style={{
-                                          border: "1px solid red",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                        onClick={() => {
-                                          handleDelete(ele.id);
-                                        }}
-                                      >
-                                        <span style={{ color: "red" }}>
-                                          <MdDelete />
-                                        </span>
-                                      </Link>
-                                    </td>
+                          <div className="table-container">
+                            <div className="card-body table-reponsive">
+                              <table
+                                id="example2"
+                                class="table table-bordered table-hover"
+                                style={{ overflowX: "auto" }}
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>SL</th>
+                                    <th>Image</th>
+                                    <th>Catagory</th>
+                                    <th>Action</th>
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                </thead>
+                                <tbody>
+                                  {displayedData.map((ele, id) => (
+                                    <tr key={id}>
+                                      <td>
+                                        {(currentPage - 1) * itemsPerPage +
+                                          id +
+                                          1}
+                                      </td>
+                                      <td style={{ width: "150px" }}>
+                                        <img
+                                          src={ele.image}
+                                          alt=""
+                                          style={{ width: "100%" }}
+                                        />
+                                      </td>
+                                      <td>{ele.cat}</td>
+                                      <td className="align-middle">
+                                        <Link
+                                          className="form-btn"
+                                          style={{
+                                            border: "1px solid #17a2b8",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <FaRegEye />
+                                          </span>
+                                        </Link>
+                                        <Link
+                                          to={`/gallary/edit/${id}`}
+                                          className="form-btn"
+                                          style={{
+                                            border: "1px solid #17a2b8",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <FiEdit />
+                                          </span>
+                                        </Link>
+                                        <Link
+                                          className="form-btn-dlt"
+                                          style={{
+                                            border: "1px solid red",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                          onClick={() => {
+                                            handleDelete(ele.id);
+                                          }}
+                                        >
+                                          <span style={{ color: "red" }}>
+                                            <MdDelete />
+                                          </span>
+                                        </Link>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                           {/* <!-- /.card-body --> */}
                           {/* pagination started */}
