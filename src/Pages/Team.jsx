@@ -1,10 +1,72 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import prod from "../images/home_about-center.png";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Team = () => {
+  let [name, setName] = useState("");
+  let [image, setImage] = useState("");
+  let [post, setPost] = useState("");
+
+  let [data, setData] = useState([]);
+
+  let { id } = useParams();
+
+  let obj = {
+    name: name,
+    image: image,
+    post: post,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios
+      .post(`http://localhost:5000/team`, obj)
+      .then((res) => {
+        console.log(res.data);
+        alert("Data Saved!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/team`)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/team/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        // After successful deletion, update the state to remove the deleted item
+        setData(data.filter((item) => item.id !== id));
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Deleted Successfully !",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <div class="wrapper">
@@ -51,7 +113,7 @@ const Team = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handleSubmit}>
                       <div class="card-body">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Name</label>
@@ -60,13 +122,19 @@ const Team = () => {
                             class="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter Name"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
                           />
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">Image</label>
                           <div class="input-group">
                             <div class="custom-file">
-                              <input type="file" />
+                              <input
+                                type="file"
+                                onChange={(e) => setImage(e.target.value)}
+                                value={image}
+                              />
                             </div>
                           </div>
                         </div>
@@ -76,6 +144,8 @@ const Team = () => {
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
+                            onChange={(e) => setPost(e.target.value)}
+                            value={post}
                           ></textarea>
                         </div>
                       </div>
@@ -122,47 +192,54 @@ const Team = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>Rustom</td>
-                                  <td>Description ...</td>
-                                  <td
-                                    style={{ width: "100px", height: "100px" }}
-                                  >
-                                    <img
-                                      src={prod}
-                                      alt=""
-                                      width={"100%"}
-                                      height={"100%"}
-                                    />
-                                  </td>
-                                  <td className="align-middle">
-                                    <button
-                                      className="form-btn"
+                                {data.map((ele, id) => (
+                                  <tr>
+                                    <td>{id + 1}</td>
+                                    <td>{ele.name}</td>
+                                    <td>{ele.post}</td>
+                                    <td
                                       style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
+                                        width: "100px",
+                                        height: "100px",
                                       }}
                                     >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FiEdit />
-                                      </span>
-                                    </button>
-                                    <button
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
+                                      <img
+                                        src={ele.image}
+                                        alt=""
+                                        width={"100%"}
+                                        height={"100%"}
+                                      />
+                                    </td>
+                                    <td className="align-middle">
+                                      <Link
+                                        to={`/team/edit/${ele.id}`}
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FiEdit />
+                                        </span>
+                                      </Link>
+                                      <button
+                                        onClick={() => handleDelete(ele.id)}
+                                        className="form-btn-dlt"
+                                        style={{
+                                          border: "1px solid red",
+                                          backgroundColor: "white",
+                                          padding: "1px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "red" }}>
+                                          <MdDelete />
+                                        </span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>
