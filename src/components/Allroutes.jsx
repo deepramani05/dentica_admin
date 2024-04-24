@@ -21,6 +21,7 @@ import Blogedit from '../Pages/Blogedit'
 import Blogadd from '../Pages/Blogadd'
 import ProductAdd from '../Pages/ProductAdd'
 import ProductEdit from '../Pages/ProductEdit'
+import ReviewEdit from '../Pages/ReviewEdit'
 
 
 const Allroutes = () => {
@@ -48,6 +49,7 @@ const Allroutes = () => {
             <Route path='/blog/add' element={<Blogadd/>}/>
             <Route path='/product/add' element={<ProductAdd/>}/>
             <Route path='/product/edit/:id' element={<ProductEdit/>}/>
+            <Route path='/review/edit/:id' element={<ReviewEdit/>}/>
         </Routes>
     </div>
   )
