@@ -141,5 +141,49 @@
       "num": "1234567890",
       "msg": "Web Developer"
     }
+  ],
+  "eventCatagory": [
+    {
+      "name": "fvdcx",
+      "image": "",
+      "video": "",
+      "id": "a096"
+    },
+    {
+      "id": "184b",
+      "name": "Deep",
+      "image": "",
+      "video": ""
+    },
+    {
+      "id": "129f",
+      "name": "ertyhujk",
+      "image": "",
+      "video": ""
+    },
+    {
+      "id": "46e8",
+      "name": "ujhytgrfd",
+      "image": "",
+      "video": ""
+    },
+    {
+      "id": "164b",
+      "name": "ujyhtgrfde",
+      "image": "",
+      "video": ""
+    }
+  ],
+  "event": [
+    {
+      "id": "420a",
+      "cat": "Products",
+      "image": ""
+    },
+    {
+      "id": "a9db",
+      "cat": "Deep",
+      "image": ""
+    }
   ]
 }

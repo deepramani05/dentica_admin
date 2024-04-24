@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import prod from "../images/Logo.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Event = () => {
+  let [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/event`)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div>
       <div class="wrapper">
@@ -43,11 +57,16 @@ const Event = () => {
                   <div class="card">
                     <div
                       class="card-header text-light"
-                      style={{ textAlign: "end",backgroundColor: "rgb(37, 111, 152)" }}
+                      style={{
+                        textAlign: "end",
+                        backgroundColor: "rgb(37, 111, 152)",
+                      }}
                     >
                       <h3 class="card-title">Event List</h3>
                       <div>
-                        <button className="form-dlt-btn"
+                        <Link
+                          to='/event/add'
+                          className="form-dlt-btn"
                           style={{
                             border: "0",
                             backgroundColor: "#ca629d",
@@ -57,7 +76,7 @@ const Event = () => {
                           }}
                         >
                           Add
-                        </button>
+                        </Link>
                       </div>
                     </div>
                     {/* <!-- /.card-header --> */}
@@ -75,42 +94,49 @@ const Event = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Internet Explorer 4.0</td>
-                            <td width={"200px"} height={"100px"}>
-                              <img
-                                src={prod}
-                                alt=""
-                                width={"100%"}
-                                height={"100%"}
-                              />
-                            </td>
-                            <td className="align-middle">
-                              <button className="form-btn"
-                                style={{
-                                  border: "1px solid #17a2b8",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"#17a2b8"}}>
-                                  <FiEdit />
-                                </span>
-                              </button>
-                              <button className="form-btn-dlt"
-                                style={{
-                                  border: "1px solid red",
-                                  backgroundColor: "white",
-                                  padding: "2px 5px",
-                                }}
-                              >
-                                <span style={{color:"red"}}>
-                                  <MdDelete />
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
+                          {data.map((ele, id) => {
+                            return (
+                              <tr key={id}>
+                                <td>{id + 1}</td>
+                                <td>{ele.cat}</td>
+                                <td width={"200px"} height={"100px"}>
+                                  <img
+                                    src={ele.image}
+                                    alt=""
+                                    width={"100%"}
+                                    height={"100%"}
+                                  />
+                                </td>
+                                <td className="align-middle">
+                                  <Link
+                                    to={`/event/edit/${ele.id}`}
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FiEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      backgroundColor: "white",
+                                      padding: "1px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
