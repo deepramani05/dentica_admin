@@ -29,10 +29,12 @@ const Blogadd = () => {
       .post(`http://localhost:5000/blog`, obj)
       .then((res) => {
         console.log(res.data);
+        alert("Added Successfully ! ")
       })
       .catch((err) => {
         console.log(err);
       });
+      window.location.reload();
   };
 
   return (

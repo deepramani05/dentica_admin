@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
-
+    
 const Blog = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { id } = useParams();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -27,6 +29,21 @@ const Blog = () => {
         console.log(err);
       });
   }, []);
+
+  const handledelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/blog/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        alert("Blog post deleted successfully !");
+        // Remove the deleted blog post from the data array
+        setData(data.filter((post) => post.id !== id));
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Error deleting blog post !");
+      });
+  };
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -98,7 +115,10 @@ const Blog = () => {
                   <div className="card">
                     <div
                       className="card-header text-light"
-                      style={{ textAlign: "end", backgroundColor: "#256f98" }}
+                      style={{
+                        textAlign: "end",
+                        backgroundColor: "#256f98",
+                      }}
                     >
                       <h3 className="card-title">Blog List</h3>
                       <div>
@@ -138,8 +158,8 @@ const Blog = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.map((ele,id) => (
-                            <tr>
+                          {displayedData.map((ele, id) => (
+                            <tr key={ele.id}>
                               <td>{id + 1}</td>
                               <td>{ele.title}</td>
                               <td>{ele.desc}</td>
@@ -157,7 +177,7 @@ const Blog = () => {
                                   </span>
                                 </Link>
                                 <Link
-                                  to={`/blog/edit/${ele.id}`} // Pass the ID as a parameter in the URL
+                                  to={`/blog/edit/${ele.id}`}
                                   className="form-btn"
                                   style={{
                                     border: "1px solid #17a2b8",
@@ -169,18 +189,19 @@ const Blog = () => {
                                     <BiSolidEdit />
                                   </span>
                                 </Link>
-                                <Link
+                                <button
+                                  onClick={() => handledelete(ele.id)}
                                   className="form-btn-dlt"
                                   style={{
                                     border: "1px solid red",
-                                    padding: "5px",
+                                    padding: "4px",
                                     backgroundColor: "white",
                                   }}
                                 >
                                   <span style={{ color: "red" }}>
                                     <MdDelete />
                                   </span>
-                                </Link>
+                                </button>
                               </td>
                             </tr>
                           ))}
@@ -198,8 +219,11 @@ const Blog = () => {
                         >
                           Showing{" "}
                           {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
+                          {Math.min(
+                            currentPage * itemsPerPage,
+                            data.length
+                          )}{" "}
+                          of {data.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -226,7 +250,9 @@ const Blog = () => {
                                 data-dt-idx="10"
                                 tabIndex="0"
                                 className="page-link"
-                                onClick={() => setCurrentPage(currentPage - 1)}
+                                onClick={() =>
+                                  setCurrentPage(currentPage - 1)
+                                }
                               >
                                 Previous
                               </a>
@@ -244,7 +270,9 @@ const Blog = () => {
                                 data-dt-idx="0"
                                 tabIndex="0"
                                 className="page-link"
-                                onClick={() => setCurrentPage(currentPage + 1)}
+                                onClick={() =>
+                                  setCurrentPage(currentPage + 1)
+                                }
                               >
                                 Next
                               </a>

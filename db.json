@@ -66,7 +66,8 @@
     {
       "name": "Deep",
       "info": "1234567890",
-      "sub": "web Developer"
+      "sub": "web Developer",
+      "id": "33dd"
     }
   ],
   "career": [
@@ -74,13 +75,14 @@
       "name": "Deep",
       "num": "1234567890",
       "mail": "deep@gmail.com",
-      "subject": "web developer"
+      "subject": "web developer",
+      "id": "915c"
     }
   ],
   "blog": [
     {
-      "id": "dabb",
-      "title": "Deep",
+      "id": "d73d",
+      "title": "Deep Ramani",
       "image": "",
       "desc": "",
       "sdesc": "",
@@ -88,6 +90,22 @@
       "mtitle": "",
       "keyword": "",
       "tag": ""
+    }
+  ],
+  "products": [
+    {
+      "id": "5e5d",
+      "title": "Deep",
+      "sdesc": "",
+      "mtitle": "",
+      "mdesc": "",
+      "keyword": "",
+      "cat": "",
+      "himage": "",
+      "bimage": "",
+      "fimage": "",
+      "images": "",
+      "desc": ""
     }
   ]
 }
