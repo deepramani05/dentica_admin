@@ -34,31 +34,13 @@
   ],
   "gallaryImage": [
     {
-      "id": "0eda",
-      "title": "",
-      "mtitle": "",
-      "keyword": "",
-      "desc": "",
+      "id": "e292",
+      "title": "trgfd",
+      "mtitle": "ygvfcd",
+      "keyword": "thgvfd",
+      "desc": "tbgvf",
       "image": "",
       "cat": "Products"
-    },
-    {
-      "id": "32e5",
-      "title": "",
-      "mtitle": "",
-      "keyword": "",
-      "desc": "",
-      "image": "C:\\fakepath\\Tissue paper Box.png",
-      "cat": "Team"
-    },
-    {
-      "id": "abc6",
-      "title": "qwe",
-      "mtitle": "ad",
-      "keyword": "dhcdvh",
-      "desc": "ewecfrf",
-      "image": "C:\\fakepath\\Hand Mirror.jpg",
-      "cat": "Before & After"
     }
   ],
   "aboutEdit": [
@@ -124,6 +106,24 @@
       "fimage": "",
       "images": "",
       "desc": ""
+    }
+  ],
+  "review": [
+    {
+      "id": "4a5e",
+      "name": "Deep",
+      "num": "1234567890",
+      "review": "Good Services !",
+      "image": ""
+    }
+  ],
+  "meta": [
+    {
+      "id": "c0c6",
+      "url": "Deep",
+      "title": "Deep Ramani",
+      "keyword": "Web Developer",
+      "desc": "qwertyuiopasdfghjklzxnm"
     }
   ]
 }

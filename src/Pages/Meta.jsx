@@ -1,10 +1,108 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
 const Meta = () => {
+  let [url, setUrl] = useState("");
+  let [title, setTitle] = useState("");
+  let [keyword, setKeyword] = useState("");
+  let [desc, setDesc] = useState("");
+
+  let [data, setData] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    // You can perform the search logic here, like filtering the data based on the query
+  };
+
+  let obj = {
+    url: url,
+    title: title,
+    keyword: keyword,
+    desc: desc,
+  };
+
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:5000/meta`, obj)
+      .then((res) => {
+        console.log(res.data);
+        alert("data savaed successfully !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/meta`).then((res) => {
+      console.log(res.data);
+      setData(res.data);
+    });
+  }, []);
+
+  const handledelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/meta/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Meta post deleted successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        // Remove the deleted blog post from the data array
+        setData(data.filter((post) => post.id !== id));
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Error deleting meta !");
+      });
+  };
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  // Generate pagination buttons
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <a
+          href="#"
+          aria-controls="example1"
+          data-dt-idx="0"
+          tabIndex="0"
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </a>
+      </li>
+    );
+  }
+
+  // Slice the data array to show only the relevant entries based on pagination
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = data.slice(startIndex, endIndex);
+
   return (
     <div>
       <div class="wrapper">
@@ -51,15 +149,17 @@ const Meta = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handlesubmit}>
                       <div class="card-body">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Meta Url</label>
                           <input
-                            type="url"
+                            type="text"
                             class="form-control"
                             id="exampleInputEmail1"
                             placeholder="Title"
+                            onChange={(e) => setUrl(e.target.value)}
+                            value={url}
                           />
                         </div>
                         <div class="form-group">
@@ -69,6 +169,8 @@ const Meta = () => {
                             class="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Title"
+                            onChange={(e) => setTitle(e.target.value)}
+                            value={title}
                           />
                         </div>
                         <div class="form-group">
@@ -80,6 +182,8 @@ const Meta = () => {
                             class="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Keyword"
+                            onChange={(e) => setKeyword(e.target.value)}
+                            value={keyword}
                           />
                         </div>
                         <div class="form-group">
@@ -88,6 +192,8 @@ const Meta = () => {
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
+                            onChange={(e) => setDesc(e.target.value)}
+                            value={desc}
                           ></textarea>
                         </div>
                       </div>
@@ -119,6 +225,16 @@ const Meta = () => {
                           >
                             <h3 class="card-title">Meta List</h3>
                           </div>
+                          <div className="search-bar">
+                            <OutlinedInput
+                              type="text"
+                              variant="outlined"
+                              placeholder="Search.."
+                              value={searchQuery}
+                              onChange={(e) => handleSearch(e.target.value)}
+                              style={{ height: "30px", margin: "10px 0" }}
+                            />
+                          </div>
                           {/* <!-- /.card-header --> */}
                           <div class="card-body">
                             <table
@@ -136,46 +252,123 @@ const Meta = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td>Win 95+</td>
-                                  <td
-                                    className="align-middle"
-                                    style={{ width: "15%" }}
-                                  >
-                                    <button
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FiEdit />
-                                      </span>
-                                    </button>
-                                    <button
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
+                                {data.map((ele, id) => (
+                                  <tr>
+                                    <td>{id + 1}</td>
+                                    <td>{ele.url}</td>
+                                    <td>{ele.title}</td>
+                                    <td>{ele.keyword}</td>
+                                    <td>{ele.desc}</td>
+                                    <td className="align-middle d-flex">
+                                      <Link
+                                        to={`/meta/edit/${ele.id}`}
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FiEdit />
+                                        </span>
+                                      </Link>
+                                      <button
+                                        onClick={(e) => handledelete(ele.id)}
+                                        className="form-btn-dlt"
+                                        style={{
+                                          border: "1px solid red",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "red" }}>
+                                          <MdDelete />
+                                        </span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>
                           {/* <!-- /.card-body --> */}
+                          {/* pagination started */}
+                          <div className="row" style={{ display: "flex" }}>
+                            <div className="col-sm-12 col-md-5">
+                              <div
+                                className="dataTables_info"
+                                id="example1_info"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                Showing{" "}
+                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
+                                to{" "}
+                                {Math.min(
+                                  currentPage * itemsPerPage,
+                                  data.length
+                                )}{" "}
+                                of {data.length} entries
+                              </div>
+                            </div>
+                            <div className="col-sm-12 col-md-7">
+                              <div
+                                className="dataTables_paginate paging_simple_numbers"
+                                id="example1_paginate"
+                              >
+                                <ul
+                                  className="pagination"
+                                  style={{
+                                    justifyContent: "right",
+                                    marginRight: "20px",
+                                  }}
+                                >
+                                  <li
+                                    className={`paginate_button page-item previous ${
+                                      currentPage === 1 ? "disabled" : ""
+                                    }`}
+                                    id="example1_previous"
+                                  >
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="10"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                      }
+                                    >
+                                      Previous
+                                    </a>
+                                  </li>
+                                  {paginationButtons}
+                                  <li
+                                    className={`paginate_button page-item next ${
+                                      currentPage === totalPages
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    id="example1_next"
+                                  >
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="0"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                      }
+                                    >
+                                      Next
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                         {/* <!-- /.card --> */}
                       </div>
