@@ -1,10 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const EventCat = () => {
+  let [name, setName] = useState("");
+  let [image, setImage] = useState("");
+  let [video, setVideo] = useState("");
+
+  let [data, setData] = useState([]);
+
+  let obj = {
+    name: name,
+    image: image,
+    video: video,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:5000/eventCatagory`, obj)
+      .then((res) => {
+        console.log(res.data);
+        alert("Data Saved Successfully !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      window.location.reload();
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/eventCatagory`)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/eventCatagory/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        // After successful deletion, update the state to remove the deleted item
+        setData(data.filter((item) => item.id !== id));
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Deleted Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <div class="wrapper">
@@ -22,7 +82,12 @@ const EventCat = () => {
                     <li class="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item active" style={{color:"#ca629d"}}>Event Catagory</li>
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Event Catagory
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -46,26 +111,28 @@ const EventCat = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}
-                    <form className="text-left">
+                    <form className="text-left" onSubmit={handleSubmit}>
                       <div class="card-body">
                         <div class="form-group">
-                          <label for="exampleInputEmail1">
-                            Name <span style={{ color: "red" }}>*</span>
-                          </label>
+                          <label for="exampleInputEmail1">Name</label>
                           <input
                             type="text"
                             class="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter title"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
                           />
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputFile">
-                            Image <span style={{ color: "red" }}>*</span>
-                          </label>
+                          <label for="exampleInputFile">Image</label>
                           <div class="input-group">
                             <div class="custom-file">
-                              <input type="file" />
+                              <input
+                                type="file"
+                                onChange={(e) => setImage(e.target.value)}
+                                value={image}
+                              />
                             </div>
                           </div>
                         </div>
@@ -73,7 +140,11 @@ const EventCat = () => {
                           <label for="exampleInputFile">Video</label>
                           <div class="input-group">
                             <div class="custom-file">
-                              <input type="file" />
+                              <input
+                                type="file"
+                                onChange={(e) => setVideo(e.target.value)}
+                                value={video}
+                              />
                             </div>
                           </div>
                         </div>
@@ -120,48 +191,55 @@ const EventCat = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>Win 95+</td>
-                                  <td>
-                                    <img src="" alt="" />
-                                  </td>
-                                  <td className="align-middle">
-                                    <button className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{color:"#17a2b8"}}>
-                                        <FaRegEye />
-                                      </span>
-                                    </button>
-                                    <button className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{color:"#17a2b8"}}>
-                                        <FiEdit />
-                                      </span>
-                                    </button>
-                                    <button className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{color:"red"}}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
+                                {data.map((ele, id) => (
+                                  <tr>
+                                    <td>{id + 1}</td>
+                                    <td>{ele.name}</td>
+                                    <td>
+                                      <img src={ele.image} alt="" />
+                                    </td>
+                                    <td className="align-middle">
+                                      <Link
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FaRegEye />
+                                        </span>
+                                      </Link>
+                                      <Link
+                                        to={`/event-catagory/edit/${ele.id}`}
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FiEdit />
+                                        </span>
+                                      </Link>
+                                      <button
+                                      onClick={() => handleDelete(ele.id)}
+                                        className="form-btn-dlt"
+                                        style={{
+                                          border: "1px solid red",
+                                          backgroundColor: "white",
+                                          padding: "1px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "red" }}>
+                                          <MdDelete />
+                                        </span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>

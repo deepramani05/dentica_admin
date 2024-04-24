@@ -24,6 +24,9 @@ import ProductEdit from '../Pages/ProductEdit'
 import ReviewEdit from '../Pages/ReviewEdit'
 import MetaEdit from '../Pages/MetaEdit'
 import TeamEdit from '../Pages/TeamEdit'
+import EventCatEdit from '../Pages/EventCatEdit'
+import EventEdit from '../Pages/EventEdit'
+import EventAdd from '../Pages/EventAdd'
 
 
 const Allroutes = () => {
@@ -54,6 +57,9 @@ const Allroutes = () => {
             <Route path='/review/edit/:id' element={<ReviewEdit/>}/>
             <Route path='/meta/edit/:id' element={<MetaEdit/>}/>
             <Route path='/team/edit/:id' element={<TeamEdit/>}/>
+            <Route path='/event-catagory/edit/:id' element={<EventCatEdit/>}/>
+            <Route path='/event/edit/:id' element={<EventEdit/>}/>
+            <Route path='/event/add' element={<EventAdd/>}/>
         </Routes>
     </div>
   )
