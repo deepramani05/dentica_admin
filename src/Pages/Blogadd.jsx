@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 const Blogadd = () => {
   const [title, setTitle] = useState("");
@@ -139,15 +142,28 @@ const Blogadd = () => {
                           <label htmlFor="exampleInputDescription">
                             Description
                           </label>
-                          <textarea
-                            className="form-control"
-                            id="exampleInputDescription"
-                            rows="3"
-                            placeholder="Place Some Text Here"
-                            name="desc"
-                            onChange={(e) => setDesc(e.target.value)}
+                          <ReactQuill
                             value={desc}
-                          ></textarea>
+                            onChange={(value) => setDesc(value)}
+                            placeholder="Place Some Text Here"
+                            modules={{
+                              toolbar: [
+                                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                                [{size: []}],
+                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                [{'list': 'ordered'}, {'list': 'bullet'}, 
+                                {'indent': '-1'}, {'indent': '+1'}],
+                                ['link', 'image', 'video'],
+                                ['clean']
+                              ],
+                            }}
+                            formats={[
+                              'header', 'font', 'size',
+                              'bold', 'italic', 'underline', 'strike', 'blockquote',
+                              'list', 'bullet', 'indent',
+                              'link', 'image', 'video'
+                            ]}
+                          />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputShortDescription">
