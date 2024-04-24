@@ -223,7 +223,7 @@ const Products = () => {
                         </table>
                       </div>
                     </div>
-                    {/* <!-- /.ca/rd-body --> */}
+                    {/* <!-- /.card-body --> */}
                     {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../css/style.css';
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -236,61 +237,63 @@ const Meta = () => {
                             />
                           </div>
                           {/* <!-- /.card-header --> */}
-                          <div class="card-body">
-                            <table
-                              id="example2"
-                              class="table table-bordered table-hover"
-                            >
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>Meta_url</th>
-                                  <th>Meta Title</th>
-                                  <th>Meta Keyword</th>
-                                  <th>Meta Description</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {data.map((ele, id) => (
+                          <div className="table-container">
+                            <div class="card-body">
+                              <table
+                                id="example2"
+                                class="table table-bordered table-hover"
+                              >
+                                <thead>
                                   <tr>
-                                    <td>{id + 1}</td>
-                                    <td>{ele.url}</td>
-                                    <td>{ele.title}</td>
-                                    <td>{ele.keyword}</td>
-                                    <td>{ele.desc}</td>
-                                    <td className="align-middle d-flex">
-                                      <Link
-                                        to={`/meta/edit/${ele.id}`}
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FiEdit />
-                                        </span>
-                                      </Link>
-                                      <button
-                                        onClick={(e) => handledelete(ele.id)}
-                                        className="form-btn-dlt"
-                                        style={{
-                                          border: "1px solid red",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "red" }}>
-                                          <MdDelete />
-                                        </span>
-                                      </button>
-                                    </td>
+                                    <th>No</th>
+                                    <th>Meta_url</th>
+                                    <th>Meta Title</th>
+                                    <th>Meta Keyword</th>
+                                    <th>Meta Description</th>
+                                    <th>Action</th>
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                </thead>
+                                <tbody>
+                                  {data.map((ele, id) => (
+                                    <tr>
+                                      <td>{id + 1}</td>
+                                      <td>{ele.url}</td>
+                                      <td>{ele.title}</td>
+                                      <td>{ele.keyword}</td>
+                                      <td>{ele.desc}</td>
+                                      <td className="align-middle d-flex">
+                                        <Link
+                                          to={`/meta/edit/${ele.id}`}
+                                          className="form-btn"
+                                          style={{
+                                            border: "1px solid #17a2b8",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <FiEdit />
+                                          </span>
+                                        </Link>
+                                        <button
+                                          onClick={(e) => handledelete(ele.id)}
+                                          className="form-btn-dlt"
+                                          style={{
+                                            border: "1px solid red",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "red" }}>
+                                            <MdDelete />
+                                          </span>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                           {/* <!-- /.card-body --> */}
                           {/* pagination started */}

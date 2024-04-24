@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css'
+import '../css/style.css';
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -238,7 +238,7 @@ const Review = () => {
                             />
                           </div>
                           {/* <!-- /.card-header --> */}
-                          <div className="table-container">
+                            <div className="table-container">
                               <div class="card-body">
                                 <table
                                   id="example2"
@@ -295,7 +295,7 @@ const Review = () => {
                                   </tbody>
                                 </table>
                               </div>
-                          </div>
+                            </div>
                           {/* <!-- /.card-body --> */}
                           {/* pagination started */}
                           <div className="row" style={{ display: "flex" }}>

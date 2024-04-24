@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../css/style.css';
 import { Link, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -228,71 +229,73 @@ const Team = () => {
                             />
                           </div>
                           {/* <!-- /.card-header --> */}
-                          <div class="card-body">
-                            <table
-                              id="example2"
-                              class="table table-bordered table-hover"
-                            >
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>Name</th>
-                                  <th>Post</th>
-                                  <th>Image</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {data.map((ele, id) => (
+                          <div className="table-container">
+                            <div class="card-body">
+                              <table
+                                id="example2"
+                                class="table table-bordered table-hover"
+                              >
+                                <thead>
                                   <tr>
-                                    <td>{id + 1}</td>
-                                    <td>{ele.name}</td>
-                                    <td>{ele.post}</td>
-                                    <td
-                                      style={{
-                                        width: "100px",
-                                        height: "100px",
-                                      }}
-                                    >
-                                      <img
-                                        src={ele.image}
-                                        alt=""
-                                        width={"100%"}
-                                        height={"100%"}
-                                      />
-                                    </td>
-                                    <td className="align-middle">
-                                      <Link
-                                        to={`/team/edit/${ele.id}`}
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FiEdit />
-                                        </span>
-                                      </Link>
-                                      <button
-                                        onClick={() => handleDelete(ele.id)}
-                                        className="form-btn-dlt"
-                                        style={{
-                                          border: "1px solid red",
-                                          backgroundColor: "white",
-                                          padding: "1px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "red" }}>
-                                          <MdDelete />
-                                        </span>
-                                      </button>
-                                    </td>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Post</th>
+                                    <th>Image</th>
+                                    <th>Action</th>
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                </thead>
+                                <tbody>
+                                  {data.map((ele, id) => (
+                                    <tr>
+                                      <td>{id + 1}</td>
+                                      <td>{ele.name}</td>
+                                      <td>{ele.post}</td>
+                                      <td
+                                        style={{
+                                          width: "100px",
+                                          height: "100px",
+                                        }}
+                                      >
+                                        <img
+                                          src={ele.image}
+                                          alt=""
+                                          width={"100%"}
+                                          height={"100%"}
+                                        />
+                                      </td>
+                                      <td className="align-middle">
+                                        <Link
+                                          to={`/team/edit/${ele.id}`}
+                                          className="form-btn"
+                                          style={{
+                                            border: "1px solid #17a2b8",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <FiEdit />
+                                          </span>
+                                        </Link>
+                                        <button
+                                          onClick={() => handleDelete(ele.id)}
+                                          className="form-btn-dlt"
+                                          style={{
+                                            border: "1px solid red",
+                                            backgroundColor: "white",
+                                            padding: "1px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "red" }}>
+                                            <MdDelete />
+                                          </span>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                           {/* <!-- /.card-body --> */}
                           {/* pagination started */}
