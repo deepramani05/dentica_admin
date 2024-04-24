@@ -1,18 +1,21 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const Blogadd = () => {
-  let [title, setTitle] = useState("");
-  let [image, setImage] = useState("");
-  let [desc, setDesc] = useState("");
-  let [sdesc, setSdesc] = useState("");
-  let [mdesc, setMdesc] = useState("");
-  let [mtitle, setMtitle] = useState("");
-  let [keyword, setKeyword] = useState("");
-  let [tag, setTag] = useState("");
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [desc, setDesc] = useState("");
+  const [sdesc, setSdesc] = useState("");
+  const [mdesc, setMdesc] = useState("");
+  const [mtitle, setMtitle] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [tags, setTags] = useState([]);
+  const [currentTag, setCurrentTag] = useState("")
 
-  let obj = {
+
+  const obj = {
     title: title,
     image: image,
     desc: desc,
@@ -20,7 +23,7 @@ const Blogadd = () => {
     mdesc: mdesc,
     mtitle: mtitle,
     keyword: keyword,
-    tag: tag,
+    tags: tags,
   };
 
   const handleSubmit = (e) => {
@@ -35,6 +38,21 @@ const Blogadd = () => {
         console.log(err);
       });
       window.location.reload();
+  };
+
+  const handleTag = (e) =>{
+    if (e.key === "Enter"){
+      e.preventDefault();
+      const trimmedTag = currentTag.trim();
+      if (trimmedTag){
+        setTags([...tags,trimmedTag]);
+        setCurrentTag("");
+      }
+    }
+  }
+
+  const handleRemoveTag = (id) =>{
+    setTags(tags.filter(( _ , index)=> index !== id));
   };
 
   return (
@@ -190,14 +208,33 @@ const Blogadd = () => {
                         <div className="form-group">
                           <label htmlFor="exampleInputMetaKeyword">Tag</label>
                           <input
-                            type=""
+                            type="text"
                             className="form-control"
-                            id="exampleInputMetaKeyword"
-                            placeholder="Enter meta keyword"
-                            name="keyword"
-                            onChange={(e) => setTag(e.target.value)}
-                            value={tag}
+                            id="exampleInputTags"
+                            placeholder="Enter tags"
+                            name="tags"
+                            value={currentTag}
+                            onChange={(e) => setCurrentTag(e.target.value)}
+                            onKeyDown={handleTag}
                           />
+                        </div>
+                        <div className="form-group">
+                          <div>
+                            {tags.map((tag,id)=>(
+                              <span key={id} 
+                                className="badge-secondary mr-1"
+                                style={{display: 'inline-flex', alignItems: 'center', padding: '2px 7px', backgroundColor: '#ca629d', borderRadius: "5px"}}>
+                                  {tag}
+                                <span 
+                                  className="remove-tag"
+                                  style={{ cursor: 'pointer', marginLeft: '5px', color: "#12448b", paddingBottom: '2px' }}
+                                  onClick={()=> handleRemoveTag(id)}
+                                  >
+                                      <HighlightOffIcon fontSize="15px" />
+                                </span>
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                       <div className="card-footer">
