@@ -5,6 +5,7 @@ import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Input, OutlinedInput } from "@mui/material";
 import axios from "axios";
+import "../css/style.css"
 
 const Contact = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -94,59 +95,61 @@ const Contact = () => {
                       <h3 class="card-title">User List</h3>
                     </div>
                     {/* <!-- /.card-header --> */}
-                    <div class="card-body">
-                      <table
-                        id="example2"
-                        class="table table-bordered table-hover text-left"
-                      >
-                        <thead>
-                          <tr>
-                            <th>SL</th>
-                            <th>Customer's Name</th>
-                            <th>Contact Info</th>
-                            <th>Subject</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedData.map((ele, id) => (
-                            <tr key={id}>
-                              <td>
-                                {(currentPage - 1) * itemsPerPage + id + 1}
-                              </td>
-                              <td>{ele.name}</td>
-                              <td>{ele.info}</td>
-                              <td>{ele.sub}</td>
-                              <td className="align-middle">
-                                <button
-                                  className="form-btn"
-                                  style={{
-                                    border: "1px solid #17a2b8",
-                                    backgroundColor: "white",
-                                    padding: "2px 5px",
-                                  }}
-                                >
-                                  <span style={{ color: "#17a2b8" }}>
-                                    <FaRegEye />
-                                  </span>
-                                </button>
-                                <button
-                                  className="form-btn-dlt"
-                                  style={{
-                                    border: "1px solid red",
-                                    backgroundColor: "white",
-                                    padding: "2px 5px",
-                                  }}
-                                >
-                                  <span style={{ color: "red" }}>
-                                    <MdDelete />
-                                  </span>
-                                </button>
-                              </td>
+                    <div className="table-container">
+                      <div class="card-body">
+                        <table
+                          id="example2"
+                          class="table table-bordered table-hover text-left"
+                        >
+                          <thead>
+                            <tr>
+                              <th>SL</th>
+                              <th>Customer's Name</th>
+                              <th>Contact Info</th>
+                              <th>Subject</th>
+                              <th>Action</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {displayedData.map((ele, id) => (
+                              <tr key={id}>
+                                <td>
+                                  {(currentPage - 1) * itemsPerPage + id + 1}
+                                </td>
+                                <td>{ele.name}</td>
+                                <td>{ele.info}</td>
+                                <td>{ele.sub}</td>
+                                <td className="align-middle">
+                                  <button
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FaRegEye />
+                                    </span>
+                                  </button>
+                                  <button
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     {/* <!-- //.card-body --> */}
                     {/* pagination started */}
