@@ -72,14 +72,37 @@
 .row{
   display: flex;
 }
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
 .table-container{
   overflow-x: auto;
 }
-.table-container table thead th {
+.table th,
+.table td {
   background-color: #fff; 
   position: sticky;
   top: 0;
   z-index: 1;
+  padding: 8px;
+  text-align: left;
+  /* white-space: nowrap; */
+}
+@media screen and (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    max-width: 100%;
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* Hide scrollbar in Edge */
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 4px; /* Reduce padding for smaller screens */
+    font-size: 14px; /* Decrease font size for smaller screens */
+  }
 }
 .pagination{
   margin-top: 10px;

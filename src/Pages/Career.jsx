@@ -4,6 +4,7 @@ import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { Input, OutlinedInput } from "@mui/material";
+import "../css/style.css"
 
 const Career = () => {
   let [data, setData] = useState([]);
@@ -96,72 +97,74 @@ const Career = () => {
                       <h3 class="card-title">User List</h3>
                     </div>
                     {/* <!-- /.card-header --> */}
-                    <div class="card-body">
-                      <table
-                        id="example2"
-                        class="table table-bordered table-hover text-left"
-                      >
-                        <thead>
-                          <tr>
-                            <th>SL</th>
-                            <th>Customer Name</th>
-                            <th>Contact Info</th>
-                            <th>Subject</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedData.map((ele, id) => (
-                            <tr key={id}>
-                              <td>
-                                {(currentPage - 1) * itemsPerPage + id + 1}
-                              </td>
-                              <td>{ele.name}</td>
-                              <td>
-                                <p className="m-0">Mo : - {ele.num}</p>
-                                <p className="m-0">E-mail ID : - {ele.mail}</p>
-                              </td>
-                              <td>{ele.subject}</td>
-                              <td>
-                                <button
-                                  className="form-btn-dlt"
-                                  style={{
-                                    backgroundColor: "white",
-                                    border: "1px solid red",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      color: "red",
-                                      lineHeight: "30px",
-                                      padding: "5px",
-                                    }}
-                                  >
-                                    <BsFileEarmarkPdfFill />
-                                  </span>
-                                </button>
-                                <button
-                                  className="form-btn-dlt"
-                                  style={{
-                                    backgroundColor: "white",
-                                    border: "1px solid red",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      color: "red",
-                                      lineHeight: "30px",
-                                      padding: "5px",
-                                    }}
-                                  >
-                                    <MdDelete />
-                                  </span>
-                                </button>
-                              </td>
+                    <div className="table-container">
+                      <div class="card-body">
+                        <table
+                          id="example2"
+                          class="table table-bordered table-hover text-left"
+                        >
+                          <thead>
+                            <tr>
+                              <th>SL</th>
+                              <th>Customer Name</th>
+                              <th>Contact Info</th>
+                              <th>Subject</th>
+                              <th>Action</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {displayedData.map((ele, id) => (
+                              <tr key={id}>
+                                <td>
+                                  {(currentPage - 1) * itemsPerPage + id + 1}
+                                </td>
+                                <td>{ele.name}</td>
+                                <td>
+                                  <p className="m-0">Mo : - {ele.num}</p>
+                                  <p className="m-0">E-mail ID : - {ele.mail}</p>
+                                </td>
+                                <td>{ele.subject}</td>
+                                <td>
+                                  <button
+                                    className="form-btn-dlt"
+                                    style={{
+                                      backgroundColor: "white",
+                                      border: "1px solid red",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        lineHeight: "30px",
+                                        padding: "5px",
+                                      }}
+                                    >
+                                      <BsFileEarmarkPdfFill />
+                                    </span>
+                                  </button>
+                                  <button
+                                    className="form-btn-dlt"
+                                    style={{
+                                      backgroundColor: "white",
+                                      border: "1px solid red",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        lineHeight: "30px",
+                                        padding: "5px",
+                                      }}
+                                    >
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     {/* <!-- /.car//d-body --> */}
                     {/* pagination started */}
