@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css';
+import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
+import { OutlinedInput } from "@mui/material";
 
 const Meta = () => {
-  let [url, setUrl] = useState("");
-  let [title, setTitle] = useState("");
-  let [keyword, setKeyword] = useState("");
-  let [desc, setDesc] = useState("");
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [desc, setDesc] = useState("");
 
-  let [data, setData] = useState([]);
-  let [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -24,27 +23,28 @@ const Meta = () => {
       item.title.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredData(filtered);
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
-  let obj = {
+  const obj = {
     url: url,
     title: title,
     keyword: keyword,
     desc: desc,
   };
 
-  const handlesubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(`http://localhost:5000/meta`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("data savaed successfully !");
+        alert("Data saved successfully !");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.reload();
   };
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Meta = () => {
     });
   }, []);
 
-  const handledelete = (id) => {
+  const handleDelete = (id) => {
     axios
       .delete(`http://localhost:5000/meta/${id}`)
       .then((res) => {
@@ -67,7 +67,7 @@ const Meta = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        // Remove the deleted blog post from the data array
+        // Remove the deleted meta post from both data arrays
         setData(data.filter((post) => post.id !== id));
         setFilteredData(filteredData.filter((post) => post.id !== id));
       })
@@ -104,30 +104,27 @@ const Meta = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
+  // Slice the filtered data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
-      <div class="wrapper">
-        <div class="content-wrapper">
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Meta Form</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li
-                      class="breadcrumb-item active"
-                      style={{ color: "#ca629d" }}
-                    >
+                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
                       Meta
                     </li>
                   </ol>
@@ -136,58 +133,56 @@ const Meta = () => {
             </div>
           </section>
 
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="card card-primary">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card card-primary">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Add Meta data</h3>
+                      <h3 className="card-title">Add Meta data</h3>
                     </div>
-                    <form className="text-left" onSubmit={handlesubmit}>
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Meta Url</label>
+                    <form className="text-left" onSubmit={handleSubmit}>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">Meta Url</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputEmail1"
                             placeholder="Title"
                             onChange={(e) => setUrl(e.target.value)}
                             value={url}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Meta Title</label>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword1">Meta Title</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Title"
                             onChange={(e) => setTitle(e.target.value)}
                             value={title}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">
-                            Meta Keyword
-                          </label>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword1">Meta Keyword</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Keyword"
                             onChange={(e) => setKeyword(e.target.value)}
                             value={keyword}
                           />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Meta Description</label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             rows="3"
                             placeholder="Enter ..."
                             onChange={(e) => setDesc(e.target.value)}
@@ -196,10 +191,10 @@ const Meta = () => {
                         </div>
                       </div>
 
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary text-light border-0 form-dlt-btn"
+                          className="btn btn-primary text-light border-0 form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
                           Submit
@@ -209,16 +204,16 @@ const Meta = () => {
                   </div>
                 </div>
 
-                <section class="content col-md-8">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
+                <section className="content col-md-8">
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card">
                           <div
-                            class="card-header text-light"
+                            className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">Meta List</h3>
+                            <h3 className="card-title">Meta List</h3>
                           </div>
                           <div className="search-bar">
                             <OutlinedInput
@@ -230,12 +225,11 @@ const Meta = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div className="table-container">
-                            <div class="card-body">
+                            <div className="card-body">
                               <table
                                 id="example2"
-                                class="table table-bordered table-hover"
+                                className="table table-bordered table-hover"
                               >
                                 <thead>
                                   <tr>
@@ -248,9 +242,9 @@ const Meta = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data.map((ele, id) => (
-                                    <tr>
-                                      <td>{id + 1}</td>
+                                  {displayedData.map((ele, id) => (
+                                    <tr key={id}>
+                                      <td>{startIndex + id + 1}</td>
                                       <td>{ele.url}</td>
                                       <td>{ele.title}</td>
                                       <td>{ele.keyword}</td>
@@ -270,7 +264,7 @@ const Meta = () => {
                                           </span>
                                         </Link>
                                         <button
-                                          onClick={(e) => handledelete(ele.id)}
+                                          onClick={() => handleDelete(ele.id)}
                                           className="form-btn-dlt"
                                           style={{
                                             border: "1px solid red",
@@ -298,10 +292,9 @@ const Meta = () => {
                                 aria-live="polite"
                               >
                                 Showing{" "}
-                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
-                                to{" "}
+                                {startIndex + 1} to{" "}
                                 {Math.min(
-                                  currentPage * itemsPerPage,
+                                  endIndex,
                                   filteredData.length
                                 )}{" "}
                                 of {filteredData.length} entries

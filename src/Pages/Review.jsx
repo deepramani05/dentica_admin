@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css';
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -8,28 +7,28 @@ import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
 
 const Review = () => {
-  let [name, setName] = useState("");
-  let [num, setNum] = useState("");
-  let [review, setReview] = useState("");
-  let [image, setImage] = useState("");
+  const [name, setName] = useState("");
+  const [num, setNum] = useState("");
+  const [review, setReview] = useState("");
+  const [image, setImage] = useState("");
 
-  let [data, setData] = useState([]);
-
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
-  let obj = {
+  const obj = {
     name: name,
     num: num,
     review: review,
     image: image,
   };
 
-  const handlesubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(`http://localhost:5000/review`, obj)
@@ -55,14 +54,17 @@ const Review = () => {
       });
   }, []);
 
-  const handledelete = (id) => {
+  const handleDelete = (id) => {
     axios
       .delete(`http://localhost:5000/review/${id}`)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
-          title: "Review deleted successfully !",
+          position: "top-end",
           icon: "success",
+          title: "Review deleted successfully !",
+          showConfirmButton: false,
+          timer: 1000,
         });
         setData(data.filter((post) => post.id !== id));
       })
@@ -73,11 +75,10 @@ const Review = () => {
   };
 
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
@@ -108,21 +109,21 @@ const Review = () => {
 
   return (
     <div>
-      <div class="wrapper">
-        <div class="content-wrapper">
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Review</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
                       Review
@@ -133,56 +134,55 @@ const Review = () => {
             </div>
           </section>
 
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="card card-primary">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card card-primary">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "rgb(37, 111, 152)" }}
                     >
-                      <h3 class="card-title">Review</h3>
+                      <h3 className="card-title">Review</h3>
                     </div>
-                    <form className="text-left" onSubmit={handlesubmit}>
-                      
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Name</label>
+                    <form className="text-left" onSubmit={handleSubmit}>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">Name</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Number</label>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword1">Number</label>
                           <input
                             type="number"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputSubtitle"
                             placeholder="Enter Number"
                             onChange={(e) => setNum(e.target.value)}
                             value={num}
                           />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Review</label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             rows="3"
                             placeholder="Enter ..."
                             onChange={(e) => setReview(e.target.value)}
                             value={review}
                           ></textarea>
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputFile">Image</label>
-                          <div class="input-group">
-                            <div class="custom-file">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputFile">Image</label>
+                          <div className="input-group">
+                            <div className="custom-file">
                               <input
                                 type="file"
                                 onChange={(e) => setImage(e.target.value)}
@@ -192,11 +192,10 @@ const Review = () => {
                           </div>
                         </div>
                       </div>
-
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary form-dlt-btn"
+                          className="btn btn-primary form-dlt-btn"
                           style={{ backgroundColor: "#ca629d", border: "0" }}
                         >
                           Submit
@@ -206,16 +205,17 @@ const Review = () => {
                   </div>
                 </div>
 
-                <section class="content col-md-8">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
+                {/* Review List Section */}
+                <section className="content col-md-8">
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card">
                           <div
-                            class="card-header text-light"
+                            className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">Review List</h3>
+                            <h3 className="card-title">Review List</h3>
                           </div>
                           <div className="search-bar">
                             <OutlinedInput
@@ -227,67 +227,60 @@ const Review = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
-                            <div className="table-container">
-                              <div class="card-body">
-                                <table
-                                  id="example2"
-                                  class="table table-bordered table-hover"
-                                >
-                                  <thead>
-                                    <tr>
-                                      <th>No</th>
-                                      <th>Name</th>
-                                      <th>Review</th>
-                                      <th>Image</th>
-                                      <th>Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {data.map((ele, id) => (
-                                      <tr>
-                                        <td>{id + 1}</td>
-                                        <td>{ele.name}</td>
-                                        <td>{ele.review}</td>
-                                        <td>
-                                          <img src={ele.image} alt={ele.name} />
-                                        </td>
-                                        <td className="align-middle">
-                                          <Link
-                                            to={`/review/edit/${ele.id}`}
-                                            className="form-btn"
-                                            style={{
-                                              border: "1px solid #17a2b8",
-                                              backgroundColor: "white",
-                                              padding: "2px 5px",
-                                            }}
-                                          >
-                                            <span style={{ color: "#17a2b8" }}>
-                                              <FiEdit />
-                                            </span>
-                                          </Link>
-                                          <button
-                                            onClick={() => handledelete(ele.id)}
-                                            className="form-btn-dlt"
-                                            style={{
-                                              border: "1px solid red",
-                                              backgroundColor: "white",
-                                              padding: "1px 5px",
-                                            }}
-                                          >
-                                            <span style={{ color: "red" }}>
-                                              <MdDelete />
-                                            </span>
-                                          </button>
-                                        </td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          {/* <!-- /.card-body --> */}
-                          {/* pagination started */}
+                          <div className="card-body">
+                            <table className="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>Name</th>
+                                  <th>Review</th>
+                                  <th>Image</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {displayedData.map((ele, id) => (
+                                  <tr key={id}>
+                                    <td>{startIndex + id + 1}</td>
+                                    <td>{ele.name}</td>
+                                    <td>{ele.review}</td>
+                                    <td>
+                                      <img src={ele.image} alt={ele.name} />
+                                    </td>
+                                    <td className="align-middle">
+                                      <Link
+                                        to={`/review/edit/${ele.id}`}
+                                        className="form-btn"
+                                        style={{
+                                          border: "1px solid #17a2b8",
+                                          backgroundColor: "white",
+                                          padding: "2px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "#17a2b8" }}>
+                                          <FiEdit />
+                                        </span>
+                                      </Link>
+                                      <button
+                                        onClick={() => handleDelete(ele.id)}
+                                        className="form-btn-dlt"
+                                        style={{
+                                          border: "1px solid red",
+                                          backgroundColor: "white",
+                                          padding: "1px 5px",
+                                        }}
+                                      >
+                                        <span style={{ color: "red" }}>
+                                          <MdDelete />
+                                        </span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          {/* Pagination */}
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div
@@ -296,14 +289,9 @@ const Review = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                Showing{" "}
-                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
-                                to{" "}
-                                {Math.min(
-                                  currentPage * itemsPerPage,
-                                  data.length
-                                )}{" "}
-                                of {data.length} entries
+                                Showing {startIndex + 1} to{" "}
+                                {Math.min(endIndex, filteredData.length)} of{" "}
+                                {filteredData.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">

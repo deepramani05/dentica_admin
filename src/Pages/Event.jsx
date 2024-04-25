@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css';
+import "../css/style.css";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -65,20 +65,16 @@ const Event = () => {
     paginationButtons.push(
       <li
         key={i}
-        className={`paginate_button page-item ${
+        className={`page-item ${
           currentPage === i ? "active" : ""
         }`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
+        <button
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </a>
+        </button>
       </li>
     );
   }
@@ -143,65 +139,73 @@ const Event = () => {
                         </Link>
                       </div>
                     </div>
-                    {/* <!-- /.card-header --> */}
+                    <div className="search-bar">
+                      <OutlinedInput
+                        type="text"
+                        variant="outlined"
+                        placeholder="Search.."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        style={{ height: "30px", margin: "10px 0" }}
+                      />
+                    </div>
                     <div className="table-container">
-                      <div class="card-body">
+                      <div className="card-body">
                         <table
                           id="example2"
-                          class="table table-bordered table-hover"
+                          className="table table-bordered table-hover"
                         >
                           <thead>
                             <tr>
                               <th>SL</th>
-                              <th>Catagory</th>
+                              <th>Category</th>
                               <th>Image</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {data.map((ele, id) => {
-                              return (
-                                <tr key={id}>
-                                  <td>{id + 1}</td>
-                                  <td>{ele.cat}</td>
-                                  <td width={"200px"} height={"100px"}>
-                                    <img
-                                      src={ele.image}
-                                      alt=""
-                                      width={"100%"}
-                                      height={"100%"}
-                                    />
-                                  </td>
-                                  <td className="align-middle">
-                                    <Link
-                                      to={`/event/edit/${ele.id}`}
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FiEdit />
-                                      </span>
-                                    </Link>
-                                    <button
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "1px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
-                              );
-                            })}
+                            {displayedData.map((ele, index) => (
+                              <tr key={index}>
+                                <td>{startIndex + index + 1}</td>
+                                <td>{ele.cat}</td>
+                                <td width={"200px"} height={"100px"}>
+                                  <img
+                                    src={ele.image}
+                                    alt=""
+                                    width={"100%"}
+                                    height={"100%"}
+                                  />
+                                </td>
+                                <td className="align-middle">
+                                  <Link
+                                    to={`/event/edit/${ele.id}`}
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FiEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handleDelete(ele.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      backgroundColor: "white",
+                                      padding: "1px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
@@ -215,12 +219,8 @@ const Event = () => {
                           aria-live="polite"
                         >
                           Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(
-                            currentPage * itemsPerPage,
-                            filteredData.length
-                          )}{" "}
-                          of {filteredData.length} entries
+                          {startIndex + 1} to{" "}
+                          {endIndex} of {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -230,43 +230,31 @@ const Event = () => {
                         >
                           <ul className="pagination">
                             <li
-                              className={`paginate_button page-item previous ${
+                              className={`page-item previous ${
                                 currentPage === 1 ? "disabled" : ""
                               }`}
-                              id="example1_previous"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
-                                onClick={() =>
-                                  setCurrentPage(currentPage - 1)
-                                }
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
                               >
                                 Previous
-                              </a>
+                              </button>
                             </li>
                             {paginationButtons}
                             <li
-                              className={`paginate_button page-item next ${
+                              className={`page-item next ${
                                 currentPage === totalPages ? "disabled" : ""
                               }`}
-                              id="example1_next"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
-                                onClick={() =>
-                                  setCurrentPage(currentPage + 1)
-                                }
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
                               >
                                 Next
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>

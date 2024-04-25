@@ -39,17 +39,23 @@ const ReviewEdit = () => {
       .then((res) => {
         console.log(res.data);
         Swal.fire({
-          title: "Review updated Successfully !",
+          position: "top-end",
           icon: "success",
+          title: "Review updated Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
         });
       })
       .catch((err) => {
         console.log(err);
         alert("Error !");
         Swal.fire({
-            title: "Error !",
-            icon: "error",
-          });
+          position: "top-end",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
   };
 

@@ -66,20 +66,16 @@ const Stl = () => {
     paginationButtons.push(
       <li
         key={i}
-        className={`paginate_button page-item ${
+        className={`page-item ${
           currentPage === i ? "active" : ""
         }`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
+        <button
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </a>
+        </button>
       </li>
     );
   }
@@ -91,23 +87,23 @@ const Stl = () => {
 
   return (
     <div>
-      <div class="wrapper">
+      <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
-        <div class="content-wrapper">
+        <div className="content-wrapper">
           {/* Content Header (Page header) */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>STL</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
                       STL
@@ -120,16 +116,16 @@ const Stl = () => {
           </section>
 
           {/* Main content */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
                     <div
-                      class="card-header text-light"
+                      className="card-header text-light"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Stl Form List</h3>
+                      <h3 className="card-title">Stl Form List</h3>
                     </div>
                     <div className="search-bar">
                       <OutlinedInput
@@ -143,10 +139,10 @@ const Stl = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
-                      <div class="card-body">
+                      <div className="card-body">
                         <table
                           id="example2"
-                          class="table table-bordered table-hover text-left"
+                          className="table table-bordered table-hover text-left"
                         >
                           <thead>
                             <tr>
@@ -158,8 +154,8 @@ const Stl = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {data.map((ele, id) => (
-                              <tr>
+                            {displayedData.map((ele, id) => (
+                              <tr key={id}>
                                 <td>{id + 1}</td>
                                 <td>{ele.name}</td>
                                 <td>{ele.num}</td>
@@ -236,39 +232,31 @@ const Stl = () => {
                             }}
                           >
                             <li
-                              className={`paginate_button page-item previous ${
+                              className={`page-item previous ${
                                 currentPage === 1 ? "disabled" : ""
                               }`}
-                              id="example1_previous"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
                               >
                                 Previous
-                              </a>
+                              </button>
                             </li>
                             {paginationButtons}
                             <li
-                              className={`paginate_button page-item next ${
+                              className={`page-item next ${
                                 currentPage === totalPages ? "disabled" : ""
                               }`}
-                              id="example1_next"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
                               >
                                 Next
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>

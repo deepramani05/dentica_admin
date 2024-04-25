@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css'
+import "../css/style.css";
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
@@ -160,105 +160,56 @@ const Blog = () => {
                             <th>Action</th>
                           </tr>
                         </thead>
-                            <tbody>
-                              {displayedData.map((ele, id) => (
-                                <tr key={ele.id}>
-                                  <td>{startIndex + id + 1}</td>
-                                  <td>{ele.title}</td>
-                                  <td>{ele.desc}</td>
-                                  <td width={"15%"}>
-                                    <Link
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        padding: "5px",
-                                        backgroundColor: "white",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FaEye />
-                                      </span>
-                                    </Link>
-                                    <Link
-                                      to={`/blog/edit/${ele.id}`}
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        padding: "5px",
-                                        backgroundColor: "white",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <BiSolidEdit />
-                                      </span>
-                                    </Link>
-                                    <button
-                                      onClick={() => handledelete(ele.id)}
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        padding: "4px",
-                                        backgroundColor: "white",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                            {/* {displayedData.map((ele, id) => (
-                              <tr key={ele.id}>
-                                <td>{id + 1}</td>
-                                <td>{ele.title}</td>
-                                <td>{ele.desc}</td>
-                                <td width={"15%"}>
-                                  <Link
-                                    className="form-btn"
-                                    style={{
-                                      border: "1px solid #17a2b8",
-                                      padding: "5px",
-                                      backgroundColor: "white",
-                                    }}
-                                  >
-                                    <span style={{ color: "#17a2b8" }}>
-                                      <FaEye />
-                                    </span>
-                                  </Link>
-                                  <Link
-                                    to={`/blog/edit/${ele.id}`}
-                                    className="form-btn"
-                                    style={{
-                                      border: "1px solid #17a2b8",
-                                      padding: "5px",
-                                      backgroundColor: "white",
-                                    }}
-                                  >
-                                    <span style={{ color: "#17a2b8" }}>
-                                      <BiSolidEdit />
-                                    </span>
-                                  </Link>
-                                  <button
-                                    onClick={() => handledelete(ele.id)}
-                                    className="form-btn-dlt"
-                                    style={{
-                                      border: "1px solid red",
-                                      padding: "4px",
-                                      backgroundColor: "white",
-                                    }}
-                                  >
-                                    <span style={{ color: "red" }}>
-                                      <MdDelete />
-                                    </span>
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody> */}
-                        </table>
-                      </div>
+                        <tbody>
+                          {displayedData.map((ele, id) => (
+                            <tr key={ele.id}>
+                              <td>{startIndex + id + 1}</td>
+                              <td>{ele.title}</td>
+                              <td>{ele.desc}</td>
+                              <td width={"15%"}>
+                                <Link
+                                  className="form-btn"
+                                  style={{
+                                    border: "1px solid #17a2b8",
+                                    padding: "5px",
+                                    backgroundColor: "white",
+                                  }}
+                                >
+                                  <span style={{ color: "#17a2b8" }}>
+                                    <FaEye />
+                                  </span>
+                                </Link>
+                                <Link
+                                  to={`/blog/edit/${ele.id}`}
+                                  className="form-btn"
+                                  style={{
+                                    border: "1px solid #17a2b8",
+                                    padding: "5px",
+                                    backgroundColor: "white",
+                                  }}
+                                >
+                                  <span style={{ color: "#17a2b8" }}>
+                                    <BiSolidEdit />
+                                  </span>
+                                </Link>
+                                <button
+                                  onClick={() => handledelete(ele.id)}
+                                  className="form-btn-dlt"
+                                  style={{
+                                    border: "1px solid red",
+                                    padding: "4px",
+                                    backgroundColor: "white",
+                                  }}
+                                >
+                                  <span style={{ color: "red" }}>
+                                    <MdDelete />
+                                  </span>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                     {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>
@@ -269,13 +220,9 @@ const Blog = () => {
                           role="status"
                           aria-live="polite"
                         >
-                          Showing{" "}
-                          {startIndex + 1} to{" "}
-                          {Math.min(
-                            endIndex,
-                            filteredData.length
-                          )}{" "}
-                          of {filteredData.length} entries
+                          Showing {startIndex + 1} to{" "}
+                          {Math.min(endIndex, filteredData.length)} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -302,9 +249,7 @@ const Blog = () => {
                                 data-dt-idx="10"
                                 tabIndex="0"
                                 className="page-link"
-                                onClick={() =>
-                                  setCurrentPage(currentPage - 1)
-                                }
+                                onClick={() => setCurrentPage(currentPage - 1)}
                               >
                                 Previous
                               </a>
@@ -322,9 +267,7 @@ const Blog = () => {
                                 data-dt-idx="0"
                                 tabIndex="0"
                                 className="page-link"
-                                onClick={() =>
-                                  setCurrentPage(currentPage + 1)
-                                }
+                                onClick={() => setCurrentPage(currentPage + 1)}
                               >
                                 Next
                               </a>
@@ -336,6 +279,7 @@ const Blog = () => {
                   </div>
                 </div>
               </div>
+            </div>
           </section>
         </div>
       </div>

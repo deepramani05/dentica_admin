@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const MetaEdit = () => {
   const { id } = useParams(); // Extracting the id from URL parameters
@@ -25,11 +26,23 @@ const MetaEdit = () => {
       .patch(`http://localhost:5000/meta/${id}`, metaData)
       .then((res) => {
         console.log(res.data);
-        alert("Meta data saved successfully !");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Meta data updated successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert("Error saving meta data !");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Error saving meta data !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
   };
 

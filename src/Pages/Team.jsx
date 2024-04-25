@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css';
 import { Link, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -8,11 +7,11 @@ import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
 
 const Team = () => {
-  let [name, setName] = useState("");
-  let [image, setImage] = useState("");
-  let [post, setPost] = useState("");
-  let [data, setData] = useState([]);
-  let { id } = useParams();
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const [post, setPost] = useState("");
+  const [data, setData] = useState([]);
+  const { id } = useParams();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,7 +20,7 @@ const Team = () => {
     setSearchQuery(query);
   };
 
-  let obj = {
+  const obj = {
     name: name,
     image: image,
     post: post,
@@ -35,11 +34,11 @@ const Team = () => {
       .then((res) => {
         console.log(res.data);
         alert("Data Saved!");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.reload();
   };
 
   useEffect(() => {
@@ -81,51 +80,46 @@ const Team = () => {
     paginationButtons.push(
       <li
         key={i}
-        className={`paginate_button page-item ${
+        className={`page-item ${
           currentPage === i ? "active" : ""
         }`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
+        <button
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </a>
+        </button>
       </li>
     );
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex).filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.post.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const displayedData = data
+    .filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.post.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .slice(startIndex, endIndex);
 
   return (
     <div>
-      <div class="wrapper">
-        <div class="content-wrapper">
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Doctor's Team</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li
-                      class="breadcrumb-item active"
-                      style={{ color: "#ca629d" }}
-                    >
+                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
                       Team
                     </li>
                   </ol>
@@ -134,46 +128,48 @@ const Team = () => {
             </div>
           </section>
 
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="card card-primary">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card card-primary">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "rgb(37, 111, 152)" }}
                     >
-                      <h3 class="card-title">Add</h3>
+                      <h3 className="card-title">Add</h3>
                     </div>
                     <form className="text-left" onSubmit={handleSubmit}>
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Name</label>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputTitle">Name</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputFile">Image</label>
-                          <div class="input-group">
-                            <div class="custom-file">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputFile">Image</label>
+                          <div className="input-group">
+                            <div className="custom-file">
                               <input
                                 type="file"
+                                className="custom-file-input"
                                 onChange={(e) => setImage(e.target.value)}
                                 value={image}
                               />
+                              <label className="custom-file-label">Choose file</label>
                             </div>
                           </div>
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Post</label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             rows="3"
                             placeholder="Enter ..."
                             onChange={(e) => setPost(e.target.value)}
@@ -181,10 +177,10 @@ const Team = () => {
                           ></textarea>
                         </div>
                       </div>
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary form-dlt-btn"
+                          className="btn btn-primary form-dlt-btn"
                           style={{ backgroundColor: "#ca629d", border: "0" }}
                         >
                           Submit
@@ -193,16 +189,16 @@ const Team = () => {
                     </form>
                   </div>
                 </div>
-                <section class="content col-md-8">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
+                <section className="content col-md-8">
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card">
                           <div
-                            class="card-header text-light"
+                            className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">Doctor's List</h3>
+                            <h3 className="card-title">Doctor's List</h3>
                           </div>
                           <div className="search-bar">
                             <OutlinedInput
@@ -214,12 +210,11 @@ const Team = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div className="table-container">
-                            <div class="card-body">
+                            <div className="card-body">
                               <table
                                 id="example2"
-                                class="table table-bordered table-hover"
+                                className="table table-bordered table-hover"
                               >
                                 <thead>
                                   <tr>
@@ -231,22 +226,16 @@ const Team = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data.map((ele, id) => (
-                                    <tr>
-                                      <td>{id + 1}</td>
+                                  {displayedData.map((ele, id) => (
+                                    <tr key={id}>
+                                      <td>{startIndex + id + 1}</td>
                                       <td>{ele.name}</td>
                                       <td>{ele.post}</td>
-                                      <td
-                                        style={{
-                                          width: "100px",
-                                          height: "100px",
-                                        }}
-                                      >
+                                      <td>
                                         <img
                                           src={ele.image}
                                           alt=""
-                                          width={"100%"}
-                                          height={"100%"}
+                                          style={{ width: "100px", height: "auto" }}
                                         />
                                       </td>
                                       <td className="align-middle">
@@ -313,45 +302,33 @@ const Team = () => {
                                   }}
                                 >
                                   <li
-                                    className={`paginate_button page-item previous ${
+                                    className={`page-item ${
                                       currentPage === 1 ? "disabled" : ""
                                     }`}
-                                    id="example1_previous"
                                   >
-                                    <a
-                                      href="#"
-                                      aria-controls="example1"
-                                      data-dt-idx="10"
-                                      tabIndex="0"
+                                    <button
                                       className="page-link"
                                       onClick={() =>
                                         setCurrentPage(currentPage - 1)
                                       }
                                     >
                                       Previous
-                                    </a>
+                                    </button>
                                   </li>
                                   {paginationButtons}
                                   <li
-                                    className={`paginate_button page-item next ${
-                                      currentPage === totalPages
-                                        ? "disabled"
-                                        : ""
+                                    className={`page-item ${
+                                      currentPage === totalPages ? "disabled" : ""
                                     }`}
-                                    id="example1_next"
                                   >
-                                    <a
-                                      href="#"
-                                      aria-controls="example1"
-                                      data-dt-idx="0"
-                                      tabIndex="0"
+                                    <button
                                       className="page-link"
                                       onClick={() =>
                                         setCurrentPage(currentPage + 1)
                                       }
                                     >
                                       Next
-                                    </a>
+                                    </button>
                                   </li>
                                 </ul>
                               </div>
