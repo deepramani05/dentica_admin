@@ -1,54 +1,69 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const EventEdit = () => {
-  const [cat, setCat] = useState("");
-  const [image, setImage] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null); // State to track the selected item for editing
+  const { id } = useParams();
   const [data, setData] = useState([]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (selectedItem) {
-        // If an item is selected, update its data
-        const updatedData = [...data];
-        const selectedIndex = data.findIndex((item) => item._id === selectedItem._id);
-        if (selectedIndex !== -1) {
-          updatedData[selectedIndex] = { ...selectedItem, cat, image };
-          setData(updatedData);
-        }
-      } else {
-        // If no item is selected, add a new item
-        const response = await axios.post("http://localhost:5000/event", { cat, image });
-        setData([...data, response.data]);
-      }
-      alert("Data Saved !");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error saving data. Please try again.");
-    }
-  };
-
-  const handleEdit = (item) => {
-    setSelectedItem(item);
-    setCat(item.cat);
-    setImage(item.image);
-  };
+  const [formData, setFormData] = useState({
+    cat: "",
+    image: "",
+  });
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/eventCatagory")
+    // Fetch event categories
+    axios.get(`http://localhost:5000/eventCatagory`)
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
         console.log(err);
-        alert("Error fetching event categories. Please try again.");
       });
-  }, []);
+
+    // Fetch event data for the specified ID
+    axios.get(`http://localhost:5000/event/${id}`)
+      .then((res) => {
+        const eventData = res.data;
+        setFormData({
+          cat: eventData.cat,
+          image: eventData.image,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Send PUT request to update the event data
+    axios.put(`http://localhost:5000/event/${id}`, formData)
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Updated Successfully !",
+          showConfirmButton: false,
+          timer: 1000
+        });
+        // Handle success, maybe redirect or show a success message
+      })
+      .catch((err) => {
+        console.log(err);
+        // Handle error, show an error message maybe
+      });
+  };
 
   return (
     <div>
@@ -65,8 +80,11 @@ const EventEdit = () => {
                     <li class="breadcrumb-item">
                       <Link to="/event">Events</Link>
                     </li>
-                    <li class="breadcrumb-item active" style={{ color: "#ca629d" }}>
-                      Add/Edit
+                    <li
+                      class="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      Edit
                     </li>
                   </ol>
                 </div>
@@ -79,48 +97,59 @@ const EventEdit = () => {
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-primary">
-                    <div class="card-header" style={{ backgroundColor: "#256f98" }}>
+                    <div
+                      class="card-header"
+                      style={{ backgroundColor: "#256f98" }}
+                    >
                       <h3 class="card-title">Edit Events</h3>
                     </div>
                     <form className="text-left" onSubmit={handleSubmit}>
                       <div class="card-body">
                         <div class="form-group">
-                          <label for="exampleInputPassword1">Category <span style={{ color: "red" }}>*</span></label>
+                          <label for="exampleInputPassword1">
+                            Category <span style={{ color: "red" }}>*</span>
+                          </label>
                           <br />
                           <select
-                            name=""
-                            id=""
+                            name="cat"
                             className="w-100 p-2"
-                            onChange={(e) => setCat(e.target.value)}
-                            value={cat}
+                            onChange={handleChange}
+                            value={formData.cat}
                           >
-                            {data.map((item) => (
-                              <option key={item._id} value={item.name}>
-                                {item.name}
+                            <option value="">
+                              Select a Option
+                            </option>
+                            {data.map((ele) => (
+                              <option key={ele.id} value={ele.name}>
+                                {ele.name}
                               </option>
                             ))}
                           </select>
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputFile">Image <span style={{ color: "red" }}>*</span></label>
+                          <label for="exampleInputFile">
+                            Image <span style={{ color: "red" }}>*</span>
+                          </label>
                           <div class="input-group">
                             <div class="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                name="image"
+                                onChange={handleChange}
+                                value={formData.image}
                               />
                             </div>
                           </div>
                         </div>
                       </div>
+
                       <div class="card-footer">
                         <button
                           type="submit"
                           class="btn btn-primary text-light border-0 form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
-                          {selectedItem ? "Update" : "Submit"}
+                          Submit
                         </button>
                       </div>
                     </form>

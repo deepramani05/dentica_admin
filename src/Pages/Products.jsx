@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import Try from "../images/Logo.png";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
@@ -16,7 +15,6 @@ const Products = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
   };
 
   useEffect(() => {
@@ -37,7 +35,6 @@ const Products = () => {
       .then((res) => {
         console.log(res.data);
         alert("Product post deleted successfully !");
-        // Remove the deleted blog post from the data array
         setData(data.filter((post) => post.id !== id));
       })
       .catch((err) => {
@@ -49,7 +46,14 @@ const Products = () => {
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  // Generate pagination buttons
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
+
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
@@ -73,30 +77,23 @@ const Products = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
-
   return (
     <div>
-      <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
-        <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Products</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
                       Products
@@ -105,20 +102,18 @@ const Products = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
                     <div
-                      class="card-header text-light"
+                      className="card-header text-light"
                       style={{ textAlign: "end", backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Products</h3>
+                      <h3 className="card-title">Products</h3>
                       <div>
                         <Link
                           to="/product/add"
@@ -145,11 +140,11 @@ const Products = () => {
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    <div class="card-body">
+
+                    <div className="card-body">
                       <table
                         id="example2"
-                        class="table table-bordered table-hover"
+                        className="table table-bordered table-hover"
                       >
                         <thead>
                           <tr>
@@ -220,8 +215,7 @@ const Products = () => {
                         </tbody>
                       </table>
                     </div>
-                    {/* <!-- /.ca/rd-body --> */}
-                    {/* pagination started */}
+
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
                         <div
@@ -286,17 +280,12 @@ const Products = () => {
                           </ul>
                         </div>
                       </div>
-                    </div>  
+                    </div>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!-- /.col --> */}
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
       </div>
     </div>

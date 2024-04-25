@@ -5,7 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
-    
+
 const Blog = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,15 +14,14 @@ const Blog = () => {
   const { id } = useParams();
 
   const handleSearch = (query) => {
-    setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
+    setSearchQuery(query.toLowerCase());
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/blog")
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -46,7 +45,10 @@ const Blog = () => {
   };
 
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const filteredData = data.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery)
+  );
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Generate pagination buttons
   const paginationButtons = [];
@@ -75,7 +77,7 @@ const Blog = () => {
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -160,7 +162,7 @@ const Blog = () => {
                         <tbody>
                           {displayedData.map((ele, id) => (
                             <tr key={ele.id}>
-                              <td>{id + 1}</td>
+                              <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
                               <td>{ele.desc}</td>
                               <td width={"15%"}>
@@ -218,12 +220,12 @@ const Blog = () => {
                           aria-live="polite"
                         >
                           Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
+                          {startIndex + 1} to{" "}
                           {Math.min(
-                            currentPage * itemsPerPage,
-                            data.length
+                            endIndex,
+                            filteredData.length
                           )}{" "}
-                          of {data.length} entries
+                          of {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">

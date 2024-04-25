@@ -19,7 +19,6 @@ const Review = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
   };
 
   let obj = {
@@ -64,19 +63,25 @@ const Review = () => {
           title: "Review deleted successfully !",
           icon: "success",
         });
-        // Remove the deleted blog post from the data array
         setData(data.filter((post) => post.id !== id));
       })
       .catch((err) => {
         console.log(err);
-        alert("Error deleting Product post !");
+        alert("Error deleting Review !");
       });
   };
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  // Generate pagination buttons
+  const filteredData = data.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
+
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
@@ -100,17 +105,10 @@ const Review = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
-
   return (
     <div>
       <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
         <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
@@ -132,16 +130,12 @@ const Review = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
           <section class="content">
             <div class="container-fluid">
               <div class="row">
-                {/* <!-- left column --> */}
                 <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
                   <div class="card card-primary">
                     <div
                       class="card-header"
@@ -149,8 +143,6 @@ const Review = () => {
                     >
                       <h3 class="card-title">Review</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
                     <form className="text-left" onSubmit={handlesubmit}>
                       <div class="card-body">
                         <div class="form-group">
@@ -198,7 +190,6 @@ const Review = () => {
                           </div>
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
 
                       <div class="card-footer">
                         <button
@@ -211,7 +202,6 @@ const Review = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
 
                 <section class="content col-md-8">
@@ -235,7 +225,6 @@ const Review = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div class="card-body">
                             <table
                               id="example2"
@@ -251,8 +240,8 @@ const Review = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {data.map((ele, id) => (
-                                  <tr>
+                                {displayedData.map((ele, id) => (
+                                  <tr key={ele.id}>
                                     <td>{id + 1}</td>
                                     <td>{ele.name}</td>
                                     <td>{ele.review}</td>
@@ -292,8 +281,6 @@ const Review = () => {
                               </tbody>
                             </table>
                           </div>
-                          {/* <!-- /.card-body --> */}
-                          {/* pagination started */}
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div
@@ -370,22 +357,14 @@ const Review = () => {
                             </div>
                           </div>
                         </div>
-                        {/* <!-- /.card --> */}
                       </div>
-                      {/* <!-- /.col --> */}
                     </div>
-                    {/* <!-- /.row --> */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
                 </section>
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
-        {/* <!-- /.content-wrapper --> */}
       </div>
     </div>
   );

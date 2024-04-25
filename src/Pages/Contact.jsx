@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { Input, OutlinedInput } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import axios from "axios";
-import "../css/style.css"
+import "../css/style.css";
 
 const Contact = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
-  let [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
@@ -24,8 +23,19 @@ const Contact = () => {
       });
   }, []);
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.info.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.sub.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -53,53 +63,58 @@ const Contact = () => {
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
-      <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
-        <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Contacts</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li class="breadcrumb-item" style={{ color: "#ca629d" }}>
+                    <li className="breadcrumb-item" style={{ color: "#ca629d" }}>
                       Contacts
                     </li>
                   </ol>
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
                     <div
-                      class="card-header text-light"
+                      className="card-header text-light"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">User List</h3>
+                      <h3 className="card-title">User List</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
+                    <div className="search-bar">
+                      <OutlinedInput
+                        type="text"
+                        variant="outlined"
+                        placeholder="Search.."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        style={{ height: "30px", margin: "10px 0" }}
+                      />
+                    </div>
                     <div className="table-container">
-                      <div class="card-body">
+                      <div className="card-body">
                         <table
                           id="example2"
-                          class="table table-bordered table-hover text-left"
+                          className="table table-bordered table-hover text-left"
                         >
                           <thead>
                             <tr>
@@ -151,8 +166,6 @@ const Contact = () => {
                         </table>
                       </div>
                     </div>
-                    {/* <!-- //.card-body --> */}
-                    {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
                         <div
@@ -213,15 +226,10 @@ const Contact = () => {
                       </div>
                     </div>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!-- /.col --> */}
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
       </div>
     </div>

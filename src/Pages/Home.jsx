@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Home = () => {
@@ -20,12 +20,6 @@ const Home = () => {
     image: image,
   };
 
-  let obj2 = {
-    wp: wp,
-    insta: insta,
-    fb: fb,
-  };
-
   const handleFormsubmit = () => {
     axios
       .post(`http://localhost:5000/homedata`, obj)
@@ -41,17 +35,29 @@ const Home = () => {
 
   const handleSocialsubmit = (e) => {
     e.preventDefault();
+    const formData = {
+      wp: wp || undefined,
+      insta: insta || undefined,
+      fb: fb || undefined,
+    };
+  
     axios
-      .post(`http://localhost:5000/socialMedia`, obj2)
+      .post(`http://localhost:5000/socialMedia`, formData)
       .then((res) => {
         console.log(res.data);
         Swal.fire("Link Saved !");
+        // Clear the state variables after successful submission
+        setWp("");
+        setInsta("");
+        setFb("");
       })
       .catch((err) => {
         console.log(err);
         Swal.fire("Error !");
       });
   };
+  
+  
 
   return (
     <div>

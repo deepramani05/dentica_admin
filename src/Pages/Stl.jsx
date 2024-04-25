@@ -7,14 +7,19 @@ import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
 
 const Stl = () => {
-  let [data, setData] = useState([]);
-
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
+    // Filter the data based on the search query
+    const filtered = data.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset pagination to the first page
   };
 
   useEffect(() => {
@@ -23,6 +28,7 @@ const Stl = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
+        setFilteredData(res.data); // Set filtered data initially with all data
       })
       .catch((err) => {
         console.log(err);
@@ -36,6 +42,7 @@ const Stl = () => {
         console.log(res.data);
         // After successful deletion, update the state to remove the deleted item
         setData(data.filter((item) => item.id !== id));
+        setFilteredData(filteredData.filter((item) => item.id !== id)); // Also update filtered data
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -50,7 +57,7 @@ const Stl = () => {
   };
 
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Generate pagination buttons
   const paginationButtons = [];
@@ -79,14 +86,14 @@ const Stl = () => {
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
       <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
+        {/* Content Wrapper. Contains page content */}
         <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
+          {/* Content Header (Page header) */}
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
@@ -108,10 +115,10 @@ const Stl = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
+            {/* /.container-fluid */}
           </section>
 
-          {/* <!-- Main content --> */}
+          {/* Main content */}
           <section class="content">
             <div class="container-fluid">
               <div class="row">
@@ -133,7 +140,7 @@ const Stl = () => {
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
-                    {/* <!-- /.card-header --> */}
+                    {/* /.card-header */}
                     <div class="card-body">
                       <table
                         id="example2"
@@ -149,8 +156,8 @@ const Stl = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.map((ele, id) => (
-                            <tr>
+                          {displayedData.map((ele, id) => (
+                            <tr key={ele.id}>
                               <td>{id + 1}</td>
                               <td>{ele.name}</td>
                               <td>{ele.num}</td>
@@ -197,7 +204,7 @@ const Stl = () => {
                         </tbody>
                       </table>
                     </div>
-                    {/* <!-- /.car//d-body --> */}
+                    {/* /.card-body */}
                     {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
@@ -209,8 +216,8 @@ const Stl = () => {
                         >
                           Showing{" "}
                           {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
+                          {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -265,15 +272,15 @@ const Stl = () => {
                       </div>
                     </div>
                   </div>
-                  {/* <!-- /.card --> */}
+                  {/* /.card */}
                 </div>
-                {/* <!-- /.c/ol --> */}
+                {/* /.col */}
               </div>
-              {/* <!-- /.row --> */}
+              {/* /.row */}
             </div>
-            {/* <!-- /.container-fluid --> */}
+            {/* /.container-fluid */}
           </section>
-          {/* <!-- /.content --> */}
+          {/* /.content */}
         </div>
       </div>
     </div>

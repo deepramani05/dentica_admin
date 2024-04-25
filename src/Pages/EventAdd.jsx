@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const EventAdd = () => {
   let [cat, setCat] = useState("");
@@ -19,13 +20,17 @@ const EventAdd = () => {
       .post(`http://localhost:5000/event`, obj)
       .then((res) => {
         console.log(res.data);
-        setData(res.data);
-        alert("Data Saved !");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Saved !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.reload();
   };
 
   useEffect(() => {
@@ -100,6 +105,9 @@ const EventAdd = () => {
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
+                             <option value="Select a Option">
+                                Select a Option
+                              </option>
                             {data.map((item) => (
                               <option key={item._id} value={item.name}>
                                 {item.name}

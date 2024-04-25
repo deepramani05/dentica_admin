@@ -3,9 +3,10 @@ import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import "../css/style.css"
+import "../css/style.css";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { OutlinedInput } from "@mui/material";
 
 const Gallary = () => {
   let [title, setTitle] = useState("");
@@ -17,7 +18,12 @@ const Gallary = () => {
 
   let [data, setData] = useState([]);
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    fetchData(); // Fetch data initially
+  }, []);
 
   let obj = {
     title: title,
@@ -68,7 +74,13 @@ const Gallary = () => {
       .delete(`http://localhost:5000/gallaryImage/${id}`)
       .then((res) => {
         console.log(res.data);
-        alert("Deleted!");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Deleted!",
+          showConfirmButton: false,
+          timer: 1000,
+        });
         fetchData();
       })
       .catch((err) => {
@@ -77,7 +89,12 @@ const Gallary = () => {
       });
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   const itemsPerPage = 10;
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const paginationButtons = [];
@@ -103,10 +120,17 @@ const Gallary = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
+  // Slice the data array to show only the relevant entries based on pagination and search query
+  const filteredData = data.filter((item) => {
+    return (
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.cat.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -123,13 +147,13 @@ const Gallary = () => {
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <Link to="/">Home</Link>
+                      <Link to="/gallary">Gallary</Link>
                     </li>
                     <li
                       class="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      Gallery
+                      Edit
                     </li>
                   </ol>
                 </div>
@@ -267,6 +291,17 @@ const Gallary = () => {
                           >
                             <h3 class="card-title">Gallery List</h3>
                           </div>
+                          <div className="search-bar">
+                            {/* <label>Search: </label> */}
+                            <OutlinedInput
+                              type="text"
+                              variant="outlined"
+                              placeholder="Search.."
+                              value={searchQuery}
+                              onChange={(e) => handleSearch(e.target.value)}
+                              style={{ height: "30px", margin: "10px 0" }}
+                            />
+                          </div>
                           {/* <!-- /.card-header --> */}
                           <div className="table-container">
                             <div className="card-body table-reponsive">
@@ -313,7 +348,7 @@ const Gallary = () => {
                                           </span>
                                         </Link>
                                         <Link
-                                          to={`/gallary/edit/${id}`}
+                                          to={`/gallary/edit/${ele.id}`}
                                           className="form-btn"
                                           style={{
                                             border: "1px solid #17a2b8",

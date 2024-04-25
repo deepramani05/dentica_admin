@@ -10,9 +10,7 @@ const Team = () => {
   let [name, setName] = useState("");
   let [image, setImage] = useState("");
   let [post, setPost] = useState("");
-
   let [data, setData] = useState([]);
-
   let { id } = useParams();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +18,6 @@ const Team = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
   };
 
   let obj = {
@@ -61,7 +58,6 @@ const Team = () => {
       .delete(`http://localhost:5000/team/${id}`)
       .then((res) => {
         console.log(res.data);
-        // After successful deletion, update the state to remove the deleted item
         setData(data.filter((item) => item.id !== id));
         Swal.fire({
           position: "top-end",
@@ -79,7 +75,6 @@ const Team = () => {
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  // Generate pagination buttons
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
@@ -103,17 +98,18 @@ const Team = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = data.slice(startIndex, endIndex).filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.post.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
       <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
         <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
@@ -135,16 +131,12 @@ const Team = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
           <section class="content">
             <div class="container-fluid">
               <div class="row">
-                {/* <!-- left column --> */}
                 <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
                   <div class="card card-primary">
                     <div
                       class="card-header"
@@ -152,8 +144,6 @@ const Team = () => {
                     >
                       <h3 class="card-title">Add</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
                     <form className="text-left" onSubmit={handleSubmit}>
                       <div class="card-body">
                         <div class="form-group">
@@ -190,8 +180,6 @@ const Team = () => {
                           ></textarea>
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
-
                       <div class="card-footer">
                         <button
                           type="submit"
@@ -203,9 +191,7 @@ const Team = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!--/.col (left) --> */}
                 <section class="content col-md-8">
                   <div class="container-fluid">
                     <div class="row">
@@ -227,7 +213,6 @@ const Team = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div class="card-body">
                             <table
                               id="example2"
@@ -243,9 +228,11 @@ const Team = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {data.map((ele, id) => (
-                                  <tr>
-                                    <td>{id + 1}</td>
+                                {displayedData.map((ele, id) => (
+                                  <tr key={id}>
+                                    <td>
+                                      {startIndex + id + 1}
+                                    </td>
                                     <td>{ele.name}</td>
                                     <td>{ele.post}</td>
                                     <td
@@ -294,8 +281,6 @@ const Team = () => {
                               </tbody>
                             </table>
                           </div>
-                          {/* <!-- /.card-body --> */}
-                          {/* pagination started */}
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div
@@ -305,10 +290,9 @@ const Team = () => {
                                 aria-live="polite"
                               >
                                 Showing{" "}
-                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
-                                to{" "}
+                                {startIndex + 1} to{" "}
                                 {Math.min(
-                                  currentPage * itemsPerPage,
+                                  endIndex,
                                   data.length
                                 )}{" "}
                                 of {data.length} entries
@@ -372,22 +356,14 @@ const Team = () => {
                             </div>
                           </div>
                         </div>
-                        {/* <!-- /.card --> */}
                       </div>
-                      {/* <!-- /.col --> */}
                     </div>
-                    {/* <!-- /.row --> */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
                 </section>
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
-        {/* <!-- /.content-wrapper --> */}
       </div>
     </div>
   );

@@ -4,35 +4,34 @@ import img from "../images/home_about-center.png";
 import axios from "axios";
 
 const GalleryEdit = () => {
-  const { title } = useParams();
+  const { id } = useParams(); // Change from title to id
   const [formData, setFormData] = useState({
     title: "",
-    subtitle: "",
+    mtitle: "",
+    keyword: "",
     desc: "",
     image: "",
     cat: "",
   });
 
   useEffect(() => {
-    // Fetch data for editing based on the title parameter
     axios
-      .get(`http://localhost:5000/gallaryImage/${title}`)
+      .get(`http://localhost:5000/gallaryImage/${id}`)
       .then((res) => {
         const data = res.data;
         setFormData({
           title: data.title,
-          subtitle: data.subtitle,
+          mtitle: data.mtitle,
+          keyword: data.keyword,
           desc: data.desc,
           image: data.image,
           cat: data.cat,
         });
-        alert("done")
       })
       .catch((err) => {
         console.log(err);
-        alert("error")
       });
-  }, [title]);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +45,7 @@ const GalleryEdit = () => {
     e.preventDefault();
     // Handle form submission here
     axios
-      .put(`http://localhost:5000/gallaryImage/${title}`, formData)
+      .put(`http://localhost:5000/gallaryImage/${id}`, formData) // Adjusted endpoint
       .then((res) => {
         console.log("Data updated successfully!");
       })
@@ -70,13 +69,13 @@ const GalleryEdit = () => {
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
                     <li className="breadcrumb-item">
-                      <Link to="/dashboard">Home</Link>
+                      <Link to="/gallary">Gallary</Link>
                     </li>
                     <li
                       className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      User
+                      Edit
                     </li>
                   </ol>
                 </div>

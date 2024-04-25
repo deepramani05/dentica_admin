@@ -5,13 +5,18 @@ import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { OutlinedInput } from "@mui/material";
 
 const EventCat = () => {
   let [name, setName] = useState("");
   let [image, setImage] = useState("");
   let [video, setVideo] = useState("");
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
   let [data, setData] = useState([]);
+  let [filteredData, setFilteredData] = useState([]);
 
   let obj = {
     name: name,
@@ -30,7 +35,7 @@ const EventCat = () => {
       .catch((err) => {
         console.log(err);
       });
-      window.location.reload();
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -39,6 +44,7 @@ const EventCat = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
+        setFilteredData(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -52,6 +58,7 @@ const EventCat = () => {
         console.log(res.data);
         // After successful deletion, update the state to remove the deleted item
         setData(data.filter((item) => item.id !== id));
+        setFilteredData(filteredData.filter((item) => item.id !== id));
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -65,12 +72,51 @@ const EventCat = () => {
       });
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const filtered = data.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1);
+  };
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <a
+          href="#"
+          aria-controls="example1"
+          data-dt-idx="0"
+          tabIndex="0"
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </a>
+      </li>
+    );
+  }
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
+
   return (
     <div>
       <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
+        {/* Content Wrapper. Contains page content */}
         <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
+          {/* Content Header (Page header) */}
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
@@ -92,16 +138,14 @@ const EventCat = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
+            {/* /.container-fluid */}
           </section>
 
-          {/* <!-- Main content --> */}
+          {/* Main content */}
           <section class="content">
             <div class="container-fluid">
               <div class="row">
-                {/* <!-- left column --> */}
                 <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
                   <div class="card card-primary">
                     <div
                       class="card-header"
@@ -109,8 +153,6 @@ const EventCat = () => {
                     >
                       <h3 class="card-title">Add Event Catagory</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
                     <form className="text-left" onSubmit={handleSubmit}>
                       <div class="card-body">
                         <div class="form-group">
@@ -149,8 +191,6 @@ const EventCat = () => {
                           </div>
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
-
                       <div class="card-footer">
                         <button
                           type="submit"
@@ -162,9 +202,7 @@ const EventCat = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!--/.col (left) --> */}
                 <section class="content col-md-8">
                   <div class="container-fluid">
                     <div class="row">
@@ -176,7 +214,16 @@ const EventCat = () => {
                           >
                             <h3 class="card-title">Event Catagory List</h3>
                           </div>
-                          {/* <!-- /.card-header --> */}
+                          <div className="search-bar">
+                            <OutlinedInput
+                              type="text"
+                              variant="outlined"
+                              placeholder="Search.."
+                              value={searchQuery}
+                              onChange={(e) => handleSearch(e.target.value)}
+                              style={{ height: "30px", margin: "10px 0" }}
+                            />
+                          </div>
                           <div class="card-body">
                             <table
                               id="example2"
@@ -191,8 +238,8 @@ const EventCat = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {data.map((ele, id) => (
-                                  <tr>
+                                {displayedData.map((ele, id) => (
+                                  <tr key={ele.id}>
                                     <td>{id + 1}</td>
                                     <td>{ele.name}</td>
                                     <td>
@@ -225,7 +272,7 @@ const EventCat = () => {
                                         </span>
                                       </Link>
                                       <button
-                                      onClick={() => handleDelete(ele.id)}
+                                        onClick={() => handleDelete(ele.id)}
                                         className="form-btn-dlt"
                                         style={{
                                           border: "1px solid red",
@@ -243,24 +290,84 @@ const EventCat = () => {
                               </tbody>
                             </table>
                           </div>
-                          {/* <!-- /.card-body --> */}
+                          <div className="row" style={{ display: "flex" }}>
+                            <div className="col-sm-12 col-md-5">
+                              <div
+                                className="dataTables_info"
+                                id="example1_info"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                Showing{" "}
+                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
+                                to{" "}
+                                {Math.min(
+                                  currentPage * itemsPerPage,
+                                  filteredData.length
+                                )}{" "}
+                                of {filteredData.length} entries
+                              </div>
+                            </div>
+                            <div className="col-sm-12 col-md-7">
+                              <div
+                                className="dataTables_paginate paging_simple_numbers"
+                                id="example1_paginate"
+                              >
+                                <ul className="pagination">
+                                  <li
+                                    className={`paginate_button page-item previous ${
+                                      currentPage === 1 ? "disabled" : ""
+                                    }`}
+                                    id="example1_previous"
+                                  >
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="10"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                      }
+                                    >
+                                      Previous
+                                    </a>
+                                  </li>
+                                  {paginationButtons}
+                                  <li
+                                    className={`paginate_button page-item next ${
+                                      currentPage === totalPages
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    id="example1_next"
+                                  >
+                                    <a
+                                      href="#"
+                                      aria-controls="example1"
+                                      data-dt-idx="0"
+                                      tabIndex="0"
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                      }
+                                    >
+                                      Next
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        {/* <!-- /.card --> */}
                       </div>
-                      {/* <!-- /.col --> */}
                     </div>
-                    {/* <!-- /.row --> */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
                 </section>
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
-        {/* <!-- /.content-wrapper --> */}
       </div>
     </div>
   );

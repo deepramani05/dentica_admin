@@ -14,12 +14,6 @@
       "wp": "http://localhost:5000/socialMedia",
       "insta": "http://localhost:5000/socialMedia",
       "fb": "http://localhost:5000/socialMedia"
-    },
-    {
-      "id": "6d9a",
-      "wp": "",
-      "insta": "",
-      "fb": ""
     }
   ],
   "userForm": [
@@ -34,18 +28,18 @@
   ],
   "gallaryImage": [
     {
-      "id": "e292",
-      "title": "trgfd",
-      "mtitle": "ygvfcd",
-      "keyword": "thgvfd",
-      "desc": "tbgvf",
+      "id": "e180",
+      "title": "",
+      "mtitle": "",
+      "keyword": "",
+      "desc": "",
       "image": "",
       "cat": "Products"
     }
   ],
   "aboutEdit": [
     {
-      "title": "",
+      "title": "Deep",
       "sdesc": "",
       "mtitle": "",
       "keyword": "",
@@ -144,46 +138,17 @@
   ],
   "eventCatagory": [
     {
-      "name": "fvdcx",
-      "image": "",
-      "video": "",
-      "id": "a096"
-    },
-    {
-      "id": "184b",
       "name": "Deep",
       "image": "",
-      "video": ""
-    },
-    {
-      "id": "129f",
-      "name": "ertyhujk",
-      "image": "",
-      "video": ""
-    },
-    {
-      "id": "46e8",
-      "name": "ujhytgrfd",
-      "image": "",
-      "video": ""
-    },
-    {
-      "id": "164b",
-      "name": "ujyhtgrfde",
-      "image": "",
-      "video": ""
+      "video": "",
+      "id": "517b"
     }
   ],
   "event": [
     {
-      "id": "420a",
-      "cat": "Products",
-      "image": ""
-    },
-    {
-      "id": "a9db",
       "cat": "Deep",
-      "image": ""
+      "image": "",
+      "id": "99e4"
     }
   ]
 }

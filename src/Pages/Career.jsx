@@ -3,19 +3,18 @@ import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { Input, OutlinedInput } from "@mui/material";
-import "../css/style.css"
+import { OutlinedInput } from "@mui/material";
+import "../css/style.css";
 
 const Career = () => {
-  let [data, setData] = useState([]);
-
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     axios
       .get(`http://localhost:5000/career`)
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -23,8 +22,16 @@ const Career = () => {
       });
   }, []);
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset current page when search query changes
+  };
+
+  const itemsPerPage = 5;
+  const filteredData = data.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -35,74 +42,64 @@ const Career = () => {
           currentPage === i ? "active" : ""
         }`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
+        <button
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </a>
+        </button>
       </li>
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
-      <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
-        <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Career</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li
-                      class="breadcrumb-item active"
-                      style={{ color: "#ca629d" }}
-                    >
+                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
                       Career
                     </li>
                   </ol>
                 </div>
               </div>
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-
-          {/* <!-- Main content --> */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div
-                      class="card-header text-light"
-                      style={{ backgroundColor: "#256f98" }}
-                    >
-                      <h3 class="card-title">User List</h3>
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
+                    <div className="card-header text-light" style={{ backgroundColor: "#256f98" }}>
+                      <h3 className="card-title">User List</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
+                    <div className="search-bar">
+                      <OutlinedInput
+                        type="text"
+                        variant="outlined"
+                        placeholder="Search.."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        style={{ height: "30px", margin: "10px 0" }}
+                      />
+                    </div>
                     <div className="table-container">
-                      <div class="card-body">
-                        <table
-                          id="example2"
-                          class="table table-bordered table-hover text-left"
-                        >
+                      <div className="card-body">
+                        <table id="example2" className="table table-bordered table-hover text-left">
                           <thead>
                             <tr>
                               <th>SL</th>
@@ -115,9 +112,7 @@ const Career = () => {
                           <tbody>
                             {displayedData.map((ele, id) => (
                               <tr key={id}>
-                                <td>
-                                  {(currentPage - 1) * itemsPerPage + id + 1}
-                                </td>
+                                <td>{startIndex + id + 1}</td>
                                 <td>{ele.name}</td>
                                 <td>
                                   <p className="m-0">Mo : - {ele.num}</p>
@@ -125,37 +120,13 @@ const Career = () => {
                                 </td>
                                 <td>{ele.subject}</td>
                                 <td>
-                                  <button
-                                    className="form-btn-dlt"
-                                    style={{
-                                      backgroundColor: "white",
-                                      border: "1px solid red",
-                                    }}
-                                  >
-                                    <span
-                                      style={{
-                                        color: "red",
-                                        lineHeight: "30px",
-                                        padding: "5px",
-                                      }}
-                                    >
+                                  <button className="form-btn-dlt" style={{ backgroundColor: "white", border: "1px solid red" }}>
+                                    <span style={{ color: "red", lineHeight: "30px", padding: "5px" }}>
                                       <BsFileEarmarkPdfFill />
                                     </span>
                                   </button>
-                                  <button
-                                    className="form-btn-dlt"
-                                    style={{
-                                      backgroundColor: "white",
-                                      border: "1px solid red",
-                                    }}
-                                  >
-                                    <span
-                                      style={{
-                                        color: "red",
-                                        lineHeight: "30px",
-                                        padding: "5px",
-                                      }}
-                                    >
+                                  <button className="form-btn-dlt" style={{ backgroundColor: "white", border: "1px solid red" }}>
+                                    <span style={{ color: "red", lineHeight: "30px", padding: "5px" }}>
                                       <MdDelete />
                                     </span>
                                   </button>
@@ -166,83 +137,31 @@ const Career = () => {
                         </table>
                       </div>
                     </div>
-                    {/* <!-- /.car//d-body --> */}
-                    {/* pagination started */}
                     <div className="row">
                       <div className="col-sm-12 col-md-5">
-                        <div
-                          className="dataTables_info"
-                          id="example1_info"
-                          role="status"
-                          aria-live="polite"
-                        >
-                          Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
+                        <div className="dataTables_info" role="status" aria-live="polite">
+                          Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7 text-right">
-                        <div
-                          className="dataTables_paginate paging_simple_numbers"
-                          id="example1_paginate"
-                        >
-                          <ul
-                            className="pagination"
-                            style={{
-                              justifyContent: "end",
-                              marginRight: "10px",
-                            }}
-                          >
-                            <li
-                              className={`paginate_button page-item previous ${
-                                currentPage === 1 ? "disabled" : ""
-                              }`}
-                              id="example1_previous"
-                            >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                              >
-                                Previous
-                              </a>
+                        <div className="dataTables_paginate paging_simple_numbers">
+                          <ul className="pagination" style={{ justifyContent: "end", marginRight: "10px" }}>
+                            <li className={`paginate_button page-item previous ${currentPage === 1 ? "disabled" : ""}`}>
+                              <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
                             </li>
                             {paginationButtons}
-                            <li
-                              className={`paginate_button page-item next ${
-                                currentPage === totalPages ? "disabled" : ""
-                              }`}
-                              id="example1_next"
-                            >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                              >
-                                Next
-                              </a>
+                            <li className={`paginate_button page-item next ${currentPage === totalPages ? "disabled" : ""}`}>
+                              <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!-- /.c/ol --> */}
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
       </div>
     </div>

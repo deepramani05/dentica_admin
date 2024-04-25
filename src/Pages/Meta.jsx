@@ -13,13 +13,16 @@ const Meta = () => {
   let [desc, setDesc] = useState("");
 
   let [data, setData] = useState([]);
-
+  let [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // You can perform the search logic here, like filtering the data based on the query
+    const filtered = data.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredData(filtered);
   };
 
   let obj = {
@@ -47,6 +50,7 @@ const Meta = () => {
     axios.get(`http://localhost:5000/meta`).then((res) => {
       console.log(res.data);
       setData(res.data);
+      setFilteredData(res.data);
     });
   }, []);
 
@@ -64,6 +68,7 @@ const Meta = () => {
         });
         // Remove the deleted blog post from the data array
         setData(data.filter((post) => post.id !== id));
+        setFilteredData(filteredData.filter((post) => post.id !== id));
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +77,7 @@ const Meta = () => {
   };
 
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Generate pagination buttons
   const paginationButtons = [];
@@ -101,14 +106,12 @@ const Meta = () => {
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
       <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
         <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
           <section class="content-header">
             <div class="container-fluid">
               <div class="row mb-2">
@@ -130,16 +133,12 @@ const Meta = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- /.cont/ainer-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
           <section class="content">
             <div class="container-fluid">
               <div class="row">
-                {/* <!-- left column --> */}
                 <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
                   <div class="card card-primary">
                     <div
                       class="card-header"
@@ -147,8 +146,6 @@ const Meta = () => {
                     >
                       <h3 class="card-title">Add Meta data</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
                     <form className="text-left" onSubmit={handlesubmit}>
                       <div class="card-body">
                         <div class="form-group">
@@ -197,7 +194,6 @@ const Meta = () => {
                           ></textarea>
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
 
                       <div class="card-footer">
                         <button
@@ -210,10 +206,8 @@ const Meta = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!--/.col (left) --> */}
-                {/* <!-- Main content --> */}
+
                 <section class="content col-md-8">
                   <div class="container-fluid">
                     <div class="row">
@@ -235,7 +229,6 @@ const Meta = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div class="card-body">
                             <table
                               id="example2"
@@ -252,8 +245,8 @@ const Meta = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {data.map((ele, id) => (
-                                  <tr>
+                                {displayedData.map((ele, id) => (
+                                  <tr key={ele.id}>
                                     <td>{id + 1}</td>
                                     <td>{ele.url}</td>
                                     <td>{ele.title}</td>
@@ -292,8 +285,6 @@ const Meta = () => {
                               </tbody>
                             </table>
                           </div>
-                          {/* <!-- /.card-body --> */}
-                          {/* pagination started */}
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div
@@ -307,9 +298,9 @@ const Meta = () => {
                                 to{" "}
                                 {Math.min(
                                   currentPage * itemsPerPage,
-                                  data.length
+                                  filteredData.length
                                 )}{" "}
-                                of {data.length} entries
+                                of {filteredData.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">
@@ -370,21 +361,13 @@ const Meta = () => {
                             </div>
                           </div>
                         </div>
-                        {/* <!-- /.card --> */}
                       </div>
-                      {/* <!-- /.col --> */}
                     </div>
-                    {/* <!-- /.row --> */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
                 </section>
-                {/* <!-- /.content --> */}
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
       </div>
     </div>
