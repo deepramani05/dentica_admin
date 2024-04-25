@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../css/style.css'
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
@@ -149,6 +150,7 @@ const Blog = () => {
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
+<<<<<<< HEAD
                     <div className="card-body">
                       <table className="table table-bordered table-hover">
                         <thead>
@@ -205,10 +207,70 @@ const Blog = () => {
                                   </span>
                                 </button>
                               </td>
+=======
+                    <div className="table-container">
+                      <div className="card-body">
+                        <table className="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>SL</th>
+                              <th>Title</th>
+                              <th>Description</th>
+                              <th>Action</th>
+>>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {displayedData.map((ele, id) => (
+                              <tr key={ele.id}>
+                                <td>{id + 1}</td>
+                                <td>{ele.title}</td>
+                                <td>{ele.desc}</td>
+                                <td width={"15%"}>
+                                  <Link
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      padding: "5px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FaEye />
+                                    </span>
+                                  </Link>
+                                  <Link
+                                    to={`/blog/edit/${ele.id}`}
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      padding: "5px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <BiSolidEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handledelete(ele.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      padding: "4px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>

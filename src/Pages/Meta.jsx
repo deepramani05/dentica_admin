@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../css/style.css';
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -229,6 +230,7 @@ const Meta = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
+<<<<<<< HEAD
                           <div class="card-body">
                             <table
                               id="example2"
@@ -280,10 +282,66 @@ const Meta = () => {
                                         </span>
                                       </button>
                                     </td>
+=======
+                          {/* <!-- /.card-header --> */}
+                          <div className="table-container">
+                            <div class="card-body">
+                              <table
+                                id="example2"
+                                class="table table-bordered table-hover"
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>Meta_url</th>
+                                    <th>Meta Title</th>
+                                    <th>Meta Keyword</th>
+                                    <th>Meta Description</th>
+                                    <th>Action</th>
+>>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                </thead>
+                                <tbody>
+                                  {data.map((ele, id) => (
+                                    <tr>
+                                      <td>{id + 1}</td>
+                                      <td>{ele.url}</td>
+                                      <td>{ele.title}</td>
+                                      <td>{ele.keyword}</td>
+                                      <td>{ele.desc}</td>
+                                      <td className="align-middle d-flex">
+                                        <Link
+                                          to={`/meta/edit/${ele.id}`}
+                                          className="form-btn"
+                                          style={{
+                                            border: "1px solid #17a2b8",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <FiEdit />
+                                          </span>
+                                        </Link>
+                                        <button
+                                          onClick={(e) => handledelete(ele.id)}
+                                          className="form-btn-dlt"
+                                          style={{
+                                            border: "1px solid red",
+                                            backgroundColor: "white",
+                                            padding: "2px 5px",
+                                          }}
+                                        >
+                                          <span style={{ color: "red" }}>
+                                            <MdDelete />
+                                          </span>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../css/style.css';
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
@@ -140,6 +141,7 @@ const Products = () => {
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
+<<<<<<< HEAD
 
                     <div className="card-body">
                       <table
@@ -210,12 +212,91 @@ const Products = () => {
                                   </span>
                                 </button>
                               </td>
+=======
+                    {/* <!-- /.card-header --> */}
+                    <div className="table-container">
+                      <div class="card-body">
+                        <table
+                          id="example2"
+                          class="table table-bordered table-hover"
+                        >
+                          <thead>
+                            <tr>
+                              <th>SL</th>
+                              <th>Title</th>
+                              <th>Image</th>
+                              <th>Description</th>
+                              <th>Action</th>
+>>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {displayedData.map((ele, id) => (
+                              <tr key={ele.id}>
+                                <td>{id + 1}</td>
+                                <td>{ele.title}</td>
+                                <td style={{ width: "200px", height: "150px" }}>
+                                  <img
+                                    src={ele.images}
+                                    alt={ele.title}
+                                    style={{ width: "100%", height: "100%" }}
+                                  />
+                                </td>
+                                <td style={{ overflowY: "scroll" }}>
+                                  {ele.desc}
+                                </td>
+                                <td>
+                                  <Link
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      padding: "5px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FaEye />
+                                    </span>
+                                  </Link>
+                                  <Link
+                                    to={`/product/edit/${ele.id}`}
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      padding: "5px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <BiSolidEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handledelete(ele.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      padding: "4px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
+<<<<<<< HEAD
 
+=======
+                    {/* <!-- /.card-body --> */}
+                    {/* pagination started */}
+>>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
                         <div
