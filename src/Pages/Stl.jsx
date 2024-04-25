@@ -141,67 +141,6 @@ const Stl = () => {
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
-<<<<<<< HEAD
-                    {/* /.card-header */}
-                    <div class="card-body">
-                      <table
-                        id="example2"
-                        class="table table-bordered table-hover text-left"
-                      >
-                        <thead>
-                          <tr>
-                            <th>SL</th>
-                            <th>FullName</th>
-                            <th>Phone Number</th>
-                            <th>Message</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedData.map((ele, id) => (
-                            <tr key={ele.id}>
-                              <td>{id + 1}</td>
-                              <td>{ele.name}</td>
-                              <td>{ele.num}</td>
-                              <td>{ele.msg}</td>
-                              <td>
-                                <button
-                                  className="form-btn-dlt"
-                                  style={{
-                                    backgroundColor: "white",
-                                    border: "1px solid red",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      color: "red",
-                                      lineHeight: "30px",
-                                      padding: "5px",
-                                    }}
-                                  >
-                                    <BsFileEarmarkPdfFill />
-                                  </span>
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(ele.id)}
-                                  className="form-btn-dlt"
-                                  style={{
-                                    backgroundColor: "white",
-                                    border: "1px solid red",
-                                  }}
-                                >
-                                  <span
-                                    style={{
-                                      color: "red",
-                                      lineHeight: "30px",
-                                      padding: "5px",
-                                    }}
-                                  >
-                                    <MdDelete />
-                                  </span>
-                                </button>
-                              </td>
-=======
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
                       <div class="card-body">
@@ -216,7 +155,6 @@ const Stl = () => {
                               <th>Phone Number</th>
                               <th>Message</th>
                               <th>Action</th>
->>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                             </tr>
                           </thead>
                           <tbody>

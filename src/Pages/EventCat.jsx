@@ -215,79 +215,6 @@ const EventCat = () => {
                           >
                             <h3 class="card-title">Event Catagory List</h3>
                           </div>
-<<<<<<< HEAD
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search.."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
-                          </div>
-                          <div class="card-body">
-                            <table
-                              id="example2"
-                              class="table table-bordered table-hover"
-                            >
-                              <thead>
-                                <tr>
-                                  <th>SL</th>
-                                  <th>Catagory</th>
-                                  <th>Image</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {displayedData.map((ele, id) => (
-                                  <tr key={ele.id}>
-                                    <td>{id + 1}</td>
-                                    <td>{ele.name}</td>
-                                    <td>
-                                      <img src={ele.image} alt="" />
-                                    </td>
-                                    <td className="align-middle">
-                                      <Link
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FaRegEye />
-                                        </span>
-                                      </Link>
-                                      <Link
-                                        to={`/event-catagory/edit/${ele.id}`}
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FiEdit />
-                                        </span>
-                                      </Link>
-                                      <button
-                                        onClick={() => handleDelete(ele.id)}
-                                        className="form-btn-dlt"
-                                        style={{
-                                          border: "1px solid red",
-                                          backgroundColor: "white",
-                                          padding: "1px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "red" }}>
-                                          <MdDelete />
-                                        </span>
-                                      </button>
-                                    </td>
-=======
                           {/* <!-- /.card-header --> */}
                           <div className="table-container">
                             <div class="card-body">
@@ -301,7 +228,6 @@ const EventCat = () => {
                                     <th>Catagory</th>
                                     <th>Image</th>
                                     <th>Action</th>
->>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                                   </tr>
                                 </thead>
                                 <tbody>

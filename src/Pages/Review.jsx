@@ -227,64 +227,6 @@ const Review = () => {
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-<<<<<<< HEAD
-                          <div class="card-body">
-                            <table
-                              id="example2"
-                              class="table table-bordered table-hover"
-                            >
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>Name</th>
-                                  <th>Review</th>
-                                  <th>Image</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {displayedData.map((ele, id) => (
-                                  <tr key={ele.id}>
-                                    <td>{id + 1}</td>
-                                    <td>{ele.name}</td>
-                                    <td>{ele.review}</td>
-                                    <td>
-                                      <img src={ele.image} alt={ele.name} />
-                                    </td>
-                                    <td className="align-middle">
-                                      <Link
-                                        to={`/review/edit/${ele.id}`}
-                                        className="form-btn"
-                                        style={{
-                                          border: "1px solid #17a2b8",
-                                          backgroundColor: "white",
-                                          padding: "2px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "#17a2b8" }}>
-                                          <FiEdit />
-                                        </span>
-                                      </Link>
-                                      <button
-                                        onClick={() => handledelete(ele.id)}
-                                        className="form-btn-dlt"
-                                        style={{
-                                          border: "1px solid red",
-                                          backgroundColor: "white",
-                                          padding: "1px 5px",
-                                        }}
-                                      >
-                                        <span style={{ color: "red" }}>
-                                          <MdDelete />
-                                        </span>
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-=======
                           {/* <!-- /.card-header --> */}
                             <div className="table-container">
                               <div class="card-body">
@@ -346,7 +288,6 @@ const Review = () => {
                             </div>
                           {/* <!-- /.card-body --> */}
                           {/* pagination started */}
->>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div

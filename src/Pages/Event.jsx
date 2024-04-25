@@ -143,76 +143,6 @@ const Event = () => {
                         </Link>
                       </div>
                     </div>
-<<<<<<< HEAD
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
-                    </div>
-                    <div className="card-body">
-                      <table
-                        id="example2"
-                        className="table table-bordered table-hover text-center"
-                      >
-                        <thead>
-                          <tr>
-                            <th>SL</th>
-                            <th>Category</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedData.map((ele, id) => (
-                            <tr key={id}>
-                              <td>{startIndex + id + 1}</td>
-                              <td>{ele.cat}</td>
-                              <td width={"200px"} height={"100px"}>
-                                <img
-                                  src={ele.image}
-                                  alt=""
-                                  width={"100%"}
-                                  height={"100%"}
-                                />
-                              </td>
-                              <td className="align-middle">
-                                <Link
-                                  to={`/event/edit/${ele.id}`}
-                                  className="form-btn"
-                                  style={{
-                                    border: "1px solid #17a2b8",
-                                    backgroundColor: "white",
-                                    padding: "2px 5px",
-                                  }}
-                                >
-                                  <span style={{ color: "#17a2b8" }}>
-                                    <FiEdit />
-                                  </span>
-                                </Link>
-                                <button
-                                  onClick={() => handleDelete(ele.id)}
-                                  className="form-btn-dlt"
-                                  style={{
-                                    border: "1px solid red",
-                                    backgroundColor: "white",
-                                    padding: "1px 5px",
-                                  }}
-                                >
-                                  <span style={{ color: "red" }}>
-                                    <MdDelete />
-                                  </span>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-=======
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
                       <div class="card-body">
@@ -275,7 +205,6 @@ const Event = () => {
                           </tbody>
                         </table>
                       </div>
->>>>>>> fe3ec8bce60f8e9b1c734515e59601761dbc28ae
                     </div>
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
