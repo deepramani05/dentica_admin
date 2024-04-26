@@ -30,23 +30,38 @@ const Event = () => {
   };
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/event/${id}`)
-      .then((res) => {
-        setData(data.filter((item) => item.id !== id));
-        setFilteredData(filteredData.filter((item) => item.id !== id));
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Deleted Successfully!",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/event/${id}`)
+          .then((res) => {
+            setData(data.filter((item) => item.id !== id));
+            setFilteredData(filteredData.filter((item) => item.id !== id));
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Data Deleted Successfully!",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   };
+  
+  
+  
 
   const handleSearch = (query) => {
     setSearchQuery(query);

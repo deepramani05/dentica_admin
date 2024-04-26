@@ -58,13 +58,13 @@
   ],
   "contacts": [
     {
-      "name":"Deep Ramani",
-      "info":"web Developer",
+      "name": "Deep Ramani",
+      "info": "web Developer",
       "sub": "dcxs"
     },
     {
-      "name":"Deep Ramani",
-      "info":"web Developer",
+      "name": "Deep Ramani",
+      "info": "web Developer",
       "sub": "dcxs"
     }
   ],
@@ -113,6 +113,13 @@
       "num": "1234567890",
       "review": "Good Services !",
       "image": ""
+    },
+    {
+      "id": "f023",
+      "name": "trgfdcsx",
+      "num": "",
+      "review": "",
+      "image": ""
     }
   ],
   "meta": [
@@ -122,6 +129,13 @@
       "title": "Deep Ramani",
       "keyword": "Web Developer",
       "desc": "qwertyuiopasdfghjklzxnm"
+    },
+    {
+      "id": "8625",
+      "url": "ygtfrd",
+      "title": "",
+      "keyword": "",
+      "desc": ""
     }
   ],
   "team": [
@@ -142,8 +156,14 @@
   ],
   "eventCatagory": [
     {
-      "id": "0b8a",
-      "name": "Deep",
+      "name": "Deep Ramani",
+      "image": "",
+      "video": "",
+      "id": "0b8a"
+    },
+    {
+      "id": "3b11",
+      "name": "tyhgvf",
       "image": "",
       "video": ""
     }
@@ -153,6 +173,11 @@
       "cat": "Deep Ramani",
       "image": "",
       "id": "99e4"
+    },
+    {
+      "id": "a336",
+      "cat": "tyhgvf",
+      "image": ""
     }
   ]
 }

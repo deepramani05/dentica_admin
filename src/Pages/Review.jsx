@@ -34,12 +34,18 @@ const Review = () => {
       .post(`http://localhost:5000/review`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Review Saved Successfully !");
-        window.location.reload();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Review Saved Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
@@ -55,23 +61,39 @@ const Review = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/review/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Review deleted successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        setData(data.filter((post) => post.id !== id));
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error deleting Review !");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/review/${id}`)
+          .then((res) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            setData(data.filter((post) => post.id !== id));
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Error deleting Product post !",
+              icon: "error",
+            });
+          });
+        // setTimeout(() => window.location.reload(), 1000);
+      }
+    });
   };
 
   const itemsPerPage = 5;

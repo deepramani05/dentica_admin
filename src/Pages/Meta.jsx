@@ -39,12 +39,25 @@ const Meta = () => {
       .post(`http://localhost:5000/meta`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Data saved successfully !");
-        window.location.reload();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Review Saved Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
+      setTimeout(() => window.location.reload(), 1000)
   };
 
   useEffect(() => {
@@ -124,7 +137,10 @@ const Meta = () => {
                     <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
                       Meta
                     </li>
                   </ol>
@@ -158,7 +174,9 @@ const Meta = () => {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword1">Meta Title</label>
+                          <label htmlFor="exampleInputPassword1">
+                            Meta Title
+                          </label>
                           <input
                             type="text"
                             className="form-control"
@@ -169,7 +187,9 @@ const Meta = () => {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword1">Meta Keyword</label>
+                          <label htmlFor="exampleInputPassword1">
+                            Meta Keyword
+                          </label>
                           <input
                             type="text"
                             className="form-control"
@@ -219,7 +239,7 @@ const Meta = () => {
                             <OutlinedInput
                               type="text"
                               variant="outlined"
-                              placeholder="Search.."
+                              placeholder="Search Meta Title Here ..."
                               value={searchQuery}
                               onChange={(e) => handleSearch(e.target.value)}
                               style={{ height: "30px", margin: "10px 0" }}
@@ -291,13 +311,9 @@ const Meta = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                Showing{" "}
-                                {startIndex + 1} to{" "}
-                                {Math.min(
-                                  endIndex,
-                                  filteredData.length
-                                )}{" "}
-                                of {filteredData.length} entries
+                                Showing {startIndex + 1} to{" "}
+                                {Math.min(endIndex, filteredData.length)} of{" "}
+                                {filteredData.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">

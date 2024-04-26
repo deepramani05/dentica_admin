@@ -6,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
 const Blog = () => {
   const [data, setData] = useState([]);
@@ -31,18 +32,41 @@ const Blog = () => {
   }, []);
 
   const handledelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/blog/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        alert("Blog post deleted successfully !");
-        // Remove the deleted blog post from the data array
-        setData(data.filter((post) => post.id !== id));
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error deleting blog post !");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/blog/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your file has been deleted.",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            // Remove the deleted blog post from the data array
+            setData(data.filter((post) => post.id !== id));
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Error deleting blog post!",
+              icon: "error",
+            });
+          });
+          setTimeout(() => window.location.reload(), 1000)
+      }
+    });
   };
 
   const itemsPerPage = 5;

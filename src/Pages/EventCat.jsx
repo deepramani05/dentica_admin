@@ -31,12 +31,18 @@ const EventCat = () => {
       .post(`http://localhost:5000/eventCatagory`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Data Saved Successfully !");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Data Saved Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.reload();
+    setTimeout(() => window.location.reload(),1000)
   };
 
   useEffect(() => {
@@ -53,25 +59,43 @@ const EventCat = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/eventCatagory/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        // After successful deletion, update the state to remove the deleted item
-        setData(data.filter((item) => item.id !== id));
-        setFilteredData(filteredData.filter((item) => item.id !== id));
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Deleted Successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/eventCatagory/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            // After successful deletion, update the state to remove the deleted item
+            setData(data.filter((item) => item.id !== id));
+            setFilteredData(filteredData.filter((item) => item.id !== id));
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Data Deleted Successfully !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Error deleting data",
+              icon: "error"
+            });
+          });
+      }
+    });
   };
+  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -92,16 +116,8 @@ const EventCat = () => {
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
-      <li
-        key={i}
-        className={`page-item ${
-          currentPage === i ? "active" : ""
-        }`}
-      >
-        <button
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
+      <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
           {i}
         </button>
       </li>
@@ -297,14 +313,9 @@ const EventCat = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                Showing{" "}
-                                {startIndex + 1}{" "}
-                                to{" "}
-                                {Math.min(
-                                  endIndex,
-                                  filteredData.length
-                                )}{" "}
-                                of {filteredData.length} entries
+                                Showing {startIndex + 1} to{" "}
+                                {Math.min(endIndex, filteredData.length)} of{" "}
+                                {filteredData.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">

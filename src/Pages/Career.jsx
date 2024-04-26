@@ -2,14 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import "../css/style.css";
+import Swal from "sweetalert2";
 
 const Career = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  let { id } = useParams();
 
   useEffect(() => {
     axios
@@ -21,6 +24,38 @@ const Career = () => {
         console.log(err);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/career/${id}`)
+          .then((res) => {
+            // Update the state by filtering out the deleted item
+            setData((prevData) => prevData.filter((item) => item.id !== id));
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your file has been deleted.",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        setTimeout(() => window.location.reload(), 1000);
+      }
+    });
+  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -42,10 +77,7 @@ const Career = () => {
           currentPage === i ? "active" : ""
         }`}
       >
-        <button
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
           {i}
         </button>
       </li>
@@ -71,7 +103,10 @@ const Career = () => {
                     <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
                       Career
                     </li>
                   </ol>
@@ -84,7 +119,10 @@ const Career = () => {
               <div className="row">
                 <div className="col-12">
                   <div className="card">
-                    <div className="card-header text-light" style={{ backgroundColor: "#256f98" }}>
+                    <div
+                      className="card-header text-light"
+                      style={{ backgroundColor: "#256f98" }}
+                    >
                       <h3 className="card-title">User List</h3>
                     </div>
                     <div className="search-bar">
@@ -99,7 +137,10 @@ const Career = () => {
                     </div>
                     <div className="table-container">
                       <div className="card-body">
-                        <table id="example2" className="table table-bordered table-hover text-left">
+                        <table
+                          id="example2"
+                          className="table table-bordered table-hover text-left"
+                        >
                           <thead>
                             <tr>
                               <th>SL</th>
@@ -116,17 +157,44 @@ const Career = () => {
                                 <td>{ele.name}</td>
                                 <td>
                                   <p className="m-0">Mo : - {ele.num}</p>
-                                  <p className="m-0">E-mail ID : - {ele.mail}</p>
+                                  <p className="m-0">
+                                    E-mail ID : - {ele.mail}
+                                  </p>
                                 </td>
                                 <td>{ele.subject}</td>
                                 <td>
-                                  <button className="form-btn-dlt" style={{ backgroundColor: "white", border: "1px solid red" }}>
-                                    <span style={{ color: "red", lineHeight: "30px", padding: "5px" }}>
+                                  <button
+                                    className="form-btn-dlt"
+                                    style={{
+                                      backgroundColor: "white",
+                                      border: "1px solid red",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        lineHeight: "30px",
+                                        padding: "5px",
+                                      }}
+                                    >
                                       <BsFileEarmarkPdfFill />
                                     </span>
                                   </button>
-                                  <button className="form-btn-dlt" style={{ backgroundColor: "white", border: "1px solid red" }}>
-                                    <span style={{ color: "red", lineHeight: "30px", padding: "5px" }}>
+                                  <button
+                                    onClick={() => handleDelete(ele.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      backgroundColor: "white",
+                                      border: "1px solid red",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        lineHeight: "30px",
+                                        padding: "5px",
+                                      }}
+                                    >
                                       <MdDelete />
                                     </span>
                                   </button>
@@ -139,19 +207,49 @@ const Career = () => {
                     </div>
                     <div className="row">
                       <div className="col-sm-12 col-md-5">
-                        <div className="dataTables_info" role="status" aria-live="polite">
-                          Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries
+                        <div
+                          className="dataTables_info"
+                          role="status"
+                          aria-live="polite"
+                        >
+                          Showing {startIndex + 1} to{" "}
+                          {Math.min(endIndex, filteredData.length)} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7 text-right">
                         <div className="dataTables_paginate paging_simple_numbers">
-                          <ul className="pagination" style={{ justifyContent: "end", marginRight: "10px" }}>
-                            <li className={`paginate_button page-item previous ${currentPage === 1 ? "disabled" : ""}`}>
-                              <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+                          <ul
+                            className="pagination"
+                            style={{
+                              justifyContent: "end",
+                              marginRight: "10px",
+                            }}
+                          >
+                            <li
+                              className={`paginate_button page-item previous ${
+                                currentPage === 1 ? "disabled" : ""
+                              }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                              >
+                                Previous
+                              </button>
                             </li>
                             {paginationButtons}
-                            <li className={`paginate_button page-item next ${currentPage === totalPages ? "disabled" : ""}`}>
-                              <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+                            <li
+                              className={`paginate_button page-item next ${
+                                currentPage === totalPages ? "disabled" : ""
+                              }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                              >
+                                Next
+                              </button>
                             </li>
                           </ul>
                         </div>

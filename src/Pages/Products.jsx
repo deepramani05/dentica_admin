@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import '../css/style.css';
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import { OutlinedInput } from "@mui/material";
 import { FaEye } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-import { OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -16,13 +16,13 @@ const Products = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/products")
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -30,19 +30,42 @@ const Products = () => {
       });
   }, []);
 
-  const handledelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/products/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        alert("Product post deleted successfully !");
-        setData(data.filter((post) => post.id !== id));
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error deleting Product post !");
-      });
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/products/${id}`)
+          .then((res) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1000
+            });
+            setData(data.filter((post) => post.id !== id));
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Error deleting Product post !",
+              icon: "error"
+            });
+          });
+          setTimeout(() => window.location.reload(),1000)
+      }
+    });
   };
+  
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -60,20 +83,14 @@ const Products = () => {
     paginationButtons.push(
       <li
         key={i}
-        className={`paginate_button page-item ${
-          currentPage === i ? "active" : ""
-        }`}
+        className={`page-item ${currentPage === i ? "active" : ""}`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
+        <button
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
           {i}
-        </a>
+        </button>
       </li>
     );
   }
@@ -143,10 +160,10 @@ const Products = () => {
                     </div>
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
-                      <div class="card-body">
+                      <div className="card-body">
                         <table
                           id="example2"
-                          class="table table-bordered table-hover"
+                          className="table table-bordered table-hover"
                         >
                           <thead>
                             <tr>
@@ -158,9 +175,9 @@ const Products = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {displayedData.map((ele, id) => (
+                            {displayedData.map((ele, index) => (
                               <tr key={ele.id}>
-                                <td>{id + 1}</td>
+                                <td>{startIndex + index + 1}</td>
                                 <td>{ele.title}</td>
                                 <td style={{ width: "200px", height: "150px" }}>
                                   <img
@@ -199,7 +216,7 @@ const Products = () => {
                                     </span>
                                   </Link>
                                   <button
-                                    onClick={() => handledelete(ele.id)}
+                                    onClick={() => handleDelete(ele.id)}
                                     className="form-btn-dlt"
                                     style={{
                                       border: "1px solid red",
@@ -229,9 +246,9 @@ const Products = () => {
                           aria-live="polite"
                         >
                           Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
+                          {startIndex + 1} to{" "}
+                          {Math.min(endIndex, filteredData.length)} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -252,16 +269,13 @@ const Products = () => {
                               }`}
                               id="example1_previous"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
                               >
                                 Previous
-                              </a>
+                              </button>
                             </li>
                             {paginationButtons}
                             <li
@@ -270,16 +284,13 @@ const Products = () => {
                               }`}
                               id="example1_next"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
                               >
                                 Next
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import '../css/style.css';
+import "../css/style.css";
 import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
@@ -37,53 +37,63 @@ const Stl = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/stl/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        // After successful deletion, update the state to remove the deleted item
-        setData(data.filter((item) => item.id !== id));
-        setFilteredData(filteredData.filter((item) => item.id !== id)); // Also update filtered data
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Deleted Successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/stl/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            // After successful deletion, update the state to remove the deleted item
+            setData(data.filter((item) => item.id !== id));
+            setFilteredData(filteredData.filter((item) => item.id !== id)); // Also update filtered data
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Data Deleted Successfully !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error",
+              text: "Error deleting data",
+              icon: "error",
+            });
+          });
+          setTimeout(() => window.location.reload(),1000)
+      }
+    });
   };
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+  // Slice the data array to show only the relevant entries based on pagination
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
+
   // Generate pagination buttons
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
-      <li
-        key={i}
-        className={`page-item ${
-          currentPage === i ? "active" : ""
-        }`}
-      >
-        <button
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
+      <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
           {i}
         </button>
       </li>
     );
   }
-
-  // Slice the data array to show only the relevant entries based on pagination
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -131,7 +141,7 @@ const Stl = () => {
                       <OutlinedInput
                         type="text"
                         variant="outlined"
-                        placeholder="Search.."
+                        placeholder="Search Name Here ..."
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
                         style={{ height: "30px", margin: "10px 0" }}
@@ -154,9 +164,9 @@ const Stl = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {displayedData.map((ele, id) => (
-                              <tr key={id}>
-                                <td>{id + 1}</td>
+                            {displayedData.map((ele, index) => (
+                              <tr key={index}>
+                                <td>{startIndex + index + 1}</td>
                                 <td>{ele.name}</td>
                                 <td>{ele.num}</td>
                                 <td>{ele.msg}</td>
@@ -213,9 +223,8 @@ const Stl = () => {
                           role="status"
                           aria-live="polite"
                         >
-                          Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
+                          Showing {startIndex + 1} to{" "}
+                          {Math.min(endIndex, filteredData.length)} of{" "}
                           {filteredData.length} entries
                         </div>
                       </div>

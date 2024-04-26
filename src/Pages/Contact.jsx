@@ -4,79 +4,59 @@ import { FaRegEye } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "../css/style.css";
-import { Swal } from "sweetalert2/dist/sweetalert2";
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
 
-  let {id} = useParams()
-
   useEffect(() => {
     axios
       .get(`http://localhost:5000/contacts`)
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data); // Log response data
         setData(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
-
-// Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
-const handleDelete = (id) => {
-  // Make sure 'id' is defined and not null
-  if (!id) {
-    console.error("ID is required for deleting the contact.");
-    return;
-  }
-
-  // Show confirmation dialog
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Proceed with the deletion
-      axios.delete(`http://localhost:5000/contacts/${id}`)
-        .then((res) => {
-          // Handle success response
-          console.log("Contact deleted successfully:", res.data);
-          // Optionally, you can perform additional actions here
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your contact has been deleted.",
-            icon: "success"
-          });
-        })
-        .catch((err) => {
-          // Handle error
-          console.error("An error occurred while deleting the contact:", err);
-          Swal.fire({
-            title: "Error",
-            text: "An error occurred while deleting the contact.",
-            icon: "error"
-          });
-        });
-    }
-  });
-};
-
-// Example usage:
-// Assuming 'id' is defined somewhere
-const idToDelete = '123'; // Replace '123' with the actual ID you want to delete
-handleDelete(idToDelete);
-
   
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/contacts/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            // Reload data after deletion
+            axios.get(`http://localhost:5000/contacts`)
+              .then((res) => {
+                setData(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            Swal.fire("Deleted!", "Your contact has been deleted.", "success");
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire("Error", "An error occurred while deleting the contact.", "error");
+          });
+      }
+    });
+  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
