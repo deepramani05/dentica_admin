@@ -6,6 +6,8 @@ import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "../css/style.css";
+import Swal from "sweetalert2";
+
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,38 +27,53 @@ const Contact = () => {
   }, []);
   
 
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`http://localhost:5000/contacts/${id}`)
-          .then((res) => {
-            console.log(res.data);
-            // Reload data after deletion
-            axios.get(`http://localhost:5000/contacts`)
-              .then((res) => {
-                setData(res.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-            Swal.fire("Deleted!", "Your contact has been deleted.", "success");
-          })
-          .catch((err) => {
-            console.log(err);
-            Swal.fire("Error", "An error occurred while deleting the contact.", "error");
+// Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
+const handleDelete = (id) => {
+
+  if (!id) {
+    console.error("ID is required for deleting the contact.");
+    return;
+  }
+
+  // Show confirmation dialog
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with the deletion
+      axios.delete(`http://localhost:5000/contacts/${id}`)
+        .then((res) => {
+          // Handle success response
+          console.log("Contact deleted successfully:", res.data);
+          // Optionally, you can perform additional actions here
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your contact has been deleted.",
+            icon: "success",
+            title:"Your contact has been deleted",
+            showConfirmButton: false,
+            timer: 1000
           });
-      }
-    });
-  };
+        })
+        .catch((err) => {
+          // Handle error
+          console.error("An error occurred while deleting the contact:", err);
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while deleting the contact.",
+            icon: "error"
+          });
+        });
+        setTimeout(() => window.location.reload(),1000)
+    }
+  });
+};
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -182,8 +199,11 @@ const Contact = () => {
                                       <FaRegEye />
                                     </span>
                                   </button>
-                                  <button 
-                                    onClick={() => handleDelete(ele.id)}
+                                 <button
+                                    onClick={(e) => {
+                                      e.preventDefault(); // Prevent default form submission behavior
+                                      handleDelete(ele.id);
+                                    }}
                                     className="form-btn-dlt"
                                     style={{
                                       border: "1px solid red",
