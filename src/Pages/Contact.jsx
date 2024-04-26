@@ -5,7 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import "../css/style.css";
-import { Swal } from "sweetalert2/dist/sweetalert2";
+import Swal from "sweetalert2";
+
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +30,7 @@ const Contact = () => {
 
 // Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
 const handleDelete = (id) => {
-  // Make sure 'id' is defined and not null
+
   if (!id) {
     console.error("ID is required for deleting the contact.");
     return;
@@ -55,7 +56,10 @@ const handleDelete = (id) => {
           Swal.fire({
             title: "Deleted!",
             text: "Your contact has been deleted.",
-            icon: "success"
+            icon: "success",
+            title:"Your contact has been deleted",
+            showConfirmButton: false,
+            timer: 1000
           });
         })
         .catch((err) => {
@@ -67,16 +71,10 @@ const handleDelete = (id) => {
             icon: "error"
           });
         });
+        setTimeout(() => window.location.reload(),1000)
     }
   });
 };
-
-// Example usage:
-// Assuming 'id' is defined somewhere
-const idToDelete = '123'; // Replace '123' with the actual ID you want to delete
-handleDelete(idToDelete);
-
-  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -202,8 +200,11 @@ handleDelete(idToDelete);
                                       <FaRegEye />
                                     </span>
                                   </button>
-                                  <button 
-                                    onClick={() => handleDelete(ele.id)}
+                                 <button
+                                    onClick={(e) => {
+                                      e.preventDefault(); // Prevent default form submission behavior
+                                      handleDelete(ele.id);
+                                    }}
                                     className="form-btn-dlt"
                                     style={{
                                       border: "1px solid red",
