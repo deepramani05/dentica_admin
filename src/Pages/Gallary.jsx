@@ -40,17 +40,26 @@ const Gallary = () => {
     axios
       .post(`http://localhost:5000/gallaryImage`, obj)
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         Swal.fire({
+          position: "top-end",
+          icon: "success",
           title: "Data Saved Successfully !",
-          icon: "sucess",
-          confirmButtionText: "Close",
+          showConfirmButton: false,
+          timer: 1000,
         });
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
-    window.location.reload();
   };
 
   const fetchData = () => {
@@ -70,23 +79,35 @@ const Gallary = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/gallaryImage/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Deleted!",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        fetchData();
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error occurred while deleting !");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/gallaryImage/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Deleted!",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            fetchData(); // Refresh data after deletion
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("Error occurred while deleting !");
+          });
+      }
+    });
   };
 
   const handleSearch = (query) => {

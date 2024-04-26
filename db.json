@@ -18,50 +18,54 @@
   ],
   "userForm": [
     {
-      "id": "9786",
-      "name": "Deep",
+      "id": "1730",
+      "name": "Deep Ramani",
       "uname": "deep05",
-      "email": "deep05@gmail.com",
-      "roll": "web dveloper",
-      "pass": ""
+      "email": "deep@gmail.com",
+      "roll": "Wed Developer",
+      "pass": "123456789"
     }
   ],
   "gallaryImage": [
     {
-      "id": "e180",
-      "title": "",
-      "mtitle": "",
-      "keyword": "",
-      "desc": "",
-      "image": "",
-      "cat": "Products"
+      "title": "Deep",
+      "mtitle": "reiwj",
+      "keyword": "piwsjcip",
+      "desc": "oiejviperjvij",
+      "image": "C:\\fakepath\\Annotation 2024-04-08 111806.png",
+      "cat": "Before & After",
+      "id": "1844"
     }
   ],
   "aboutEdit": [
     {
-      "title": "Deep",
-      "sdesc": "",
-      "mtitle": "",
-      "keyword": "",
-      "mdesc": "",
-      "image": "",
+      "title": "Deep Ramani",
+      "sdesc": "Deep Ramani",
+      "mtitle": "efi",
+      "keyword": "yefuih",
+      "mdesc": "sdrtyuiokl,",
+      "image": "C:\\fakepath\\Annotation 2024-04-08 111806.png",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit magna orci, sed consectetur velit euismod non.",
-      "haddress": "",
-      "address": "",
-      "num1": "",
-      "num2": "",
-      "mail": "",
-      "mon": "",
-      "sun": "",
+      "haddress": "edew",
+      "address": "wfdcewfw",
+      "num1": "123456789",
+      "num2": "1234567890",
+      "mail": "ed@erd.wer",
+      "mon": "9.00 - 9.00",
+      "sun": "Closed",
       "id": "a269"
     }
   ],
   "contacts": [
     {
-      "name": "Deep",
-      "info": "1234567890",
-      "sub": "web Developer",
-      "id": "33dd"
+      "name":"Deep Ramani",
+      "info":"web Developer",
+      "sub": "dcxs"
+    },
+    {
+      "name":"Deep Ramani",
+      "info":"web Developer",
+      "sub": "dcxs"
     }
   ],
   "career": [
@@ -109,13 +113,6 @@
       "num": "1234567890",
       "review": "Good Services !",
       "image": ""
-    },
-    {
-      "id": "4d79",
-      "name": "Ramani",
-      "num": "",
-      "review": "",
-      "image": ""
     }
   ],
   "meta": [
@@ -129,10 +126,10 @@
   ],
   "team": [
     {
-      "id": "3dbd",
       "name": "Deep",
       "image": "",
-      "post": ""
+      "post": "ewrtynj",
+      "id": "3dbd"
     }
   ],
   "stl": [

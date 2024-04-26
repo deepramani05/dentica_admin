@@ -32,15 +32,26 @@ const User = () => {
     axios
       .post(`http://localhost:5000/userForm`, obj)
       .then((res) => {
+        console.log(res.data);
         Swal.fire({
-          title: "Data Saved Successfully !",
+          position: "top-end",
           icon: "success",
-          confirmButtonText: "Close",
+          title: "Data Saved Successfully !",
+          showConfirmButton: false,
+          timer: 1000,
         });
         fetchData();
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
   };
 
@@ -60,24 +71,37 @@ const User = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/userForm/${id}`)
-      .then((res) => {
-        Swal.fire({
-          title: "Data Deleted Successfully !",
-          icon: "success",
-          confirmButtonText: "Close",
-        });
-        fetchData();
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire({
-          title: "Error occurred while deleting !",
-          icon: "error",
-          confirmButtonText: "Close",
-        });
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/userForm/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire({
+              title: "Data Deleted Successfully !",
+              icon: "success",
+              confirmButtonText: "Close",
+            });
+            fetchData(); // Assuming you have a function named fetchData to fetch updated data
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire({
+              title: "Error occurred while deleting !",
+              icon: "error",
+              confirmButtonText: "Close",
+            });
+          });
+      }
+    });
   };
 
   const itemsPerPage = 10;

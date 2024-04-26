@@ -33,12 +33,18 @@ const Team = () => {
       .post(`http://localhost:5000/team`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Data Saved!");
-        window.location.reload();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Saved !",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
       .catch((err) => {
         console.log(err);
       });
+      setTimeout(() => window.location.reload(),1000);
   };
 
   useEffect(() => {

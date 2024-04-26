@@ -1,270 +1,284 @@
-  import React, { useEffect, useState } from "react";
-  import { MdDelete } from "react-icons/md";
-  import { FiEdit } from "react-icons/fi";
-  import { FaRegEye } from "react-icons/fa";
-  import { Link } from "react-router-dom";
-  import axios from "axios";
-  import "../css/style.css";
-  import { OutlinedInput } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { MdDelete } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
+import { FaRegEye } from "react-icons/fa";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
-  const About = () => {
-    const [data, setData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+const About = () => {
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-      fetchData(); // Fetch data initially
-    }, []);
+  let { id } = useParams();
 
-    const fetchData = () => {
-      axios
-        .get(`http://localhost:5000/aboutEdit`)
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+  useEffect(() => {
+    fetchData(); // Fetch data initially
+  }, []);
 
-    const handleSearch = (query) => {
-      setSearchQuery(query);
-    };
+  const fetchData = () => {
+    axios
+      .get(`http://localhost:5000/aboutEdit`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    const filteredData = data.filter(
-      (item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/aboutEdit/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            fetchData(); // Refresh data after deletion
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          })
+          .catch((err) => {
+            console.log(err);
+            Swal.fire(
+              "Error!",
+              "An error occurred while deleting the file.",
+              "error"
+            );
+          });
+      }
+    });
+  };
 
-    const itemsPerPage = 5;
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
 
-    const paginationButtons = [];
-    for (let i = 1; i <= totalPages; i++) {
-      paginationButtons.push(
-        <li
-          key={i}
-          className={`paginate_button page-item ${
-            currentPage === i ? "active" : ""
-          }`}
+  const filteredData = data.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <a
+          href="#"
+          aria-controls="example1"
+          data-dt-idx="0"
+          tabIndex="0"
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
         >
-          <a
-            href="#"
-            aria-controls="example1"
-            data-dt-idx="0"
-            tabIndex="0"
-            className="page-link"
-            onClick={() => setCurrentPage(i)}
-          >
-            {i}
-          </a>
-        </li>
-      );
-    }
+          {i}
+        </a>
+      </li>
+    );
+  }
 
-    // Slice the data array to show only the relevant entries based on pagination
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = currentPage * itemsPerPage;
-    const displayedData = filteredData.slice(startIndex, endIndex);
+  // Slice the data array to show only the relevant entries based on pagination
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
-    return (
-      <div>
-        <div class="wrapper">
-          {/* <!-- Content Wrapper. Contains page content --> */}
-          <div class="content-wrapper">
-            {/* <!-- Content Header (Page header) --> */}
-            <section class="content-header">
-              <div class="container-fluid">
-                <div class="row mb-2">
-                  <div class="col-sm-6 text-left">
-                    <h1>About - us</h1>
-                  </div>
-                  <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item">
-                        <Link to="/">Home</Link>
-                      </li>
-                      <li
-                        class="breadcrumb-item active"
-                        style={{ color: "#ca629d" }}
-                      >
-                        About
-                      </li>
-                    </ol>
-                  </div>
+  return (
+    <div>
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
+                  <h1>About - us</h1>
+                </div>
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
+                      <Link to="/">Home</Link>
+                    </li>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      About
+                    </li>
+                  </ol>
                 </div>
               </div>
-              {/* <!-- /.container-fluid --> */}
-            </section>
+            </div>
+          </section>
 
-            {/* <!-- Main content --> */}
-            <section class="content">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card">
-                      <div
-                        class="card-header text-light"
-                        style={{ backgroundColor: "rgb(37, 111, 152)" }}
-                      >
-                        <h3 class="card-title">About</h3>
-                      </div>
-                      <div className="search-bar">
-                        {/* <label>Search: </label> */}
-                        <OutlinedInput
-                          type="text"
-                          variant="outlined"
-                          placeholder="Search.."
-                          value={searchQuery}
-                          onChange={(e) => handleSearch(e.target.value)}
-                          style={{ height: "30px", margin: "10px 0" }}
-                        />
-                      </div>
-                      {/* <!-- /.card-header --> */}
-                      <div className="table-container">
-                        <div class="card-body">
-                          <table
-                            id="example2"
-                            class="table table-bordered table-hover"
-                          >
-                            <thead>
-                              <tr>
-                                <th style={{ width: "1%" }}>SL</th>
-                                <th style={{ width: "19%" }}>Title</th>
-                                <th style={{ width: "65%" }}>Description</th>
-                                <th style={{ width: "15%" }}>Action</th>
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
+                    <div
+                      className="card-header text-light"
+                      style={{ backgroundColor: "rgb(37, 111, 152)" }}
+                    >
+                      <h3 className="card-title">About</h3>
+                    </div>
+                    <div className="search-bar">
+                      <OutlinedInput
+                        type="text"
+                        variant="outlined"
+                        placeholder="Search.."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        style={{ height: "30px", margin: "10px 0" }}
+                      />
+                    </div>
+                    <div className="table-container">
+                      <div className="card-body">
+                        <table
+                          id="example2"
+                          className="table table-bordered table-hover"
+                        >
+                          <thead>
+                            <tr>
+                              <th style={{ width: "1%" }}>SL</th>
+                              <th style={{ width: "19%" }}>Title</th>
+                              <th style={{ width: "65%" }}>Description</th>
+                              <th style={{ width: "15%" }}>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {displayedData.map((ele, index) => (
+                              <tr key={ele.id}>
+                                <td>{startIndex + index + 1}</td>
+                                <td>{ele.title}</td>
+                                <td>{ele.desc}</td>
+                                <td className="align-middle">
+                                  <Link
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FaRegEye />
+                                    </span>
+                                  </Link>
+                                  <Link
+                                    to="/about/edit"
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      backgroundColor: "white",
+                                      padding: "2px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <FiEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handleDelete(ele.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      backgroundColor: "white",
+                                      padding: "1px 5px",
+                                    }}
+                                  >
+                                    <span style={{ color: "red" }}>
+                                      <MdDelete />
+                                    </span>
+                                  </button>
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {displayedData.map((ele, id) => (
-                                <tr key={id}>
-                                  <td>
-                                    {(currentPage - 1) * itemsPerPage + id + 1}
-                                  </td>
-                                  <td>{ele.title}</td>
-                                  <td>{ele.desc}</td>
-                                  <td className="align-middle">
-                                    <Link
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FaRegEye />
-                                      </span>
-                                    </Link>
-                                    <Link
-                                      to="/about/edit"
-                                      className="form-btn"
-                                      style={{
-                                        border: "1px solid #17a2b8",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "#17a2b8" }}>
-                                        <FiEdit />
-                                      </span>
-                                    </Link>
-                                    <Link
-                                      className="form-btn-dlt"
-                                      style={{
-                                        border: "1px solid red",
-                                        backgroundColor: "white",
-                                        padding: "2px 5px",
-                                      }}
-                                    >
-                                      <span style={{ color: "red" }}>
-                                        <MdDelete />
-                                      </span>
-                                    </Link>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div className="row" style={{ display: "flex" }}>
+                      <div className="col-sm-12 col-md-5">
+                        <div
+                          className="dataTables_info"
+                          id="example1_info"
+                          role="status"
+                          aria-live="polite"
+                        >
+                          Showing {startIndex + 1} to{" "}
+                          {Math.min(endIndex, filteredData.length)} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
-                      {/* pagination started */}
-                      <div className="row" style={{ display: "flex" }}>
-                        <div className="col-sm-12 col-md-5">
-                          <div
-                            className="dataTables_info"
-                            id="example1_info"
-                            role="status"
-                            aria-live="polite"
-                          >
-                            Showing{" "}
-                            {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                            {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
-                            {filteredData.length} entries
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-md-7">
-                          <div
-                            className="dataTables_paginate paging_simple_numbers"
-                            id="example1_paginate"
-                          >
-                            <ul className="pagination">
-                              <li
-                                className={`paginate_button page-item previous ${
-                                  currentPage === 1 ? "disabled" : ""
-                                }`}
-                                id="example1_previous"
+                      <div className="col-sm-12 col-md-7">
+                        <div
+                          className="dataTables_paginate paging_simple_numbers"
+                          id="example1_paginate"
+                        >
+                          <ul className="pagination">
+                            <li
+                              className={`paginate_button page-item previous ${
+                                currentPage === 1 ? "disabled" : ""
+                              }`}
+                            >
+                              <a
+                                href="#"
+                                aria-controls="example1"
+                                data-dt-idx="10"
+                                tabIndex="0"
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage - 1)}
                               >
-                                <a
-                                  href="#"
-                                  aria-controls="example1"
-                                  data-dt-idx="10"
-                                  tabIndex="0"
-                                  className="page-link"
-                                  onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                  Previous
-                                </a>
-                              </li>
-                              {paginationButtons}
-                              <li
-                                className={`paginate_button page-item next ${
-                                  currentPage === totalPages ? "disabled" : ""
-                                }`}
-                                id="example1_next"
+                                Previous
+                              </a>
+                            </li>
+                            {paginationButtons}
+                            <li
+                              className={`paginate_button page-item next ${
+                                currentPage === totalPages ? "disabled" : ""
+                              }`}
+                            >
+                              <a
+                                href="#"
+                                aria-controls="example1"
+                                data-dt-idx="0"
+                                tabIndex="0"
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage + 1)}
                               >
-                                <a
-                                  href="#"
-                                  aria-controls="example1"
-                                  data-dt-idx="0"
-                                  tabIndex="0"
-                                  className="page-link"
-                                  onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                  Next
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
+                                Next
+                              </a>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    {/* <!-- /.card --> */}
                   </div>
-                  {/* <!-- /.col --> */}
                 </div>
-                {/* <!-- /.row --> */}
               </div>
-              {/* <!-- /.container-fluid --> */}
-            </section>
-            {/* <!-- /.content --> */}
-          </div>
-          {/* <!-- /.content-wrapper --> */}
+            </div>
+          </section>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-  export default About;
+export default About;

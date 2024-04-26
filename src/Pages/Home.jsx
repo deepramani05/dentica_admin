@@ -20,17 +20,31 @@ const Home = () => {
     image: image,
   };
 
-  const handleFormsubmit = () => {
+  const handleFormsubmit = (e) => {
+    e.preventDefault();
     axios
       .post(`http://localhost:5000/homedata`, obj)
       .then((res) => {
         console.log(res.data);
-        Swal.fire("Form Submited !");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Form Submited !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
-        Swal.fire("Error !");
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   const handleSocialsubmit = (e) => {
@@ -40,12 +54,18 @@ const Home = () => {
       insta: insta || undefined,
       fb: fb || undefined,
     };
-  
+
     axios
       .post(`http://localhost:5000/socialMedia`, formData)
       .then((res) => {
         console.log(res.data);
-        Swal.fire("Link Saved !");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Link Saved !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
         // Clear the state variables after successful submission
         setWp("");
         setInsta("");
@@ -53,11 +73,16 @@ const Home = () => {
       })
       .catch((err) => {
         console.log(err);
-        Swal.fire("Error !");
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
       });
+    setTimeout(() => window.location.reload(), 1000);
   };
-  
-  
 
   return (
     <div>

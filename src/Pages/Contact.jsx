@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import "../css/style.css";
+import { Swal } from "sweetalert2/dist/sweetalert2";
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+
+  let {id} = useParams()
 
   useEffect(() => {
     axios
@@ -22,6 +25,58 @@ const Contact = () => {
         console.log(err);
       });
   }, []);
+
+
+// Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
+const handleDelete = (id) => {
+  // Make sure 'id' is defined and not null
+  if (!id) {
+    console.error("ID is required for deleting the contact.");
+    return;
+  }
+
+  // Show confirmation dialog
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with the deletion
+      axios.delete(`http://localhost:5000/contacts/${id}`)
+        .then((res) => {
+          // Handle success response
+          console.log("Contact deleted successfully:", res.data);
+          // Optionally, you can perform additional actions here
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your contact has been deleted.",
+            icon: "success"
+          });
+        })
+        .catch((err) => {
+          // Handle error
+          console.error("An error occurred while deleting the contact:", err);
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while deleting the contact.",
+            icon: "error"
+          });
+        });
+    }
+  });
+};
+
+// Example usage:
+// Assuming 'id' is defined somewhere
+const idToDelete = '123'; // Replace '123' with the actual ID you want to delete
+handleDelete(idToDelete);
+
+  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -147,7 +202,8 @@ const Contact = () => {
                                       <FaRegEye />
                                     </span>
                                   </button>
-                                  <button
+                                  <button 
+                                    onClick={() => handleDelete(ele.id)}
                                     className="form-btn-dlt"
                                     style={{
                                       border: "1px solid red",
