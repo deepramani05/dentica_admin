@@ -4,10 +4,8 @@ import { FaRegEye } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
-import Swal from "sweetalert2";
 import "../css/style.css";
 import Swal from "sweetalert2";
-
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,55 +23,54 @@ const Contact = () => {
         console.log(err);
       });
   }, []);
-  
 
-// Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
-const handleDelete = (id) => {
-
-  if (!id) {
-    console.error("ID is required for deleting the contact.");
-    return;
-  }
-
-  // Show confirmation dialog
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Proceed with the deletion
-      axios.delete(`http://localhost:5000/contacts/${id}`)
-        .then((res) => {
-          // Handle success response
-          console.log("Contact deleted successfully:", res.data);
-          // Optionally, you can perform additional actions here
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your contact has been deleted.",
-            icon: "success",
-            title:"Your contact has been deleted",
-            showConfirmButton: false,
-            timer: 1000
-          });
-        })
-        .catch((err) => {
-          // Handle error
-          console.error("An error occurred while deleting the contact:", err);
-          Swal.fire({
-            title: "Error",
-            text: "An error occurred while deleting the contact.",
-            icon: "error"
-          });
-        });
-        setTimeout(() => window.location.reload(),1000)
+  // Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
+  const handleDelete = (id) => {
+    if (!id) {
+      console.error("ID is required for deleting the contact.");
+      return;
     }
-  });
-};
+
+    // Show confirmation dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Proceed with the deletion
+        axios
+          .delete(`http://localhost:5000/contacts/${id}`)
+          .then((res) => {
+            // Handle success response
+            console.log("Contact deleted successfully:", res.data);
+            // Optionally, you can perform additional actions here
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your contact has been deleted.",
+              icon: "success",
+              title: "Your contact has been deleted",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            // Handle error
+            console.error("An error occurred while deleting the contact:", err);
+            Swal.fire({
+              title: "Error",
+              text: "An error occurred while deleting the contact.",
+              icon: "error",
+            });
+          });
+        setTimeout(() => window.location.reload(), 1000);
+      }
+    });
+  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -132,7 +129,10 @@ const handleDelete = (id) => {
                     <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li className="breadcrumb-item" style={{ color: "#ca629d" }}>
+                    <li
+                      className="breadcrumb-item"
+                      style={{ color: "#ca629d" }}
+                    >
                       Contacts
                     </li>
                   </ol>
@@ -199,7 +199,7 @@ const handleDelete = (id) => {
                                       <FaRegEye />
                                     </span>
                                   </button>
-                                 <button
+                                  <button
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent default form submission behavior
                                       handleDelete(ele.id);

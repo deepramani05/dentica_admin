@@ -58,14 +58,14 @@
   ],
   "contacts": [
     {
-      "name":  "Deep Ramani",
-      "info":  "web Developer",
+      "name": "Deep Ramani",
+      "info": "web Developer",
       "sub": "dcxs",
       "id": "db09"
     },
     {
-      "name":  "Deep Ramani",
-      "info":  "web Developer",
+      "name": "Deep Ramani",
+      "info": "web Developer",
       "sub": "dcxs",
       "id": "db09"
     }
@@ -175,11 +175,6 @@
       "cat": "Deep Ramani",
       "image": "",
       "id": "99e4"
-    },
-    {
-      "id": "a336",
-      "cat": "tyhgvf",
-      "image": ""
     }
   ]
 }
