@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ProductAdd = () => {
   let [title, setTitle] = useState("");
@@ -35,6 +36,13 @@ const ProductAdd = () => {
       .post(`http://localhost:5000/products`, obj)
       .then((res) => {
         console.log(res.data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Added Successfully !",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
       .catch((err) => {
         console.log(err);

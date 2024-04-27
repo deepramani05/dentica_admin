@@ -64,7 +64,7 @@ const Blog = () => {
               icon: "error",
             });
           });
-          setTimeout(() => window.location.reload(), 1000)
+          // setTimeout(() => window.location.reload(), 1000)
       }
     });
   };

@@ -128,7 +128,7 @@ const GalleryEdit = () => {
                           </label>
                           <input
                             onChange={handleChange}
-                            value={formData.subtitle}
+                            value={formData.mtitle}
                             type="text"
                             className="form-control"
                             id="exampleInputSubtitle"

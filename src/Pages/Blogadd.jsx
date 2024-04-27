@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import Swal from "sweetalert2";
 
 const Blogadd = () => {
   const [title, setTitle] = useState("");
@@ -15,8 +15,7 @@ const Blogadd = () => {
   const [mtitle, setMtitle] = useState("");
   const [keyword, setKeyword] = useState("");
   const [tags, setTags] = useState([]);
-  const [currentTag, setCurrentTag] = useState("")
-
+  const [currentTag, setCurrentTag] = useState("");
 
   const obj = {
     title: title,
@@ -35,27 +34,39 @@ const Blogadd = () => {
       .post(`http://localhost:5000/blog`, obj)
       .then((res) => {
         console.log(res.data);
-        alert("Added Successfully ! ")
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Added Successfully ! ",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error ! ",
+          showConfirmButton: false,
+          timer: 1000
+        });
       });
-      window.location.reload();
   };
 
-  const handleTag = (e) =>{
-    if (e.key === "Enter"){
+  const handleTag = (e) => {
+    if (e.key === "Enter") {
       e.preventDefault();
       const trimmedTag = currentTag.trim();
-      if (trimmedTag){
-        setTags([...tags,trimmedTag]);
+      if (trimmedTag) {
+        setTags([...tags, trimmedTag]);
         setCurrentTag("");
       }
     }
-  }
+  };
 
-  const handleRemoveTag = (id) =>{
-    setTags(tags.filter(( _ , index)=> index !== id));
+  const handleRemoveTag = (id) => {
+    setTags(tags.filter((_, index) => index !== id));
   };
 
   return (
@@ -148,20 +159,44 @@ const Blogadd = () => {
                             placeholder="Place Some Text Here"
                             modules={{
                               toolbar: [
-                                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                                [{size: []}],
-                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                [{'list': 'ordered'}, {'list': 'bullet'}, 
-                                {'indent': '-1'}, {'indent': '+1'}],
-                                ['link', 'image', 'video'],
-                                ['clean']
+                                [
+                                  { header: "1" },
+                                  { header: "2" },
+                                  { font: [] },
+                                ],
+                                [{ size: [] }],
+                                [
+                                  "bold",
+                                  "italic",
+                                  "underline",
+                                  "strike",
+                                  "blockquote",
+                                ],
+                                [
+                                  { list: "ordered" },
+                                  { list: "bullet" },
+                                  { indent: "-1" },
+                                  { indent: "+1" },
+                                ],
+                                ["link", "image", "video"],
+                                ["clean"],
                               ],
                             }}
                             formats={[
-                              'header', 'font', 'size',
-                              'bold', 'italic', 'underline', 'strike', 'blockquote',
-                              'list', 'bullet', 'indent',
-                              'link', 'image', 'video'
+                              "header",
+                              "font",
+                              "size",
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                              "list",
+                              "bullet",
+                              "indent",
+                              "link",
+                              "image",
+                              "video",
                             ]}
                           />
                         </div>
@@ -236,17 +271,30 @@ const Blogadd = () => {
                         </div>
                         <div className="form-group">
                           <div>
-                            {tags.map((tag,id)=>(
-                              <span key={id} 
+                            {tags.map((tag, id) => (
+                              <span
+                                key={id}
                                 className="badge-secondary mr-1"
-                                style={{display: 'inline-flex', alignItems: 'center', padding: '2px 7px', backgroundColor: '#ca629d', borderRadius: "5px"}}>
-                                  {tag}
-                                <span 
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  padding: "2px 7px",
+                                  backgroundColor: "#ca629d",
+                                  borderRadius: "5px",
+                                }}
+                              >
+                                {tag}
+                                <span
                                   className="remove-tag"
-                                  style={{ cursor: 'pointer', marginLeft: '5px', color: "#12448b", paddingBottom: '2px' }}
-                                  onClick={()=> handleRemoveTag(id)}
-                                  >
-                                      <HighlightOffIcon fontSize="15px" />
+                                  style={{
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                    color: "#12448b",
+                                    paddingBottom: "2px",
+                                  }}
+                                  onClick={() => handleRemoveTag(id)}
+                                >
+                                  <HighlightOffIcon fontSize="15px" />
                                 </span>
                               </span>
                             ))}

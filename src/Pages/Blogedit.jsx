@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Blogedit = () => {
   const [formData, setFormData] = useState({
@@ -41,8 +42,13 @@ const Blogedit = () => {
       .put(`http://localhost:5000/blog/${id}`, formData)
       .then((res) => {
         console.log(res.data);
-        alert("Data Changed !")
-        window.location.reload();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Changed !",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
       .catch((err) => {
         console.error(err);

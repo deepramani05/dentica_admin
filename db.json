@@ -28,13 +28,13 @@
   ],
   "gallaryImage": [
     {
-      "title": "Deep Ramani",
-      "mtitle": "reiwj",
-      "keyword": "piwsjcip",
-      "desc": "etrytyhujnk",
-      "image": "C:\\fakepath\\Annotation 2024-04-08 111806.png",
+      "title": "Deep",
+      "mtitle": "Deep Ramani",
+      "keyword": "Ramani",
+      "desc": "qjspjwidfiodvnsnz",
+      "image": null,
       "cat": "Team",
-      "id": "1844"
+      "id": "b8ba"
     }
   ],
   "aboutEdit": [
@@ -62,12 +62,6 @@
       "info": "web Developer",
       "sub": "dcxs",
       "id": "db09"
-    },
-    {
-      "name": "Deep Ramani",
-      "info": "web Developer",
-      "sub": "dcxs",
-      "id": "db09"
     }
   ],
   "career": [
@@ -82,9 +76,9 @@
   "blog": [
     {
       "id": "d73d",
-      "title": "Deep Ramani",
+      "title": "Deep",
       "image": "",
-      "desc": "",
+      "desc": "esdrtfhyujik",
       "sdesc": "",
       "mdesc": "",
       "mtitle": "",
@@ -96,6 +90,20 @@
     {
       "id": "5e5d",
       "title": "Deep",
+      "sdesc": "",
+      "mtitle": "",
+      "mdesc": "",
+      "keyword": "",
+      "cat": "",
+      "himage": "",
+      "bimage": "",
+      "fimage": "",
+      "images": "",
+      "desc": ""
+    },
+    {
+      "id": "d330",
+      "title": "",
       "sdesc": "",
       "mtitle": "",
       "mdesc": "",
