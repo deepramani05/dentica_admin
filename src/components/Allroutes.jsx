@@ -27,12 +27,14 @@ import TeamEdit from '../Pages/TeamEdit'
 import EventCatEdit from '../Pages/EventCatEdit'
 import EventEdit from '../Pages/EventEdit'
 import EventAdd from '../Pages/EventAdd'
+import Login from '../Pages/login'
 
 
 const Allroutes = () => {
   return (
     <div>
         <Routes>
+          <Route path='/login' element={<Login />}/>
             <Route path='/dashboard' element={<Dashboard/>}/>
             <Route path='/users' element={<Users/>}/>
             <Route path='/' element={<Home/>}/>
