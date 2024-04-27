@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import img from "../images/home_about-center.png";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const GalleryEdit = () => {
   const { id } = useParams(); // Change from title to id
@@ -10,7 +11,7 @@ const GalleryEdit = () => {
     mtitle: "",
     keyword: "",
     desc: "",
-    image: "",
+    image: null,
     cat: "",
   });
 
@@ -24,7 +25,7 @@ const GalleryEdit = () => {
           mtitle: data.mtitle,
           keyword: data.keyword,
           desc: data.desc,
-          image: data.image,
+          image: null,
           cat: data.cat,
         });
       })
@@ -47,7 +48,14 @@ const GalleryEdit = () => {
     axios
       .put(`http://localhost:5000/gallaryImage/${id}`, formData) // Adjusted endpoint
       .then((res) => {
-        console.log("Data updated successfully!");
+        console.log(res.data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data updated successfully!",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
       .catch((err) => {
         console.error("Error updating data:", err);
@@ -69,7 +77,7 @@ const GalleryEdit = () => {
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
                     <li className="breadcrumb-item">
-                      <Link to="/gallary">Gallary</Link>
+                      <Link to="/gallery">Gallery</Link>
                     </li>
                     <li
                       className="breadcrumb-item active"
