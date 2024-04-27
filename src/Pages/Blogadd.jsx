@@ -40,6 +40,8 @@ const Blogadd = () => {
           title: "Added Successfully ! ",
           showConfirmButton: false,
           timer: 1000
+        }).then(()=>{
+          window.location.href = "/blog";
         });
       })
       .catch((err) => {
@@ -111,11 +113,14 @@ const Blogadd = () => {
                       <h3 className="card-title">About</h3>
                     </div>
 
-                    {/* {data.map((item, index) => ( */}
                     <form
-                      // key={index}
                       className="text-left"
                       onSubmit={handleSubmit}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          }
+                        }}   
                     >
                       <div className="card-body">
                         <div className="form-group">
