@@ -68,6 +68,11 @@ const Blog = () => {
       }
     });
   };
+  const stripHtmlTags = (html) => {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || "";
+  };
 
   const itemsPerPage = 5;
   const filteredData = data.filter((post) =>
@@ -103,6 +108,7 @@ const Blog = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
+  console.log("data",displayedData);
 
   return (
     <div>
@@ -189,7 +195,7 @@ const Blog = () => {
                             <tr key={ele.id}>
                               <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
-                              <td>{ele.desc}</td>
+                              <td dangerouslySetInnerHTML={{ __html: ele.desc }}></td>
                               <td width={"15%"}>
                                 <Link
                                   className="form-btn"
