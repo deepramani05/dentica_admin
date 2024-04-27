@@ -6,6 +6,7 @@
   import { Link, useParams } from "react-router-dom";
   import axios from "axios";
   import { OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
   const Products = () => {
     const [data, setData] = useState([]);
@@ -35,14 +36,32 @@
         .delete(`http://localhost:5000/products/${id}`)
         .then((res) => {
           console.log(res.data);
-          alert("Product post deleted successfully !");
-          setData(data.filter((post) => post.id !== id));
+          Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                showConfirmButton: false,
+                icon: "success"
+              });
+              setData(data.filter((post) => post.id !== id));
+            }
+          });
         })
         .catch((err) => {
           console.log(err);
           alert("Error deleting Product post !");
         });
     };
+    
     
 
     const itemsPerPage = 5;

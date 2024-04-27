@@ -111,20 +111,6 @@
       "fimage": "",
       "images": "",
       "desc": ""
-    },
-    {
-      "id": "d330",
-      "title": "",
-      "sdesc": "",
-      "mtitle": "",
-      "mdesc": "",
-      "keyword": "",
-      "cat": "",
-      "himage": "",
-      "bimage": "",
-      "fimage": "",
-      "images": "",
-      "desc": ""
     }
   ],
   "review": [
@@ -133,13 +119,6 @@
       "name": "Deep",
       "num": "1234567890",
       "review": "Good Services !",
-      "image": ""
-    },
-    {
-      "id": "f023",
-      "name": "trgfdcsx",
-      "num": "",
-      "review": "",
       "image": ""
     }
   ],
@@ -173,12 +152,6 @@
       "name": "Deep",
       "num": "1234567890",
       "msg": "Web Developer"
-    },
-    {
-      "id": "1",
-      "name": "Deep",
-      "num": "1234567890",
-      "msg": "Web Developer"
     }
   ],
   "eventCatagory": [
@@ -187,19 +160,13 @@
       "image": "",
       "video": "",
       "id": "0b8a"
-    },
-    {
-      "id": "3b11",
-      "name": "tyhgvf",
-      "image": "",
-      "video": ""
     }
   ],
   "event": [
     {
+      "id": "cb87",
       "cat": "Deep Ramani",
-      "image": "",
-      "id": "99e4"
+      "image": ""
     }
   ]
 }
