@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const [stlFilesCount, setStlFilesCount] = useState(0);
+
+  useEffect(() => {
+    // Fetch data from the API
+    fetch("http://localhost:5000/stl")
+      .then(response => response.json())
+      .then(data => {
+        // Update the state with the number of STL files
+        setStlFilesCount(data.length);
+      })
+      .catch(error => console.error("Error fetching STL files:", error));
+  }, []);
+
   return (
     <div>
       <div className="content-wrapper">
@@ -17,7 +30,7 @@ const Dashboard = () => {
                   <li className="breadcrumb-item">
                     <Link to="/">Home</Link>
                   </li>
-                  <li className="breadcrumb-item active" style={{color:"#ca629d"}}>Dashboard</li>
+                  <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>Dashboard</li>
                 </ol>
               </div>
             </div>
@@ -33,7 +46,7 @@ const Dashboard = () => {
                 {/* small box */}
                 <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>0</h3>
+                    <h3>{stlFilesCount}</h3>
                     <p>New STL Files</p>
                   </div>
                   <div className="icon">
