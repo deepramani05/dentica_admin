@@ -33,7 +33,7 @@ const Login = () => {
                   required
                   size="small"
               />
-              <div className='icon'><MailIcon fontSize="large" /></div>
+              <div className='login-icon'><MailIcon fontSize="large" /></div>
                  
             </div>
             <div className='pass'>
@@ -46,7 +46,7 @@ const Login = () => {
                 required
                 size="small"
             />
-            <div className='icon'><LockIcon fontSize="large" /></div>
+            <div className='login-icon'><LockIcon fontSize="large" /></div>
             </div>
             <button type="submit" variant="contained" className='btn'>LogIn</button>
         </form>
