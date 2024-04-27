@@ -104,7 +104,7 @@ const User = () => {
     });
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   const filteredData = data.filter(
     (item) =>
