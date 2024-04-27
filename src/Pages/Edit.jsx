@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import img from "../images/home_about-center.png";
+import Swal from "sweetalert2";
 
 const Edit = () => {
   const [data, setData] = useState([]);
@@ -53,8 +54,14 @@ const Edit = () => {
       .patch(`http://localhost:5000/aboutEdit/${data[0].id}`, formData)
       .then((res) => {
         console.log(res.data);
-        alert("Updated!");
-        window.location.reload();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data has been Updated",
+          showConfirmButton: false,
+          timer: 1000
+        });
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);

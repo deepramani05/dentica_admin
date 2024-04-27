@@ -37,7 +37,7 @@ const Allroutes = () => {
             <Route path='/users' element={<Users/>}/>
             <Route path='/' element={<Home/>}/>
             <Route path='/about-us' element={<About/>}/>
-            <Route path='/gallary' element={<Gallary/>}/>
+            <Route path='/gallery' element={<Gallary/>}/>
             <Route path='/contact' element={<Contacts/>}/>
             <Route path='/career' element={<Career/>}/>
             <Route path='/blog' element={<Blog/>}/>
