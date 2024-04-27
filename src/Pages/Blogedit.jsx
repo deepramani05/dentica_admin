@@ -15,10 +15,10 @@ const Blogedit = () => {
     mdesc: "",
     mtitle: "",
     keyword: "",
-    tag: ""
+    tag: "",
   });
-  const[tags,setTags] = useState([]);
-  const [currentTag,setCurrentTag] = useState("");
+  const [tags, setTags] = useState([]);
+  const [currentTag, setCurrentTag] = useState("");
 
   const { id } = useParams("");
 
@@ -37,16 +37,16 @@ const Blogedit = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
   const handleChange1 = (value) => {
     setFormData({
       ...formData,
-      desc: value // Assuming 'desc' is the field for description in your form data
+      desc: value, // Assuming 'desc' is the field for description in your form data
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -58,29 +58,29 @@ const Blogedit = () => {
           icon: "success",
           title: "Data Changed !",
           showConfirmButton: false,
-          timer: 1000
-        }).then(()=>{
-          window.location.href = "/blog"
+          timer: 1000,
+        }).then(() => {
+          window.location.href = "/blog";
         });
       })
       .catch((err) => {
         console.error(err);
-        alert("Error !")
+        alert("Error !");
       });
   };
-  const handleTag = (e) =>{
-    if (e.key === "Enter"){
+  const handleTag = (e) => {
+    if (e.key === "Enter") {
       e.preventDefault();
       const trimmedTag = currentTag.trim();
-      if(trimmedTag){
+      if (trimmedTag) {
         setTags([...tags, trimmedTag]);
         setCurrentTag("");
       }
     }
   };
 
-  const handleRemoveTag = (id) =>{
-    setTags(tags.filter((_,index)=> index !== id));
+  const handleRemoveTag = (id) => {
+    setTags(tags.filter((_, index) => index !== id));
   };
   return (
     <div>
@@ -121,13 +121,14 @@ const Blogedit = () => {
                       <h3 className="card-title">About</h3>
                     </div>
 
-                    <form className="text-left"
-                        onSubmit={handleSubmit}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                          }
-                      }}                  
+                    <form
+                      className="text-left"
+                      onSubmit={handleSubmit}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                        }
+                      }}
                     >
                       <div className="card-body">
                         <div className="form-group">
@@ -149,63 +150,67 @@ const Blogedit = () => {
                             className="form-control-file"
                             id="exampleInputFile"
                             name="image"
-                            onChange={handleChange}
-                            value={formData.image}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                image: e.target.files[0],
+                              })
+                            }
                           />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputDescription">
                             Description
                           </label>
-                            <ReactQuill
-                              id="exampleInputDescription"
-                              rows="10"
-                              placeholder="Place Some Text Here"
-                              name="desc"
-                              onChange={handleChange1}
-                              value={formData.desc}
-                              modules={{
-                                toolbar: [
-                                  [
-                                    { header: "1" },
-                                    { header: "2" },
-                                    { font: [] },
-                                  ],
-                                  [{ size: [] }],
-                                  [
-                                    "bold",
-                                    "italic",
-                                    "underline",
-                                    "strike",
-                                    "blockquote",
-                                  ],
-                                  [
-                                    { list: "ordered" },
-                                    { list: "bullet" },
-                                    { indent: "-1" },
-                                    { indent: "+1" },
-                                  ],
-                                  ["link", "image", "video"],
-                                  ["clean"],
+                          <ReactQuill
+                            id="exampleInputDescription"
+                            rows="10"
+                            placeholder="Place Some Text Here"
+                            name="desc"
+                            onChange={handleChange1}
+                            value={formData.desc}
+                            modules={{
+                              toolbar: [
+                                [
+                                  { header: "1" },
+                                  { header: "2" },
+                                  { font: [] },
                                 ],
-                              }}
-                              formats={[
-                                "header",
-                                "font",
-                                "size",
-                                "bold",
-                                "italic",
-                                "underline",
-                                "strike",
-                                "blockquote",
-                                "list",
-                                "bullet",
-                                "indent",
-                                "link",
-                                "image",
-                                "video",
-                              ]}
-                            />
+                                [{ size: [] }],
+                                [
+                                  "bold",
+                                  "italic",
+                                  "underline",
+                                  "strike",
+                                  "blockquote",
+                                ],
+                                [
+                                  { list: "ordered" },
+                                  { list: "bullet" },
+                                  { indent: "-1" },
+                                  { indent: "+1" },
+                                ],
+                                ["link", "image", "video"],
+                                ["clean"],
+                              ],
+                            }}
+                            formats={[
+                              "header",
+                              "font",
+                              "size",
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                              "list",
+                              "bullet",
+                              "indent",
+                              "link",
+                              "image",
+                              "video",
+                            ]}
+                          />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputShortDescription">
@@ -271,21 +276,21 @@ const Blogedit = () => {
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
                             name="tag"
-                            onChange={(e)=> setCurrentTag(e.target.value)}
+                            onChange={(e) => setCurrentTag(e.target.value)}
                             onKeyDown={handleTag}
                             value={currentTag}
                           />
                         </div>
                         <div className="form-group">
                           <div>
-                            {tags.map((tag,id)=>(
+                            {tags.map((tag, id) => (
                               <span
-                                key = {id}
-                                className="badge-secondary mr-1" 
+                                key={id}
+                                className="badge-secondary mr-1"
                                 style={{
-                                  display: 'inline-flex',
+                                  display: "inline-flex",
                                   alignItems: "center",
-                                  padding:"2px 7px",
+                                  padding: "2px 7px",
                                   backgroundColor: "#ca629d",
                                   borderRadius: "5px",
                                 }}
@@ -296,9 +301,9 @@ const Blogedit = () => {
                                   style={{
                                     cursor: "pointer",
                                     marginLeft: "5px",
-                                    color:"#12448b",
+                                    color: "#12448b",
                                     paddingBottom: "2px",
-                                  }} 
+                                  }}
                                   onClick={() => handleRemoveTag(id)}
                                 >
                                   <HighlightOffIcon fontSize="15px" />
@@ -317,7 +322,7 @@ const Blogedit = () => {
                           // onKeyDown={(e)=>{if(e.key === 'enter'){
                           //   e.preventDefault();
                           // }}
-                        // } 
+                          // }
                         >
                           Submit
                         </button>
