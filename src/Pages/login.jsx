@@ -1,55 +1,103 @@
-import { Button, OutlinedInput } from '@mui/material';
-import React, { useState } from 'react';
-import '../css/style.css';
-import MailIcon from '@mui/icons-material/Mail';
-import LockIcon from '@mui/icons-material/Lock';
+import React, { useEffect, useState } from "react";
+import "../css/style.css";
+import axios from "axios";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/userForm")
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching user data:", err);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can add your authentication logic
-    console.log('Submitted:', { username, password });
+    if (userData && email === userData.email && password === userData.pass) {
+      console.log("Login successful");
+      // Here you can redirect or perform any actions for successful login
+    } else {
+      setError("Incorrect email or password.");
+    }
     // Reset the form fields
-    setUsername('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
   };
 
   return (
     <div>
-      <h2>Admin Login</h2>
-      <div className='box'>
-        <form onSubmit={handleSubmit}>
-            <div className='user'>
-            <label htmlFor="username">Username:</label>
-              <OutlinedInput
-                  type="text"
-                  id="username"
-                  className='MuiOutlinedInput-input'
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+      <div className="login-box" style={{ margin: "50px auto" }}>
+        <div className="card card-outline card-primary">
+          <div className="card-header text-center">
+            <a href="../../index2.html" className="h1">
+              <b>Admin</b> Login
+            </a>
+          </div>
+          <div className="card-body">
+            <p className="login-box-msg">Sign in to start your session</p>
+
+            <form onSubmit={handleSubmit}>
+              <div className="input-group mb-3">
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email"
                   required
-                  size="small"
-              />
-              <div className='login-icon'><MailIcon fontSize="large" /></div>
-                 
-            </div>
-            <div className='pass'>
-            <label htmlFor="password">Password:</label>
-            <OutlinedInput
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                size="small"
-            />
-            <div className='login-icon'><LockIcon fontSize="large" /></div>
-            </div>
-            <button type="submit" variant="contained" className='btn'>LogIn</button>
-        </form>
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+              <div className="input-group mb-3">
+                <input
+                  type={showPassword ? "text" : "password"} // Ternary operator to toggle input type
+                  className="form-control"
+                  placeholder="Password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                  <div className="input-group-text">
+                    <span className="fas fa-lock"></span>
+                  </div>
+              </div>
+              <div style={{margin:"30px 10px"}}>
+                <div className="input-group-append">
+                </div>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <input
+                      type="checkbox"
+                      onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+                    />
+                    <span style={{marginLeft:"10px",fontSize:"15px"}}>Show Password</span>
+                  </div>
+                </div>
+              </div>
+              {error && <div className="text-danger">{error}</div>}
+              <div className="row">
+                <div className="col-4">
+                  <button type="submit" className="btn btn-primary btn-block">
+                    Sign In
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
