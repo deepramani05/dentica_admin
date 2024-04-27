@@ -2,6 +2,33 @@
   margin: 0;
   padding: 0;
 }
+.user,
+.pass {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.btn {
+  margin-top: 10px;
+  border-radius: 1rem;
+  background-color: #12448b;
+  /* border: 2px solid #ca629d; */
+  color: #fff;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn:hover {
+  background-color: #ca629d;
+  color: white;
+}
 
 .side-ul li a {
   color: white !important;
@@ -39,7 +66,7 @@
 }
 
 .breadcrumb-item a {
-  color: #256f98 !important;
+  color: #256f98 !important; 
 }
 
 .form-btn:hover {
@@ -85,6 +112,8 @@ table{
   position: sticky;
   top: 0;
   z-index: 1;
+
+
   padding: 8px;
   text-align: left;
   /* white-space: nowrap; */
@@ -117,4 +146,30 @@ table{
   background-color: #007bff;
   color: #fff;
   border-color: #007bff;
+}
+.box{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 400px;
+  margin: 0 auto;
+}
+.icon{
+  font-size: large !important;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  font-weight: 400;
+  line-height: 1;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #cbbaba;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  height: 38px;
+}
+.MuiOutlinedInput-input {
+  height: 90%; /* Set the height of the input */
 }
