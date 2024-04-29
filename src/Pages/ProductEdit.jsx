@@ -51,8 +51,7 @@ const ProductEdit = () => {
           title: "Data has been Edited Successfully !",
           showConfirmButton: false,
           timer: 1500,
-        })
-        .then(() => {
+        }).then(() => {
           window.location.href = "/product";
         });
       })
@@ -179,13 +178,12 @@ const ProductEdit = () => {
                           </label>
                           <br />
                           <select
-                            name=""
-                            id=""
                             className="w-100 p-2"
                             onChange={handleChange}
                             value={formData.cat}
+                            name="cat"
                           >
-                            <option value="Select Tyep">Select Type</option>
+                            <option value="">Select Type</option>
                             <option value="Digital Dentistry">
                               Digital Dentistry
                             </option>

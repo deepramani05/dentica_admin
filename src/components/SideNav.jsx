@@ -20,6 +20,20 @@ const SideNav = () => {
   const location = useLocation();
   const sidebarRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,8 +52,10 @@ const SideNav = () => {
     setIsOpen(!isOpen);
   };
 
-  const closeSidebar = () => {
-    setIsOpen(false);
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setIsOpen(false); // Close the sidebar on mobile when a link is clicked
+    }
   };
 
   return (
@@ -47,14 +63,14 @@ const SideNav = () => {
       <aside
         className={`main-sidebar elevation-4 text-left ${
           isOpen ? "sidebar-open" : ""
-        }`}
+        } ${isMobile ? "mobile-sidebar" : ""}`}
         style={{ backgroundColor: "#256f98", height: "auto" }}
       >
         {/* Brand Logo */}
         <Link
           to="/"
           className="brand-link sidebar-light-primary"
-          onClick={closeSidebar}
+          onClick={isMobile ? toggleSidebar : undefined}
         >
           <img src={logo} alt="" style={{ width: "50%", margin: "10px 0" }} />
         </Link>
