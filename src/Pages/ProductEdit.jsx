@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -31,11 +32,11 @@ const ProductEdit = () => {
       });
   }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (content, delta, source, editor) => {
+    // 'content' contains the updated text from ReactQuill
     setFormData({
       ...formData,
-      [name]: value,
+      desc: content, // Assuming 'desc' is the key for ReactQuill content in your state
     });
   };
 
@@ -274,15 +275,54 @@ const ProductEdit = () => {
                           <label htmlFor="exampleInputDescription">
                             Description
                           </label>
-                          <textarea
-                            className="form-control"
+                          <ReactQuill
                             id="exampleInputDescription"
-                            rows="3"
+                            rows="10"
                             placeholder="Place Some Text Here"
-                            name="desc"
                             onChange={handleChange}
                             value={formData.desc}
-                          ></textarea>
+                            modules={{
+                              toolbar: [
+                                [
+                                  { header: "1" },
+                                  { header: "2" },
+                                  { font: [] },
+                                ],
+                                [{ size: [] }],
+                                [
+                                  "bold",
+                                  "italic",
+                                  "underline",
+                                  "strike",
+                                  "blockquote",
+                                ],
+                                [
+                                  { list: "ordered" },
+                                  { list: "bullet" },
+                                  { indent: "-1" },
+                                  { indent: "+1" },
+                                ],
+                                ["link", "image", "video"],
+                                ["clean"],
+                              ],
+                            }}
+                            formats={[
+                              "header",
+                              "font",
+                              "size",
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                              "list",
+                              "bullet",
+                              "indent",
+                              "link",
+                              "image",
+                              "video",
+                            ]}
+                          />
                         </div>
                       </div>
                       <div className="card-footer">

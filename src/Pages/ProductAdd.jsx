@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -41,9 +42,8 @@ const ProductAdd = () => {
           icon: "success",
           title: "Data Added Successfully !",
           showConfirmButton: false,
-          timer: 1000
-        })
-        .then(() => {
+          timer: 1000,
+        }).then(() => {
           window.location.href = "/product";
         });
       })
@@ -266,15 +266,55 @@ const ProductAdd = () => {
                           <label htmlFor="exampleInputDescription">
                             Description
                           </label>
-                          <textarea
-                            className="form-control"
+                          <ReactQuill
                             id="exampleInputDescription"
-                            rows="3"
+                            rows="10"
                             placeholder="Place Some Text Here"
                             name="desc"
                             onChange={(e) => setDesc(e.target.value)}
                             value={desc}
-                          ></textarea>
+                            modules={{
+                              toolbar: [
+                                [
+                                  { header: "1" },
+                                  { header: "2" },
+                                  { font: [] },
+                                ],
+                                [{ size: [] }],
+                                [
+                                  "bold",
+                                  "italic",
+                                  "underline",
+                                  "strike",
+                                  "blockquote",
+                                ],
+                                [
+                                  { list: "ordered" },
+                                  { list: "bullet" },
+                                  { indent: "-1" },
+                                  { indent: "+1" },
+                                ],
+                                ["link", "image", "video"],
+                                ["clean"],
+                              ],
+                            }}
+                            formats={[
+                              "header",
+                              "font",
+                              "size",
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                              "list",
+                              "bullet",
+                              "indent",
+                              "link",
+                              "image",
+                              "video",
+                            ]}
+                          />
                         </div>
                       </div>
                       <div className="card-footer">

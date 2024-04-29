@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import img from "../images/home_about-center.png";
 import Swal from "sweetalert2";
+import ReactQuill from "react-quill";
 
 const Edit = () => {
   const [data, setData] = useState([]);
@@ -40,11 +41,20 @@ const Edit = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    // Check if the event comes from React Quill (description field)
+    if (e?.target?.name) {
+      const { name, value } = e.target;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    } else {
+      // Handle React Quill editor change (description field)
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        desc: e,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -59,9 +69,8 @@ const Edit = () => {
           icon: "success",
           title: "Data has been Updated",
           showConfirmButton: false,
-          timer: 1000
-        })
-        .then(() => {
+          timer: 1000,
+        }).then(() => {
           window.location.href = "/about-us";
         });
         // setTimeout(() => window.location.reload(), 1000)
@@ -184,7 +193,7 @@ const Edit = () => {
                               onChange={handleChange}
                               value={formData.mdesc}
                             />
-                        </div>
+                          </div>
                           <div className="form-group">
                             <label htmlFor="exampleInputFile">Image</label>
                             <div
@@ -215,15 +224,55 @@ const Edit = () => {
                             <label htmlFor="exampleInputDescription">
                               Description
                             </label>
-                            <textarea
-                              className="form-control"
+                            <ReactQuill
                               id="exampleInputDescription"
-                              rows="3"
+                              rows="10"
                               placeholder="Place Some Text Here"
                               name="desc"
                               onChange={handleChange}
                               value={formData.desc}
-                            ></textarea>
+                              modules={{
+                                toolbar: [
+                                  [
+                                    { header: "1" },
+                                    { header: "2" },
+                                    { font: [] },
+                                  ],
+                                  [{ size: [] }],
+                                  [
+                                    "bold",
+                                    "italic",
+                                    "underline",
+                                    "strike",
+                                    "blockquote",
+                                  ],
+                                  [
+                                    { list: "ordered" },
+                                    { list: "bullet" },
+                                    { indent: "-1" },
+                                    { indent: "+1" },
+                                  ],
+                                  ["link", "image", "video"],
+                                  ["clean"],
+                                ],
+                              }}
+                              formats={[
+                                "header",
+                                "font",
+                                "size",
+                                "bold",
+                                "italic",
+                                "underline",
+                                "strike",
+                                "blockquote",
+                                "list",
+                                "bullet",
+                                "indent",
+                                "link",
+                                "image",
+                                "video",
+                              ]}
+                            />
                           </div>
                           <div
                             className="col-sm-6 text-left"
@@ -271,7 +320,7 @@ const Edit = () => {
                               onChange={handleChange}
                               value={formData.num1}
                             />
-                         </div>
+                          </div>
                           <div className="form-group">
                             <label htmlFor="exampleInputPhoneNumber2">
                               Phone Number 2

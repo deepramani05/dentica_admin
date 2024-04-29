@@ -64,7 +64,16 @@ const SideNav = () => {
         className={`main-sidebar elevation-4 text-left ${
           isOpen ? "sidebar-open" : ""
         } ${isMobile ? "mobile-sidebar" : ""}`}
-        style={{ backgroundColor: "#256f98", height: "auto" }}
+        style={{
+          backgroundColor: "#256f98",
+          height: "100%",
+          overflowY: "auto",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: "250px",
+        }}
       >
         {/* Brand Logo */}
         <Link
