@@ -25,7 +25,10 @@ const Header = () => {
   };
   return (
     <div>
-      <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <nav class="main-header navbar navbar-expand navbar-white navbar-light"
+            style={{ zIndex: 1000 }}
+      >
+        
         {/* <!-- Left navbar links --> */}
         <ul class="navbar-nav">
           <li class="nav-item">

@@ -26,7 +26,10 @@ const Blogedit = () => {
     axios
       .get(`http://localhost:5000/blog/${id}`)
       .then((res) => {
-        setFormData(res.data);
+        const {title, image, desc, sdesc, medesc, mtitle, keyword, tag} = res.data;
+
+        setFormData({title, image, desc, sdesc, medesc, mtitle, keyword, tag});
+        setTags(res.data.tags || []);
       })
       .catch((err) => {
         console.error(err);
