@@ -44,6 +44,8 @@ const ReviewEdit = () => {
           title: "Review updated Successfully !",
           showConfirmButton: false,
           timer: 1000,
+        }).then(() => {
+          window.location.href = "/review";
         });
       })
       .catch((err) => {

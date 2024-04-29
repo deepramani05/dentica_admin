@@ -32,6 +32,9 @@ const MetaEdit = () => {
           title: "Meta data updated successfully !",
           showConfirmButton: false,
           timer: 1000,
+        })
+        .then(() => {
+          window.location.href = "/meta";
         });
       })
       .catch((err) => {

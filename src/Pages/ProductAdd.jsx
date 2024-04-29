@@ -42,6 +42,9 @@ const ProductAdd = () => {
           title: "Data Added Successfully !",
           showConfirmButton: false,
           timer: 1000
+        })
+        .then(() => {
+          window.location.href = "/product";
         });
       })
       .catch((err) => {

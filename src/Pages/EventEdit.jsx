@@ -13,7 +13,8 @@ const EventEdit = () => {
 
   useEffect(() => {
     // Fetch event categories
-    axios.get(`http://localhost:5000/eventCatagory`)
+    axios
+      .get(`http://localhost:5000/eventCatagory`)
       .then((res) => {
         setData(res.data);
       })
@@ -22,7 +23,8 @@ const EventEdit = () => {
       });
 
     // Fetch event data for the specified ID
-    axios.get(`http://localhost:5000/event/${id}`)
+    axios
+      .get(`http://localhost:5000/event/${id}`)
       .then((res) => {
         const eventData = res.data;
         setFormData({
@@ -47,7 +49,8 @@ const EventEdit = () => {
     e.preventDefault();
 
     // Send PUT request to update the event data
-    axios.put(`http://localhost:5000/event/${id}`, formData)
+    axios
+      .put(`http://localhost:5000/event/${id}`, formData)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -55,9 +58,12 @@ const EventEdit = () => {
           icon: "success",
           title: "Data Updated Successfully !",
           showConfirmButton: false,
-          timer: 1000
-        });
-        // Handle success, maybe redirect or show a success message
+          timer: 1000,
+        })
+          // Handle success, maybe redirect or show a success message
+          .then(() => {
+            window.location.href = "/event";
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -116,9 +122,7 @@ const EventEdit = () => {
                             onChange={handleChange}
                             value={formData.cat}
                           >
-                            <option value="">
-                              Select a Option
-                            </option>
+                            <option value="">Select a Option</option>
                             {data.map((ele) => (
                               <option key={ele.id} value={ele.name}>
                                 {ele.name}

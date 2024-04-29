@@ -51,6 +51,9 @@ const ProductEdit = () => {
           title: "Data has been Edited Successfully !",
           showConfirmButton: false,
           timer: 1500,
+        })
+        .then(() => {
+          window.location.href = "/product";
         });
       })
       .catch((err) => {

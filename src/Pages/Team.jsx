@@ -253,7 +253,7 @@ const Team = () => {
                                       <td>
                                         <img
                                           src={ele.image}
-                                          alt=""
+                                          alt={ele.name}
                                           style={{ width: "100px", height: "auto" }}
                                         />
                                       </td>

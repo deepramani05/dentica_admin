@@ -33,7 +33,7 @@
       "keyword": "Ramani",
       "desc": "qjspjwidfiodvnsnz",
       "image": null,
-      "cat": "Team",
+      "cat": "Before & After",
       "id": "b8ba"
     }
   ],
@@ -79,32 +79,44 @@
       "image": "C:\\fakepath\\Tissue paper Box.png",
       "desc": "<p>Hello !!</p><p>It's Testing <strong>Demo</strong></p><p>1<em>st</em></p>",
       "sdesc": "demo",
-      "mdesc": "test",
       "mtitle": "test",
       "keyword": "demo",
       "tag": "demo",
       "id": "d73d"
-    },
-    {
-      "id": "6912",
-      "title": " New Test",
-      "image": "",
-      "desc": "<p>Demo content <strong>added</strong></p>",
-      "sdesc": "demo",
-      "mdesc": "demo",
-      "mtitle": "demo",
-      "keyword": "WF",
-      "tags": [
-        "hi",
-        "hi1",
-        "hi2"
-      ]
     }
   ],
   "products": [
     {
       "id": "5e5d",
       "title": "Deep",
+      "sdesc": "",
+      "mtitle": "",
+      "mdesc": "",
+      "keyword": "",
+      "cat": "",
+      "himage": "",
+      "bimage": "",
+      "fimage": "",
+      "images": "",
+      "desc": ""
+    },
+    {
+      "id": "0deb",
+      "title": "",
+      "sdesc": "",
+      "mtitle": "",
+      "mdesc": "",
+      "keyword": "",
+      "cat": "",
+      "himage": "",
+      "bimage": "",
+      "fimage": "",
+      "images": "",
+      "desc": ""
+    },
+    {
+      "id": "8f30",
+      "title": "",
       "sdesc": "",
       "mtitle": "",
       "mdesc": "",
@@ -145,7 +157,7 @@
   "team": [
     {
       "name": "Deep",
-      "image": "",
+      "image": "C:\\fakepath\\Annotation 2024-04-08 111806.png",
       "post": "ewrtynj",
       "id": "3dbd"
     }
@@ -171,6 +183,11 @@
       "id": "cb87",
       "cat": "Deep Ramani",
       "image": ""
+    },
+    {
+      "cat": "",
+      "image": "",
+      "id": "b04b"
     }
   ]
 }

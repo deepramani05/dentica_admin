@@ -60,8 +60,11 @@ const Edit = () => {
           title: "Data has been Updated",
           showConfirmButton: false,
           timer: 1000
+        })
+        .then(() => {
+          window.location.href = "/about-us";
         });
-        setTimeout(() => window.location.reload(), 1000);
+        // setTimeout(() => window.location.reload(), 1000)
       })
       .catch((err) => {
         console.log(err);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const TeamEdit = () => {
   const { id } = useParams();
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
 
   useEffect(() => {
@@ -34,7 +35,15 @@ const TeamEdit = () => {
       .put(`http://localhost:5000/team/${id}`, updatedTeamMember)
       .then((res) => {
         console.log(res.data);
-        alert("Data Updated!");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Updated!",
+          showConfirmButton: false,
+          timer: 1000,
+        }).then(() => {
+          window.location.href = "/team";
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -92,8 +101,8 @@ const TeamEdit = () => {
                             type="file"
                             className="form-control-file"
                             id="exampleInputFile"
-                            onChange={(e) => setImage(e.target.value)}
-                            value={image}
+                            onChange={(e) => setImage(e.target.files[0])}
+                            // Note: File input value is not set directly
                           />
                         </div>
                         <div className="form-group">

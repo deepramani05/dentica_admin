@@ -168,13 +168,13 @@ const Gallary = () => {
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                      <Link to="/gallary">Gallary</Link>
+                      <Link to="/">Home</Link>
                     </li>
                     <li
                       class="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      Edit
+                      Gallary
                     </li>
                   </ol>
                 </div>

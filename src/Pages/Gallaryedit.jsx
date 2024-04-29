@@ -55,6 +55,9 @@ const GalleryEdit = () => {
           title: "Data updated successfully!",
           showConfirmButton: false,
           timer: 1000
+        })
+        .then(() => {
+          window.location.href = "/gallery";
         });
       })
       .catch((err) => {

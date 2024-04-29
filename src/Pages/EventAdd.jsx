@@ -26,6 +26,8 @@ const EventAdd = () => {
           title: "Data Saved !",
           showConfirmButton: false,
           timer: 1000,
+        }).then(() => {
+          window.location.href = "/event";
         });
       })
       .catch((err) => {
@@ -105,9 +107,9 @@ const EventAdd = () => {
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
-                             <option value="Select a Option">
-                                Select a Option
-                              </option>
+                            <option value="Select a Option">
+                              Select a Option
+                            </option>
                             {data.map((item) => (
                               <option key={item._id} value={item.name}>
                                 {item.name}

@@ -52,6 +52,9 @@ const EventCatEdit = () => {
           title: "Data updated successfully!",
           showConfirmButton: false,
           timer: 1000,
+        })
+        .then(() => {
+          window.location.href = "/event-catagory";
         });
       })
       .catch((err) => {

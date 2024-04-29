@@ -26,9 +26,19 @@ const Blogedit = () => {
     axios
       .get(`http://localhost:5000/blog/${id}`)
       .then((res) => {
-        const {title, image, desc, sdesc, medesc, mtitle, keyword, tag} = res.data;
+        const { title, image, desc, sdesc, medesc, mtitle, keyword, tag } =
+          res.data;
 
-        setFormData({title, image, desc, sdesc, medesc, mtitle, keyword, tag});
+        setFormData({
+          title,
+          image,
+          desc,
+          sdesc,
+          medesc,
+          mtitle,
+          keyword,
+          tag,
+        });
         setTags(res.data.tags || []);
       })
       .catch((err) => {
@@ -52,13 +62,15 @@ const Blogedit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedFormData = { ...formData, tags: tags }; // Include tags in formData
+    console.log("Data to be sent:", updatedFormData); // Log the data before sending
     axios
-      .put(`http://localhost:5000/blog/${id}`, formData)
+      .put(`http://localhost:5000/blog/${id}`, updatedFormData) // Send updatedFormData to the server
       .then((res) => {
         console.log(res.data);
         Swal.fire({
           position: "top-end",
-          icon: "success",
+          icon  : "success",
           title: "Data Changed !",
           showConfirmButton: false,
           timer: 1000,
@@ -71,6 +83,7 @@ const Blogedit = () => {
         alert("Error !");
       });
   };
+
   const handleTag = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
