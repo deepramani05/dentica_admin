@@ -41,6 +41,11 @@ label {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   background-color: #ca629d !important;
+  box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.584);
+}
+.nav-pills .nav-link.active:hover ,
+.nav-pills .show > .nav-link {
+  background-color: #ca629d !important;
 }
 
 .nav-pills .nav-link:hover,

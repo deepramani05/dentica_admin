@@ -49,14 +49,10 @@ const SideNav = () => {
   }, []);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prevState) => !prevState); // Toggle isOpen state
   };
 
-  const handleLinkClick = () => {
-    if (isMobile) {
-      setIsOpen(false); // Close the sidebar on mobile when a link is clicked
-    }
-  };
+  
 
   return (
     <div ref={sidebarRef}>
@@ -76,13 +72,14 @@ const SideNav = () => {
         }}
       >
         {/* Brand Logo */}
-        <Link
-          to="/"
+        <a
+          href="/"
           className="brand-link sidebar-light-primary"
           onClick={isMobile ? toggleSidebar : undefined}
+          style={{padding:"0" }}
         >
-          <img src={logo} alt="" style={{ width: "50%", margin: "10px 0" }} />
-        </Link>
+          <img src={logo} alt="" style={{ width: "50%", margin: "10px 0"}} />
+        </a>
 
         {/* Sidebar */}
         <div className="sidebar">
@@ -100,15 +97,15 @@ const SideNav = () => {
                   location.pathname === "/dashboard" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/dashboard"
+                <a
+                  href="/dashboard"
                   className={`nav-link ${
                     location.pathname === "/dashboard" ? "active" : ""
                   }`}
                 >
                   <i className="nav-icon fas fa-tachometer-alt"></i>
                   <p>Dashboard</p>
-                </Link>
+                </a>
               </li>
 
               {/* Users */}
@@ -117,8 +114,8 @@ const SideNav = () => {
                   location.pathname === "/users" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/users"
+                <a
+                  href="/users"
                   className={`nav-link ${
                     location.pathname === "/users" ? "active" : ""
                   }`}
@@ -127,7 +124,7 @@ const SideNav = () => {
                     <FaUsers />
                   </i>
                   <p>Users</p>
-                </Link>
+                </a>
               </li>
 
               {/* Home */}
@@ -136,8 +133,8 @@ const SideNav = () => {
                   location.pathname === "/" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/"
+                <a
+                  href="/"
                   className={`nav-link ${
                     location.pathname === "/" ? "active" : ""
                   }`}
@@ -146,7 +143,7 @@ const SideNav = () => {
                     <BiHome />
                   </i>
                   <p>Home</p>
-                </Link>
+                </a>
               </li>
 
               {/* About Us */}
@@ -155,8 +152,8 @@ const SideNav = () => {
                   location.pathname === "/about-us" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/about-us"
+                <a
+                  href="/about-us"
                   className={`nav-link ${
                     location.pathname === "/about-us" ? "active" : ""
                   }`}
@@ -165,7 +162,7 @@ const SideNav = () => {
                     <BsInfoCircle />
                   </i>
                   <p>About Us</p>
-                </Link>
+                </a>
               </li>
 
               {/* Gallery */}
@@ -174,8 +171,8 @@ const SideNav = () => {
                   location.pathname === "/gallery" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/gallery"
+                <a
+                  href="/gallery"
                   className={`nav-link ${
                     location.pathname === "/gallery" ? "active" : ""
                   }`}
@@ -184,7 +181,7 @@ const SideNav = () => {
                     <BsFillImageFill />
                   </i>
                   <p>Gallary</p>
-                </Link>
+                </a>
               </li>
 
               {/* Contacts */}
@@ -193,8 +190,8 @@ const SideNav = () => {
                   location.pathname === "/contact" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/contact"
+                <a
+                  href="/contact"
                   className={`nav-link ${
                     location.pathname === "/contact" ? "active" : ""
                   }`}
@@ -203,7 +200,7 @@ const SideNav = () => {
                     <BsFillTelephoneFill />
                   </i>
                   <p>Contacts</p>
-                </Link>
+                </a>
               </li>
 
               {/* Career */}
@@ -212,8 +209,8 @@ const SideNav = () => {
                   location.pathname === "/career" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/career"
+                <a
+                  href="/career"
                   className={`nav-link ${
                     location.pathname === "/career" ? "active" : ""
                   }`}
@@ -222,7 +219,7 @@ const SideNav = () => {
                     <BsBagFill />
                   </i>
                   <p>Career</p>
-                </Link>
+                </a>
               </li>
 
               {/* Blog */}
@@ -231,8 +228,8 @@ const SideNav = () => {
                   location.pathname === "/blog" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/blog"
+                <a
+                  href="/blog"
                   className={`nav-link ${
                     location.pathname === "/blog" ? "active" : ""
                   }`}
@@ -241,7 +238,7 @@ const SideNav = () => {
                     <FaPencilAlt />
                   </i>
                   <p>Blog</p>
-                </Link>
+                </a>
               </li>
 
               {/* Products */}
@@ -250,8 +247,8 @@ const SideNav = () => {
                   location.pathname === "/product" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/product"
+                <a
+                  href="/product"
                   className={`nav-link ${
                     location.pathname === "/product" ? "active" : ""
                   }`}
@@ -260,7 +257,7 @@ const SideNav = () => {
                     <AiOutlineShoppingCart />
                   </i>
                   <p>Products</p>
-                </Link>
+                </a>
               </li>
 
               {/* Review */}
@@ -269,8 +266,8 @@ const SideNav = () => {
                   location.pathname === "/review" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/review"
+                <a
+                  href="/review"
                   className={`nav-link ${
                     location.pathname === "/review" ? "active" : ""
                   }`}
@@ -279,7 +276,7 @@ const SideNav = () => {
                     <AiFillStar />
                   </i>
                   <p>Review</p>
-                </Link>
+                </a>
               </li>
 
               {/* Meta */}
@@ -288,8 +285,8 @@ const SideNav = () => {
                   location.pathname === "/meta" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/meta"
+                <a
+                  href="/meta"
                   className={`nav-link ${
                     location.pathname === "/meta" ? "active" : ""
                   }`}
@@ -298,7 +295,7 @@ const SideNav = () => {
                     <TbCylinder />
                   </i>
                   <p>Meta</p>
-                </Link>
+                </a>
               </li>
 
               {/* Team */}
@@ -307,8 +304,8 @@ const SideNav = () => {
                   location.pathname === "/team" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/team"
+                <a
+                  href="/team"
                   className={`nav-link ${
                     location.pathname === "/team" ? "active" : ""
                   }`}
@@ -317,7 +314,7 @@ const SideNav = () => {
                     <FaUserDoctor />
                   </i>
                   <p>Team</p>
-                </Link>
+                </a>
               </li>
 
               {/* STL */}
@@ -326,8 +323,8 @@ const SideNav = () => {
                   location.pathname === "/stl" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/stl"
+                <a
+                  href="/stl"
                   className={`nav-link ${
                     location.pathname === "/stl" ? "active" : ""
                   }`}
@@ -336,7 +333,7 @@ const SideNav = () => {
                     <BsBagDash />
                   </i>
                   <p>STL</p>
-                </Link>
+                </a>
               </li>
 
               {/* Event Category */}
@@ -345,8 +342,8 @@ const SideNav = () => {
                   location.pathname === "/event-catagory" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/event-catagory"
+                <a
+                  href="/event-catagory"
                   className={`nav-link ${
                     location.pathname === "/event-catagory" ? "active" : ""
                   }`}
@@ -355,7 +352,7 @@ const SideNav = () => {
                     <SlCalender />
                   </i>
                   <p>Event Category</p>
-                </Link>
+                </a>
               </li>
 
               {/* Event */}
@@ -364,8 +361,8 @@ const SideNav = () => {
                   location.pathname === "/event" ? "menu-open" : ""
                 }`}
               >
-                <Link
-                  to="/event"
+                <a
+                  href="/event"
                   className={`nav-link ${
                     location.pathname === "/event" ? "active" : ""
                   }`}
@@ -374,7 +371,7 @@ const SideNav = () => {
                     <SlCalender />
                   </i>
                   <p>Event</p>
-                </Link>
+                </a>
               </li>
             </ul>
           </nav>

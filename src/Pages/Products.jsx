@@ -50,7 +50,8 @@ import Swal from "sweetalert2";
                 title: "Deleted!",
                 text: "Your file has been deleted.",
                 showConfirmButton: false,
-                icon: "success"
+                icon: "success",
+                timer:"1000"
               });
               setData(data.filter((post) => post.id !== id));
             }

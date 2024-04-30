@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Home = () => {
@@ -33,6 +33,10 @@ const Home = () => {
           showConfirmButton: false,
           timer: 1000,
         });
+        setTitle("")
+        setSubtitle("")
+        setDesc("")
+        setImage("")
       })
       .catch((err) => {
         console.log(err);
@@ -44,7 +48,7 @@ const Home = () => {
           timer: 1000,
         });
       });
-    setTimeout(() => window.location.reload(), 1000);
+    // setTimeout(() => window.location.reload(), 1000);
   };
 
   const handleSocialsubmit = (e) => {
