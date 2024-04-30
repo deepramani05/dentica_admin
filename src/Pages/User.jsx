@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/style.css";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const User = () => {
   let [name, setName] = useState("");
@@ -14,6 +15,14 @@ const User = () => {
   let [searchQuery, setSearchQuery] = useState("");
   let [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Check if token is available
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
 
   let obj = {
     name: name,

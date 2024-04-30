@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/style.css";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,30 +10,48 @@ const Login = () => {
   const [userData, setUserData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/userForm")
-      .then((res) => {
-        setUserData(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching user data:", err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://denticadentalstudio.com/api/login")
+  //     .then((res) => {
+  //       setUserData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching user data:", err);
+  //     });
+  // }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (userData && email === userData.email && password === userData.pass) {
-      console.log("Login successful");
-      // Here you can redirect or perform any actions for successful login
-    } else {
-      setError("Incorrect email or password.");
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (userData && email === userData.email && password === userData.pass) {
+  //     console.log("Login successful");
+  //     // Here you can redirect or perform any actions for successful login
+  //   } else {
+  //     setError("Incorrect email or password.");
+  //   }
+  //   // Reset the form fields
+  //   setEmail("");
+  //   setPassword("");
+  // };
+    const handleSubmit =(e) =>{
+      e.preventDefault();
+
+      axios.post("https://denticadentalstudio.com/api/login",{email, password})
+          .then((res)=>{
+            const token = res.data.token;
+
+            Cookies.set("token",token);
+
+            console.log("Login Sucessful");
+            window.location.href = "/";
+          })
+          .catch((err)=>{
+            console.error("Error Logging in: ",err);
+            setError("Incorrect Email or Password.");
+          });
+          setEmail("");
+          setPassword("");
     }
-    // Reset the form fields
-    setEmail("");
-    setPassword("");
-  };
-
   return (
     <div>
       <div className="login-box" style={{ margin: "50px auto" }}>

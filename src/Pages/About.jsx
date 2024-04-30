@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const About = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,14 @@ const About = () => {
   useEffect(() => {
     fetchData(); // Fetch data initially
   }, []);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
+  
 
   const fetchData = () => {
     axios
