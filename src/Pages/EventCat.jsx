@@ -7,6 +7,7 @@ import { FaRegEye } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
+import Cookies from "js-cookie";
 
 const EventCat = () => {
   const [name, setName] = useState("");
@@ -56,6 +57,12 @@ const EventCat = () => {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
   }, []);
 
   const handleDelete = (id) => {

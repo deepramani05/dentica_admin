@@ -7,6 +7,7 @@ import "../css/style.css";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { OutlinedInput } from "@mui/material";
+import Cookies from "js-cookie";
 
 const Gallary = () => {
   let [title, setTitle] = useState("");
@@ -76,6 +77,12 @@ const Gallary = () => {
   };
   useEffect(() => {
     fetchData();
+  }, []);
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
   }, []);
 
   const handleDelete = (id) => {

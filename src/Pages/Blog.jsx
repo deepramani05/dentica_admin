@@ -7,6 +7,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Blog = () => {
   const [data, setData] = useState([]);
@@ -29,6 +30,14 @@ const Blog = () => {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  //checking for token
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
   }, []);
 
   const handledelete = (id) => {

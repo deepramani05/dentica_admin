@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import "../css/style.css";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Career = () => {
   const [data, setData] = useState([]);
@@ -24,7 +25,12 @@ const Career = () => {
         console.log(err);
       });
   }, []);
-
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

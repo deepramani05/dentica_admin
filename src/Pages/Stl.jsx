@@ -6,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
+import Cookies from "js-cookie";
 
 const Stl = () => {
   const [data, setData] = useState([]);
@@ -35,6 +36,12 @@ const Stl = () => {
         console.log(err);
       });
   }, []);
+    useEffect(() => {
+      const token = Cookies.get("token");
+      if (!token) {
+        window.location.href = "/login";
+      }
+    }, []);
 
   const handleDelete = (id) => {
     Swal.fire({

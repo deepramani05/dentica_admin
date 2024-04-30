@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
+import Cookies from "js-cookie";
 
 const Meta = () => {
   const [url, setUrl] = useState("");
@@ -66,6 +67,12 @@ const Meta = () => {
       setData(res.data);
       setFilteredData(res.data);
     });
+  }, []);
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
   }, []);
 
   const handleDelete = (id) => {
