@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const [stlFilesCount, setStlFilesCount] = useState(0);
@@ -14,7 +15,12 @@ const Dashboard = () => {
       })
       .catch(error => console.error("Error fetching STL files:", error));
   }, []);
-
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
   return (
     <div>
       <div className="content-wrapper">

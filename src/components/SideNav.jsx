@@ -180,7 +180,7 @@ const SideNav = () => {
                   <i className="nav-icon">
                     <BsFillImageFill />
                   </i>
-                  <p>Gallary</p>
+                  <p>Gallery</p>
                 </a>
               </li>
 

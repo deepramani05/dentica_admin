@@ -6,6 +6,7 @@ import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import "../css/style.css";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +23,12 @@ const Contact = () => {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
   }, []);
 
   // Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function

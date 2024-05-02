@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
+import Cookies from "js-cookie";
 
 const Review = () => {
   const [name, setName] = useState("");
@@ -59,7 +60,12 @@ const Review = () => {
         console.log(err);
       });
   }, []);
-
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

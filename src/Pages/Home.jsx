@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Home = () => {
+
   let [title, setTitle] = useState("");
   let [subtitle, setSubtitle] = useState("");
   let [desc, setDesc] = useState("");
@@ -12,6 +14,14 @@ const Home = () => {
   let [wp, setWp] = useState("");
   let [insta, setInsta] = useState("");
   let [fb, setFb] = useState("");
+
+  // Check if token is available
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
 
   let obj = {
     title: title,
