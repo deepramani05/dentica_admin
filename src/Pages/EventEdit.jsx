@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { TbArrowsVertical } from "react-icons/tb";
+import { BiMoveHorizontal } from "react-icons/bi";
+
 
 const EventEdit = () => {
   const { id } = useParams();
@@ -142,6 +145,40 @@ const EventEdit = () => {
                                 onChange={handleChange}
                                 value={formData.image}
                               />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputFile">
+                            Image <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <div class="input-group">
+                            <div class="custom-file" style={{ gap: "20px" }}>
+                              <div className="radio-1 d-flex">
+                                <input
+                                  type="radio"
+                                  name="layout"
+                                  value="Vertical"
+                                  onChange={handleChange}
+                                  checked={formData.layout === "Vertical"}
+                                  required
+                                />
+                                <label htmlFor="" style={{ marginLeft: "5px" }}>
+                                 <span><TbArrowsVertical /></span> Vertical
+                                </label>
+                              </div>
+                              <div className="radio-2 d-flex">
+                                <input
+                                  type="radio"
+                                  name="layout"
+                                  value="Horizontal"
+                                  onChange={handleChange}
+                                  checked={formData.layout === "Horizontal"}
+                                />
+                                <label htmlFor="" style={{ marginLeft: "5px" }}>
+                                  <span><BiMoveHorizontal /></span> Horizontal
+                                </label>
+                              </div>
                             </div>
                           </div>
                         </div>

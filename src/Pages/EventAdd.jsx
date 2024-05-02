@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { TbArrowsVertical } from "react-icons/tb";
+import { BiMoveHorizontal } from "react-icons/bi";
 
 const EventAdd = () => {
   let [cat, setCat] = useState("");
@@ -16,8 +18,12 @@ const EventAdd = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const layout = document.querySelector('input[name="layout"]:checked').value;
     axios
-      .post(`http://localhost:5000/event`, obj)
+      .post(`http://localhost:5000/event`, {
+        ...obj,
+        layout: layout,
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -128,6 +134,42 @@ const EventAdd = () => {
                                 onChange={(e) => setImage(e.target.value)}
                                 value={image}
                               />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputFile">
+                            Image Type <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <div class="input-group">
+                            <div class="custom-file" style={{ gap: "20px" }}>
+                              <div className="radio-1 d-flex">
+                                <input
+                                  type="radio"
+                                  name="layout"
+                                  value="Vertical"
+                                  required
+                                />
+                                <label htmlFor="" style={{ marginLeft: "5px" }}>
+                                  <span>
+                                    <TbArrowsVertical />
+                                  </span>{" "}
+                                  Vertical
+                                </label>
+                              </div>
+                              <div className="radio-2 d-flex">
+                                <input
+                                  type="radio"
+                                  name="layout"
+                                  value="Horizontal"
+                                />
+                                <label htmlFor="" style={{ marginLeft: "5px" }}>
+                                  <span>
+                                    <BiMoveHorizontal />
+                                  </span>{" "}
+                                  Horizontal
+                                </label>
+                              </div>
                             </div>
                           </div>
                         </div>
