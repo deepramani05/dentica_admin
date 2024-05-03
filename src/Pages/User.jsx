@@ -15,6 +15,7 @@ const User = () => {
   let [pass, setPass] = useState("");
   let [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Check if token is available
   useEffect(() => {
@@ -68,11 +69,12 @@ const User = () => {
     axios
       .get("https://denticadentalstudio.com/api/users", {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        setData(res.data);
+        setData({users:res.data});
         console.log("data", res.data);
       })
       .catch((err) => {
@@ -152,6 +154,7 @@ const User = () => {
           aria-controls="example1"
           data-dt-idx="0"
           tabIndex="0"
+
           className="page-link"
           onClick={() => setCurrentPage(i)}
         >
@@ -163,7 +166,7 @@ const User = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
+  const displayedData = filteredData.slice(startIndex, endIndex);
   // console.log("displayed",displayedData);
 
   return (
@@ -314,7 +317,7 @@ const User = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data.users && data.users.map((user, index) => (
+                                  {Array.isArray(data.users) && data.users.map((user, index) => (
                                     <tr key={user.id}>
                                       <td>{index + 1}</td>
                                       <td>{user.name}</td>
@@ -322,7 +325,7 @@ const User = () => {
                                       <td>{user.email}</td>
                                       <td>
                                         <Link
-                                          to={`/users/edit/${ele.id}`}
+                                          to={`/users/edit/${user.id}`}
                                           className="form-btn"
                                           style={{
                                             border: "1px solid #17a2b8",
@@ -335,15 +338,12 @@ const User = () => {
                                           </span>
                                         </Link>
                                         <button
-                                          onClick={() => handleDelete(ele.id)}
+                                          onClick={() => handleDelete(user.id)}
                                           className="form-btn-dlt"
                                           style={{
                                             border: "1px solid red",
                                             padding: "4px",
                                             backgroundColor: "white",
-                                          }}
-                                          onClick={() => {
-                                            handleDelete(user.id);
                                           }}
                                         >
                                           Delete
