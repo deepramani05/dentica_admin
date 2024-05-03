@@ -4,23 +4,33 @@ import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const [stlFilesCount, setStlFilesCount] = useState(0);
+  const [reviewed, setReviewed] = useState(3);
 
-  useEffect(() => {
-    // Fetch data from the API
-    fetch("http://localhost:5000/stl")
-      .then(response => response.json())
-      .then(data => {
-        // Update the state with the number of STL files
-        setStlFilesCount(data.length);
-      })
-      .catch(error => console.error("Error fetching STL files:", error));
-  }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try{
+        const token = Cookies.get("token");
+        const response = await fetch("https://denticadentalstudio.com/api/dashboard",{
+          method: "GET",
+          headers:{
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          const data  = await response.json();    
+            const { unreviewedCount, reviewedCount } = data.data;
+            setStlFilesCount (unreviewedCount);
+            setReviewed (reviewedCount);
+        }else{
+          console.error("Something went wrong",response.statusText,response.statusMessage);
+        }
+      }catch (error){
+        console.error("Something went wrong",error);
+      }
     }
-  }, []);
+    fetchData()
+  },[]);
   return (
     <div>
       <div className="content-wrapper">
@@ -68,7 +78,7 @@ const Dashboard = () => {
                 {/* small box */}
                 <div className="small-box bg-success">
                   <div className="inner">
-                    <h3>0</h3>
+                    <h3>{reviewed}</h3>
                     <p>Reviewed files</p>
                   </div>
                   <div className="icon">
