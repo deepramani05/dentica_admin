@@ -38,12 +38,18 @@ const Login = () => {
 
       axios.post("https://denticadentalstudio.com/api/login",{email, password})
           .then((res)=>{
-            const token = res.data.token;
-
-            Cookies.set("token",token);
-
-            console.log("Login Sucessful");
-            window.location.href = "/";
+            // console.log("token-id", res.data.data.token);
+            const token = res.data.data.token;
+            
+            if(token){
+               Cookies.set("token",token);
+               console.log("Login Sucessful");
+               window.location.href = "/";
+            }else{
+              console.error("Token is not fond in data")
+              setError("Token ID is missing.");
+            }
+           
           })
           .catch((err)=>{
             console.error("Error Logging in: ",err);
