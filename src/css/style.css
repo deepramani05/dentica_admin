@@ -138,8 +138,11 @@ table{
     font-size: 14px; /* Decrease font size for smaller screens */
   }
 }
+
 .pagination{
   margin-top: 10px;
+  justify-content: right;
+  margin-right: 15px;
 }
 
 .pagination li{
