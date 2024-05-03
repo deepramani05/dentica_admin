@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../css/style.css";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [userData, setUserData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("https://denticadentalstudio.com/api/login")
-  //     .then((res) => {
-  //       setUserData(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching user data:", err);
-  //     });
-  // }, []);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (userData && email === userData.email && password === userData.pass) {
-  //     console.log("Login successful");
-  //     // Here you can redirect or perform any actions for successful login
-  //   } else {
-  //     setError("Incorrect email or password.");
-  //   }
-  //   // Reset the form fields
-  //   setEmail("");
-  //   setPassword("");
-  // };
     const handleSubmit =(e) =>{
       e.preventDefault();
 
@@ -44,16 +21,31 @@ const Login = () => {
             if(token){
                Cookies.set("token",token);
                console.log("Login Sucessful");
-               window.location.href = "/";
+               setTimeout(() => window.location.href = "/",1000)
             }else{
               console.error("Token is not fond in data")
               setError("Token ID is missing.");
             }
+
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Login Successfully",
+              showConfirmButton: false,
+              timer: 1000
+            });
            
           })
           .catch((err)=>{
             console.error("Error Logging in: ",err);
             setError("Incorrect Email or Password.");
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Error",
+              showConfirmButton: false,
+              timer: 1000
+            });
           });
           setEmail("");
           setPassword("");
