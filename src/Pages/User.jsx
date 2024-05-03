@@ -10,12 +10,11 @@ const User = () => {
   let [name, setName] = useState("");
   let [uname, setUname] = useState("");
   let [email, setEmail] = useState("");
-  let [roll, setRoll] = useState("");
   let [pass, setPass] = useState("");
   let [searchQuery, setSearchQuery] = useState("");
   let [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // Check if token is available
   useEffect(() => {
     const token = Cookies.get("token");
@@ -28,7 +27,6 @@ const User = () => {
     name: name,
     uname: uname,
     email: email,
-    roll: roll,
     pass: pass,
   };
 
@@ -119,8 +117,7 @@ const User = () => {
     (item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.uname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.roll.toLowerCase().includes(searchQuery.toLowerCase())
+      item.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -237,18 +234,6 @@ const User = () => {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputRoll">
-                            Role <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="exampleInputRoll"
-                            placeholder="Enter your Role ..."
-                            onChange={(e) => setRoll(e.target.value)}
-                          />
-                        </div>
-                        <div className="form-group">
                           <label htmlFor="exampleInputPassword">
                             Password <span style={{ color: "red" }}>*</span>
                           </label>
@@ -312,7 +297,6 @@ const User = () => {
                                     <th>Name</th>
                                     <th>Username</th>
                                     <th>Email Address</th>
-                                    <th>Role</th>
                                     <th>Actions</th>
                                   </tr>
                                 </thead>
@@ -327,7 +311,6 @@ const User = () => {
                                       <td>{ele.name}</td>
                                       <td>{ele.uname}</td>
                                       <td>{ele.email}</td>
-                                      <td>{ele.roll}</td>
                                       <td>
                                         <button
                                           type="button"

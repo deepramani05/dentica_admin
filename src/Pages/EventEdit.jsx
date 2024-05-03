@@ -150,7 +150,7 @@ const EventEdit = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
-                            Image <span style={{ color: "red" }}>*</span>
+                            Image Dimention <span style={{ color: "red" }}>*</span>
                           </label>
                           <div class="input-group">
                             <div class="custom-file" style={{ gap: "20px" }}>

@@ -18,20 +18,11 @@
   ],
   "userForm": [
     {
-      "id": "1730",
-      "name": "Deep Ramani",
-      "uname": "deep05",
-      "email": "deep@gmail.com",
-      "roll": "Wed Developer",
-      "pass": "123456789"
-    },
-    {
-      "id": "8dfc",
+      "id": "106e",
       "name": "",
       "uname": "admin@gmail.com",
       "email": "",
-      "roll": "",
-      "pass": "1234567"
+      "pass": ""
     }
   ],
   "gallaryImage": [
