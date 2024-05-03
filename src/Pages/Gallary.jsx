@@ -65,7 +65,12 @@ const Gallary = () => {
 
   const fetchData = () => {
     axios
-      .get(`http://localhost:5000/gallaryImage`)
+      .get(`https://denticadentalstudio.com/api/gallery`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data);
         setData(res.data);
