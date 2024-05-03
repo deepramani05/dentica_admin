@@ -11,7 +11,7 @@ const UserEdit = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/userForm/${id}`)
+      .get(`https://denticadentalstudio.com/api/user/update/${id}`)
       .then((res) => {
         const userData = res.data;
         setName(userData.name);
@@ -26,14 +26,15 @@ const UserEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      name: name,
-      email: email,
-      password: pass,
-    };
+    const userData = new FormData(); 
+      userData.append("id",id);
+      userData.append("name", name);
+      userData.append("email",email);
+      userData.append("password",pass);
+  
 
     axios
-      .put(`http://localhost:5000/userForm/${id}`, userData)
+      .post(`https://denticadentalstudio.com/api/user/update`, userData)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -48,7 +49,7 @@ const UserEdit = () => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  };  
 
   return (
     <div>
