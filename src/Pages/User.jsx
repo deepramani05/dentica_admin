@@ -28,13 +28,18 @@ const User = () => {
     name: name,
     // uname: uname,
     email: email,
-    pass: pass,
+    password: pass,
   };
 
   const handleUsersubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/userForm`, obj)
+      .post(`https://denticadentalstudio.com/api/user/store`, obj,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -61,18 +66,24 @@ const User = () => {
 
   const fetchData = () => {
     axios
-      .get(`http://localhost:5000/userForm`)
+      .get("https://denticadentalstudio.com/api/users", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         setData(res.data);
+        console.log("data", res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  
   useEffect(() => {
     fetchData();
   }, []);
+
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -86,7 +97,13 @@ const User = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/userForm/${id}`)
+          .post(`https://denticadentalstudio.com/api/user/delete`,{id},
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          }
+          )
           .then((res) => {
             console.log(res.data);
             Swal.fire({
@@ -110,7 +127,14 @@ const User = () => {
 
   const itemsPerPage = 5;
 
-
+  const filteredData = Array.isArray(data)
+  ? data.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.uname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  : [];
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -140,6 +164,7 @@ const User = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = data.slice(startIndex, endIndex);
+  // console.log("displayed",displayedData);
 
   return (
     <div>
@@ -285,20 +310,16 @@ const User = () => {
                                     <th>Name</th>
                                     {/* <th>Username</th> */}
                                     <th>Email Address</th>
-                                    <th>Actions</th>
+                                    <th>Actions</th>  
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {displayedData.map((ele, id) => (
-                                    <tr key={id}>
-                                      <td>
-                                        {(currentPage - 1) * itemsPerPage +
-                                          id +
-                                          1}
-                                      </td>
-                                      <td>{ele.name}</td>
-                                      {/* <td>{ele.uname}</td> */}
-                                      <td>{ele.email}</td>
+                                  {data.users && data.users.map((user, index) => (
+                                    <tr key={user.id}>
+                                      <td>{index + 1}</td>
+                                      <td>{user.name}</td>
+                                      {/* <td>{user.uname}</td> */}
+                                      <td>{user.email}</td>
                                       <td>
                                         <Link
                                           to={`/users/edit/${ele.id}`}
@@ -321,15 +342,17 @@ const User = () => {
                                             padding: "4px",
                                             backgroundColor: "white",
                                           }}
+                                          onClick={() => {
+                                            handleDelete(user.id);
+                                          }}
                                         >
-                                          <span style={{ color: "red" }}>
-                                            <MdDelete />
-                                          </span>
+                                          Delete
                                         </button>
                                       </td>
                                     </tr>
                                   ))}
                                 </tbody>
+
                               </table>
                             </div>
                           </div>
