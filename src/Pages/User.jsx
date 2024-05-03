@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import "../css/style.css";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import { BiSolidEdit } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 
 const User = () => {
   let [name, setName] = useState("");
-  let [uname, setUname] = useState("");
+  // let [uname, setUname] = useState("");
   let [email, setEmail] = useState("");
   let [pass, setPass] = useState("");
-  let [searchQuery, setSearchQuery] = useState("");
   let [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -25,13 +26,9 @@ const User = () => {
 
   let obj = {
     name: name,
-    uname: uname,
+    // uname: uname,
     email: email,
     pass: pass,
-  };
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
   };
 
   const handleUsersubmit = (e) => {
@@ -113,14 +110,9 @@ const User = () => {
 
   const itemsPerPage = 5;
 
-  const filteredData = data.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.uname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -147,7 +139,7 @@ const User = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = filteredData.slice(startIndex, endIndex);
+  const displayedData = data.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -207,9 +199,10 @@ const User = () => {
                             id="exampleInputName"
                             placeholder="Enter your name ..."
                             onChange={(e) => setName(e.target.value)}
+                            value={name}
                           />
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <label htmlFor="exampleInputUsername">
                             Username <span style={{ color: "red" }}>*</span>
                           </label>
@@ -220,7 +213,7 @@ const User = () => {
                             placeholder="Enter your username ..."
                             onChange={(e) => setUname(e.target.value)}
                           />
-                        </div>
+                        </div> */}
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail">
                             Email <span style={{ color: "red" }}>*</span>
@@ -231,6 +224,7 @@ const User = () => {
                             id="exampleInputEmail"
                             placeholder="Enter your email ..."
                             onChange={(e) => setEmail(e.target.value)}
+                            value={email}
                           />
                         </div>
                         <div className="form-group">
@@ -243,6 +237,7 @@ const User = () => {
                             id="exampleInputPassword"
                             placeholder="Password ..."
                             onChange={(e) => setPass(e.target.value)}
+                            value={pass}
                           />
                         </div>
                       </div>
@@ -275,14 +270,7 @@ const User = () => {
                             <h3 className="card-title">User List</h3>
                           </div>
                           <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search.."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                            
                           </div>
                           <div className="table-container">
                             <div className="card-body">
@@ -295,7 +283,7 @@ const User = () => {
                                   <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Username</th>
+                                    {/* <th>Username</th> */}
                                     <th>Email Address</th>
                                     <th>Actions</th>
                                   </tr>
@@ -309,23 +297,34 @@ const User = () => {
                                           1}
                                       </td>
                                       <td>{ele.name}</td>
-                                      <td>{ele.uname}</td>
+                                      {/* <td>{ele.uname}</td> */}
                                       <td>{ele.email}</td>
                                       <td>
-                                        <button
-                                          type="button"
-                                          className="text-light form-dlt-btn"
+                                        <Link
+                                          to={`/users/edit/${ele.id}`}
+                                          className="form-btn"
                                           style={{
-                                            border: "0",
-                                            backgroundColor: "#ca629d",
-                                            padding: "5px 10px",
-                                            borderRadius: "5px",
-                                          }}
-                                          onClick={() => {
-                                            handleDelete(ele.id);
+                                            border: "1px solid #17a2b8",
+                                            padding: "5px",
+                                            backgroundColor: "white",
                                           }}
                                         >
-                                          Delete
+                                          <span style={{ color: "#17a2b8" }}>
+                                            <BiSolidEdit />
+                                          </span>
+                                        </Link>
+                                        <button
+                                          onClick={() => handleDelete(ele.id)}
+                                          className="form-btn-dlt"
+                                          style={{
+                                            border: "1px solid red",
+                                            padding: "4px",
+                                            backgroundColor: "white",
+                                          }}
+                                        >
+                                          <span style={{ color: "red" }}>
+                                            <MdDelete />
+                                          </span>
                                         </button>
                                       </td>
                                     </tr>
@@ -347,9 +346,9 @@ const User = () => {
                                 to{" "}
                                 {Math.min(
                                   currentPage * itemsPerPage,
-                                  filteredData.length
+                                  data.length
                                 )}{" "}
-                                of {filteredData.length} entries
+                                of {data.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">

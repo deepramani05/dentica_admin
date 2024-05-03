@@ -18,11 +18,10 @@
   ],
   "userForm": [
     {
-      "id": "106e",
-      "name": "",
-      "uname": "admin@gmail.com",
-      "email": "",
-      "pass": ""
+      "name": "Deep",
+      "email": "admin@gmail.com",
+      "password": "1234567",
+      "id": "81f7"
     }
   ],
   "gallaryImage": [
