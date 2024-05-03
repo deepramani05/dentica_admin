@@ -24,6 +24,14 @@
       "email": "deep@gmail.com",
       "roll": "Wed Developer",
       "pass": "123456789"
+    },
+    {
+      "id": "8dfc",
+      "name": "",
+      "uname": "admin@gmail.com",
+      "email": "",
+      "roll": "",
+      "pass": "1234567"
     }
   ],
   "gallaryImage": [
@@ -160,12 +168,8 @@
     {
       "cat": "Deep Ramani",
       "image": "",
+      "layout": "Horizontal",
       "id": "cb87"
-    },
-    {
-      "id": "f1ce",
-      "cat": "weqdfeqw",
-      "image": ""
     }
   ]
 }
