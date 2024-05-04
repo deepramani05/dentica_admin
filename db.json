@@ -152,6 +152,12 @@
       "name": "weqdfeqw",
       "image": "",
       "video": ""
+    },
+    {
+      "id": "f004",
+      "name": "Nice !",
+      "image": "",
+      "video": ""
     }
   ],
   "event": [
@@ -160,6 +166,18 @@
       "image": "",
       "layout": "Horizontal",
       "id": "cb87"
+    },
+    {
+      "id": "a837",
+      "cat": "weqdfeqw",
+      "image": "C:\\fakepath\\Screenshot 2024-04-30 153233.png",
+      "layout": "Vertical"
+    },
+    {
+      "id": "f4bf",
+      "cat": "Nice !",
+      "image": "",
+      "layout": "Vertical"
     }
   ]
 }

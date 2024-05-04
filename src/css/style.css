@@ -86,6 +86,7 @@ label {
 .form-btn-dlt:hover {
   background-color: red !important;
   transition: 0.3s;
+  color: white !important;
 }
 
 .form-btn-dlt:hover span {
