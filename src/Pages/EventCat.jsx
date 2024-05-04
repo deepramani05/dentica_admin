@@ -29,14 +29,12 @@ const EventCat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`https://denticadentalstudio.com/api/event_category/store`, obj,
-      {
+      .post(`https://denticadentalstudio.com/api/event_category/store`, obj, {
         headers: {
-          "Content-Type": "multipart/form-data", 
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
-      }
-      )
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -50,19 +48,19 @@ const EventCat = () => {
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(() => window.location.reload(),1000)
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`,{
-        headers:{
+      .get(`https://denticadentalstudio.com/api/event_category`, {
+        headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((response) => {
-        if(response.data.status === "success"){
+        if (response.data.status === "success") {
           console.log(response.data.data.event_category);
           setData(response.data.data.event_category);
           setFilteredData(response.data.data.event_category);
@@ -87,16 +85,17 @@ const EventCat = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/event_category/delete/${id}`,
+          .delete(
+            `https://denticadentalstudio.com/api/event_category/delete/${id}`,
             {
-              headers:{
+              headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${Cookies.get("token")}`,
-              }
+              },
             }
           )
           .then((res) => {
@@ -107,23 +106,30 @@ const EventCat = () => {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Data Deleted Successfully !",
+              title: "Data Deleted Successfully!",
               showConfirmButton: false,
               timer: 1000,
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
+            let errorMessage = "Error deleting data";
+            if (
+              err.response &&
+              err.response.data &&
+              err.response.data.message
+            ) {
+              errorMessage = err.response.data.message;
+            }
             Swal.fire({
               title: "Error",
-              text: "Error deleting data",
-              icon: "error"
+              text: errorMessage,
+              icon: "error",
             });
           });
       }
     });
   };
-  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -213,7 +219,7 @@ const EventCat = () => {
                             <div className="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) =>{ 
+                                onChange={(e) => {
                                   const file = e.target.files[0];
                                   setImage(file);
                                 }}
@@ -230,7 +236,7 @@ const EventCat = () => {
                                 type="file"
                                 onChange={(e) => {
                                   const file = e.target.files[0];
-                                  setVideo(file)
+                                  setVideo(file);
                                 }}
                                 // value={video}
                               />
@@ -291,7 +297,14 @@ const EventCat = () => {
                                       <td>{startIndex + id + 1}</td>
                                       <td>{ele.name}</td>
                                       <td>
-                                        <img src={ele.image} alt="" style={{ height: '100px', width: '100px' }} />
+                                        <img
+                                          src={ele.image}
+                                          alt=""
+                                          style={{
+                                            height: "100px",
+                                            width: "100px",
+                                          }}
+                                        />
                                       </td>
                                       <td className="align-middle">
                                         <Link

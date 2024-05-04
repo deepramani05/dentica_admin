@@ -16,52 +16,61 @@ const GalleryEdit = () => {
     categoery: "",
   });
 
-
+  let [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/gallery`,{id: id})
+      .post(`https://denticadentalstudio.com/api/show/gallery`, { id: id })
       .then((res) => {
-        const data = res.data;
-        console.log("data",data); 
+        console.log(res.data.data.gallery);
+        if (Array.isArray(res.data)) {
+          setData(res.data.data.gallery);
+        } else if (typeof res.data === "object") {
+          setData([res.data.data.gallery]); // Wrap object in an array
+        }
+        // Assuming res.data is an object
         setFormData({
-          title: data.title,
-          meta_title: data.mtitle,
-          meta_keyword: data.keyword,
-          meta_description: data.desc,
+          title: res.data.title,
+          meta_title: res.data.mtitle,
+          meta_keyword: res.data.keyword,
+          meta_description: res.data.desc,
           image: null,
-          categoery: data.cat,
+          categoery: res.data.cat,
         });
       })
       .catch((err) => {
         console.log(err);
       });
-     
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData((prevData)=>({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0]: value,
+      [name]: files ? files[0] : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('id', id);
+
+    // Create an object to hold the updated data
+    const updatedData = {};
+
+    // Add only the changed data to updatedData
     for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
+      if (formData[key] !== data[key]) {
+        // Only add if the value has changed
+        updatedData[key] = formData[key];
+      }
     }
-    
+
     try {
       const res = await axios.post(
-        "https://denticadentalstudio.com/api/gallery/update", 
-        formDataToSend,
+        "https://denticadentalstudio.com/api/gallery/update",
+        { id: id, ...updatedData }, // Send the updated data along with the id
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
         }
@@ -74,7 +83,7 @@ const GalleryEdit = () => {
         showConfirmButton: false,
         timer: 1000,
       }).then(() => {
-        setTimeout(()=>  window.location.href="/gallery" , 1000)
+        setTimeout(() => (window.location.href = "/gallery"), 1000);
         // Redirect to the gallery page after successful update
       });
     } catch (err) {
@@ -82,8 +91,6 @@ const GalleryEdit = () => {
       // Handle error
     }
   };
-
-
 
   return (
     <div>
@@ -131,115 +138,127 @@ const GalleryEdit = () => {
                     </div>
                     {/* /.card-header */}
                     {/* form start */}
-                    <form onSubmit={handleSubmit} className="text-left">
-                      <div className="card-body">
-                        <div className="form-group">
-                          <label htmlFor="exampleInputTitle">Title</label>
-                          <input
-                            onChange={handleChange}
-                            value={formData.title}
-                            type="text"
-                            className="form-control"
-                            id="exampleInputTitle"
-                            name="title"
-                            placeholder="Enter title"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="exampleInputSubtitle">
-                            Meta Title
-                          </label>
-                          <input
-                            onChange={handleChange}
-                            value={formData.mtitle}
-                            type="text"
-                            className="form-control"
-                            id="exampleInputSubtitle"
-                            name="subtitle"
-                            placeholder="Enter SubTitle"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="exampleInputKeyword">
-                            Meta Keyword
-                          </label>
-                          <input
-                            onChange={handleChange}
-                            value={formData.keyword}
-                            type="text"
-                            className="form-control"
-                            id="exampleInputKeyword"
-                            name="keyword"
-                            placeholder="Enter Keywords"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="exampleInputDesc">
-                            Meta Description
-                          </label>
-                          <textarea
-                            onChange={handleChange}
-                            value={formData.desc}
-                            className="form-control"
-                            rows="3"
-                            name="desc"
-                            placeholder="Enter ..."
-                          ></textarea>
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="exampleInputFile">
-                            Image <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <div className="d-flex align-items-center">
-                            <div className="input-group">
-                              <div className="custom-file">
-                                <input
-                                  type="file"
-                                  onChange={handleChange}
-                                  value={formData.image}
-                                  name="image"
+                    {data.map((ele) => (
+                      <form
+                        onSubmit={handleSubmit}
+                        className="text-left"
+                        key={ele.id}
+                      >
+                        <div className="card-body">
+                          <div className="form-group">
+                            <label htmlFor="exampleInputTitle">Title</label>
+                            <input
+                              onChange={handleChange}
+                              value={ele.title}
+                              type="text"
+                              className="form-control"
+                              id="exampleInputTitle"
+                              name="title"
+                              placeholder="Enter title"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputSubtitle">
+                              Meta Title
+                            </label>
+                            <input
+                              onChange={handleChange}
+                              value={ele.meta_title}
+                              type="text"
+                              className="form-control"
+                              id="exampleInputSubtitle"
+                              name="meta_title"
+                              placeholder="Enter SubTitle"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputKeyword">
+                              Meta Keyword
+                            </label>
+                            <input
+                              onChange={handleChange}
+                              value={ele.meta_keyword}
+                              type="text"
+                              className="form-control"
+                              id="exampleInputKeyword"
+                              name="meta_keyword"
+                              placeholder="Enter Keywords"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputDesc">
+                              Meta Description
+                            </label>
+                            <textarea
+                              onChange={handleChange}
+                              value={ele.meta_description}
+                              className="form-control"
+                              rows="3"
+                              name="meta_description"
+                              placeholder="Enter ..."
+                            ></textarea>
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleInputFile">
+                              Image <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <div className="d-flex align-items-center">
+                              <div className="input-group">
+                                <div className="custom-file">
+                                  <input
+                                    type="file"
+                                    onChange={handleChange}
+                                    name="image"
+                                  />
+                                </div>
+                              </div>
+                              <div style={{ width: "150px" }}>
+                                <img
+                                  src={img}
+                                  alt=""
+                                  style={{ width: "100%" }}
                                 />
                               </div>
                             </div>
-                            <div style={{ width: "150px" }}>
-                              <img src={img} alt="" style={{ width: "100%" }} />
-                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="exampleFormControlSelect1">
+                              Category <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <select
+                              onChange={handleChange}
+                              value={ele.categoery}
+                              className="form-control"
+                              id="exampleFormControlSelect1"
+                              name="categoery"
+                            >
+                              <option value="Select Category">
+                                Select Category
+                              </option>
+                              <option value="Before & After">
+                                Before & After
+                              </option>
+                              <option value="Products">Products</option>
+                              <option value="Team">Team</option>
+                            </select>
                           </div>
                         </div>
-                        <div className="form-group">
-                          <label htmlFor="exampleFormControlSelect1">
-                            Category <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <select
-                            onChange={handleChange}
-                            value={formData.cat}
-                            className="form-control"
-                            id="exampleFormControlSelect1"
-                            name="cat"
-                          >
-                            <option value="Select Category">
-                              Select Category
-                            </option>
-                            <option value="Before & After">
-                              Before & After
-                            </option>
-                            <option value="Products">Products</option>
-                            <option value="Team">Team</option>
-                          </select>
-                        </div>
-                      </div>
-                      {/* /.card-body */}
+                        {/* /.card-body */}
 
-                      <div className="card-footer">
-                        <button
-                          type="submit"
-                          className="btn btn-primary form-dlt-btn"
-                          style={{ backgroundColor: "#ca629d", border: "0" }}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </form>
+                        <div className="card-footer">
+                          <button
+                            type="submit"
+                            className="btn btn-primary form-dlt-btn"
+                            style={{
+                              backgroundColor: "#ca629d",
+                              border: "0",
+                            }}
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </form>
+                    ))}
                   </div>
                   {/* /.card */}
                 </div>
