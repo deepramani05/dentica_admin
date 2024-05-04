@@ -28,64 +28,51 @@ const Gallary = () => {
   //   fetchData(); // Fetch data initially
   // }, []);
 
- 
-console.log(image);
   const handlegallarySubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    // Create payload object
-    const payload = {
-      title: title,
-      meta_title: mtitle,
-      meta_keyword: keyword,
-      meta_description: desc,
-      image: image, 
-      categoery: cat, 
-    };
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("meta_title", mtitle);
+      formData.append("meta_keyword", keyword);
+      formData.append("meta_description", desc);
+      formData.append("image", image); // Append image file
+      formData.append("categoery", cat);
 
-    // Validate if any required field is empty
-    // for (const key in payload) {
-    //   if (!payload[key]) {
-    //     throw new Error("Please fill in all required fields.");
-    //   }
-    // }
+      const res = await axios.post(
+        `https://denticadentalstudio.com/api/gallery/store`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
 
-    // Make API call with payload
-    const res = await axios.post(
-      `https://denticadentalstudio.com/api/gallery/store`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json", // Use application/json for sending JSON data
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }
-    );
+      console.log(res.data);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Data Saved Successfully!",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error",
+        text: err.message || "An error occurred.",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
+  };
 
-    console.log(res.data);
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Data Saved Successfully !",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    setTimeout(() => window.location.reload(), 1000);
-  } catch (err) {
-    console.log(err);
-    Swal.fire({
-      position: "top-end",
-      icon: "error",
-      title: "Error",
-      text: err.message || "An error occurred.",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-  }
-};
-
-  
   const fetchData = async () => {
     try {
       axios
@@ -110,6 +97,8 @@ console.log(image);
     }
   };
 
+  console.log(data);
+
   useEffect(() => {
     if (!dataFetched) {
       fetchData();
@@ -120,26 +109,47 @@ console.log(image);
   const handleDelete = async (id) => {
     try {
       const res = await axios.post(
-        `https://denticadentalstudio.com/api/gallery/delete`,{id: id},{
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
+        `https://denticadentalstudio.com/api/gallery/delete`,
+        { id: id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
         }
       );
       console.log(res.data);
       Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Deleted!",
-        showConfirmButton: false,
-        timer: 1000,
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          }).then(() => {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          });
+          fetchData(); // Refresh data after deletion
+        }
       });
-      fetchData(); // Refresh data after deletion
     } catch (err) {
       console.log(err);
       alert("Error occurred while deleting !");
     }
   };
+
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -288,8 +298,9 @@ console.log(image);
                             <div class="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) =>{const file =  e.target.files[0];
-                                  setImage(file); 
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setImage(file);
                                 }}
                                 // value={image}
                               />
@@ -390,7 +401,7 @@ console.log(image);
                                             style={{ width: "100%" }}
                                           />
                                         </td>
-                                        <td>{ele.cat}</td>
+                                        <td>{ele.category}</td>
                                         <td className="align-middle">
                                           <Link
                                             className="form-btn"
