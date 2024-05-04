@@ -43,7 +43,7 @@
       "keyword": "yefuih",
       "mdesc": "sdrtyuiokl,",
       "image": "C:\\fakepath\\Annotation 2024-04-08 111806.png",
-      "desc": "<p><s><span class=\"ql-cursor\">﻿</span></s>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit magna orci, sed consectetur velit e<s>uismod non.</s></p>",
+      "desc": "<p><s>﻿</s>Lorem ipsum dolor sit a<strong>met, c</strong>onsectetur adipisc<em>ing elit. Maec</em>enas hendrerit ma<u>gna orci, sed co</u>nsectetur velit e<s>uismod non.</s></p>",
       "haddress": "edew",
       "address": "wfdcewfw",
       "num1": "123456789",
