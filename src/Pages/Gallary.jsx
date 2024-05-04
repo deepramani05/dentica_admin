@@ -39,7 +39,7 @@ const Gallary = () => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:5000/gallaryImage`, obj)
+      .post(`https://denticadentalstudio.com/api/gallery/store`, obj)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -73,7 +73,21 @@ const Gallary = () => {
       })
       .then((res) => {
         console.log(res.data);
-        setData(res.data);
+        if (res.data.status === "Success "){
+          // const filteredData = res.data.filter((item)=>{
+          //   return(
+          //     item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          //     item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          //     item.image.toLowerCase().includes(searchQuery.toLowerCase())
+              
+          //   )
+          // })
+          setData(res.data);
+
+        }else{
+          console.error("error");
+        }
+        
       })
 
       .catch((err) => {
@@ -154,16 +168,18 @@ const Gallary = () => {
   }
 
   // Slice the data array to show only the relevant entries based on pagination and search query
-  const filteredData = data.filter((item) => {
-    return (
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.cat.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  });
+  // const filteredData = data.filter((item) => {
+  //   return (
+  //     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     item.cat.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  // });
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
-  const displayedData = filteredData.slice(startIndex, endIndex);
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const endIndex = currentPage * itemsPerPage;
+  // const displayedData = filteredData.slice(startIndex, endIndex);
+
+  // console.log("displayed data:", filteredData);
 
   return (
     <div>
