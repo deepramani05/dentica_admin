@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import "../css/style.css";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { OutlinedInput } from "@mui/material";
+import { OutlinedInput, formControlLabelClasses } from "@mui/material";
 import Cookies from "js-cookie";
+import { CatchingPokemonSharp } from "@mui/icons-material";
 
 const Gallary = () => {
   let [title, setTitle] = useState("");
@@ -17,125 +18,109 @@ const Gallary = () => {
   let [image, setImage] = useState("");
   let [cat, setCat] = useState("");
 
-  let [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    fetchData(); // Fetch data initially
-  }, []);
+  // useEffect(() => {
+  //   fetchData(); // Fetch data initially
+  // }, []);
 
-  let obj = {
-    title: title,
-    mtitle: mtitle,
-    keyword: keyword,
-    desc: desc,
-    image: image,
-    cat: cat,
-  };
+  // let obj = {
+  //   title: title,
+  //   meta_title: mtitle,
+  //   meta_keyword: keyword,
+  //   meta_description: desc,
+  //   image: image,
+  //   categoery: cat,
+  // };
 
-  const handlegallarySubmit = (e) => {
+  const handlegallarySubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .post(`https://denticadentalstudio.com/api/gallery/store`, obj)
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Saved Successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        setTimeout(() => window.location.reload(), 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Error",
-          showConfirmButton: false,
-          timer: 1000,
-        });
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("meta_title", mtitle);
+      formData.append("meta_keyword", keyword);
+      formData.append("meta_description", desc);
+      formData.append("image",image[0]);
+      formData.append("categoery",cat);
+
+      const res = await axios.post(
+        `https://denticadentalstudio.com/api/gallery/store`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`, // Set the token in the Authorization header
+          },
+        }
+      );
+      console.log(res.data);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Data Saved Successfully !",
+        showConfirmButton: false,
+        timer: 1000,
       });
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
   };
 
-  const fetchData = () => {
-    axios
-      .get(`https://denticadentalstudio.com/api/gallery`,{
+  const fetchData = async () => {
+    try {
+      axios.get(`https://denticadentalstudio.com/api/gallery`,{
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         }
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "Success "){
-          // const filteredData = res.data.filter((item)=>{
-          //   return(
-          //     item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          //     item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          //     item.image.toLowerCase().includes(searchQuery.toLowerCase())
-              
-          //   )
-          // })
-          setData(res.data);
-
+      }).then((response)=>{
+        if(response.data.status === "success"){
+          setData(response.data.data);
         }else{
-          console.error("error");
+          setData([]);
         }
-        
+      }).catch((error)=>{
+        console.log(error);
       })
-
-      .catch((err) => {
-        console.log(err);
-      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/gallaryImage/${id}`);
+      console.log(res.data);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Deleted!",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      fetchData(); // Refresh data after deletion
+    } catch (err) {
+      console.log(err);
+      alert("Error occurred while deleting !");
     }
-  }, []);
-
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`http://localhost:5000/gallaryImage/${id}`)
-          .then((res) => {
-            console.log(res.data);
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Deleted!",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-            fetchData(); // Refresh data after deletion
-          })
-          .catch((err) => {
-            console.log(err);
-            alert("Error occurred while deleting !");
-          });
-      }
-    });
   };
-
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -180,7 +165,7 @@ const Gallary = () => {
   // const displayedData = filteredData.slice(startIndex, endIndex);
 
   // console.log("displayed data:", filteredData);
-
+  console.log("data",data);
   return (
     <div>
       <div class="wrapper">
@@ -368,7 +353,7 @@ const Gallary = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {displayedData.map((ele, id) => (
+                                  {data.map((ele, id) => (
                                     <tr key={id}>
                                       <td>
                                         {(currentPage - 1) * itemsPerPage +
