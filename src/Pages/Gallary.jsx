@@ -15,8 +15,9 @@ const Gallary = () => {
   let [mtitle, setMtitle] = useState("");
   let [keyword, setKeyword] = useState("");
   let [desc, setDesc] = useState("");
-  let [image, setImage] = useState("");
+  let [image, setImage] = useState(null);
   let [cat, setCat] = useState("");
+  const [dataFetched, setDataFetched] = useState(false);
 
   const [data, setData] = useState([]);
 
@@ -27,58 +28,64 @@ const Gallary = () => {
   //   fetchData(); // Fetch data initially
   // }, []);
 
-  // let obj = {
-  //   title: title,
-  //   meta_title: mtitle,
-  //   meta_keyword: keyword,
-  //   meta_description: desc,
-  //   image: image,
-  //   categoery: cat,
-  // };
-
+ 
+console.log(image);
   const handlegallarySubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("meta_title", mtitle);
-      formData.append("meta_keyword", keyword);
-      formData.append("meta_description", desc);
-      formData.append("image", image[0]);
-      formData.append("categoery", cat);
+  try {
+    // Create payload object
+    const payload = {
+      title: title,
+      meta_title: mtitle,
+      meta_keyword: keyword,
+      meta_description: desc,
+      image: image, 
+      categoery: cat, 
+    };
 
-      const res = await axios.post(
-        `https://denticadentalstudio.com/api/gallery/store`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("token")}`, // Set the token in the Authorization header
-          },
-        }
-      );
-      console.log(res.data);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Data Saved Successfully !",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      setTimeout(() => window.location.reload(), 1000);
-    } catch (err) {
-      console.log(err);
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Error",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-    }
-  };
+    // Validate if any required field is empty
+    // for (const key in payload) {
+    //   if (!payload[key]) {
+    //     throw new Error("Please fill in all required fields.");
+    //   }
+    // }
 
+    // Make API call with payload
+    const res = await axios.post(
+      `https://denticadentalstudio.com/api/gallery/store`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json", // Use application/json for sending JSON data
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }
+    );
+
+    console.log(res.data);
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Data Saved Successfully !",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    setTimeout(() => window.location.reload(), 1000);
+  } catch (err) {
+    console.log(err);
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Error",
+      text: err.message || "An error occurred.",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  }
+};
+
+  
   const fetchData = async () => {
     try {
       axios
@@ -104,13 +111,20 @@ const Gallary = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!dataFetched) {
+      fetchData();
+      setDataFetched(true);
+    }
+  }, [dataFetched]);
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(
-        `http://localhost:5000/gallaryImage/${id}`
+      const res = await axios.post(
+        `https://denticadentalstudio.com/api/gallery/delete`,{id: id},{
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+        }
       );
       console.log(res.data);
       Swal.fire({
@@ -274,8 +288,10 @@ const Gallary = () => {
                             <div class="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) =>{const file =  e.target.files[0];
+                                  setImage(file); 
+                                }}
+                                // value={image}
                               />
                             </div>
                           </div>
