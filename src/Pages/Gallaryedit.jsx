@@ -3,30 +3,33 @@ import { Link, useParams } from "react-router-dom";
 import img from "../images/home_about-center.png";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const GalleryEdit = () => {
   const { id } = useParams(); // Change from title to id
   const [formData, setFormData] = useState({
     title: "",
-    mtitle: "",
-    keyword: "",
-    desc: "",
+    meta_title: "",
+    meta_keyword: "",
+    meta_description: "",
     image: null,
-    cat: "",
+    categoery: "",
   });
+
+
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/gallaryImage/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/gallery`,{id: id})
       .then((res) => {
         const data = res.data;
         setFormData({
           title: data.title,
-          mtitle: data.mtitle,
-          keyword: data.keyword,
-          desc: data.desc,
+          meta_title: data.mtitle,
+          meta_keyword: data.keyword,
+          meta_description: data.desc,
           image: null,
-          cat: data.cat,
+          categoery: data.cat,
         });
       })
       .catch((err) => {
@@ -35,35 +38,50 @@ const GalleryEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, files } = e.target;
+    setFormData((prevData)=>({
+      ...prevData,
+      [name]: files ? files[0]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    axios
-      .put(`http://localhost:5000/gallaryImage/${id}`, formData) // Adjusted endpoint
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data updated successfully!",
-          showConfirmButton: false,
-          timer: 1000
-        })
-        .then(() => {
-          window.location.href = "/gallery";
-        });
-      })
-      .catch((err) => {
-        console.error("Error updating data:", err);
+    const formDataToSend = new FormData();
+    formDataToSend.append('id', id);
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+    
+    try {
+      const res = await axios.post(
+        "https://denticadentalstudio.com/api/gallery/update", 
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+      console.log(res.data);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Data updated successfully!",
+        showConfirmButton: false,
+        timer: 1000,
+      }).then(() => {
+        setTimeout(()=>  window.location.href="/gallery" , 1000)
+        // Redirect to the gallery page after successful update
       });
+    } catch (err) {
+      console.error("Error updating data:", err);
+      // Handle error
+    }
   };
+
+
 
   return (
     <div>
