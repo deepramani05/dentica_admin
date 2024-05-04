@@ -44,11 +44,64 @@ const EventCat = () => {
           showConfirmButton: false,
           timer: 1000,
         });
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(() => window.location.reload(), 1000);
+  };
+
+  const handleDelete = (id) => {
+    console.log("Deleting item with ID:", id); // Check if function is triggered and ID is received
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`https://denticadentalstudio.com/api/event_category/${id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
+          .then((res) => {
+            console.log("Delete response:", res.data); // Check response from server
+            // After successful deletion, update the state to remove the deleted item
+            setData(data.filter((item) => item.id !== id));
+            setFilteredData(filteredData.filter((item) => item.id !== id));
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Data Deleted Successfully!",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          })
+          .catch((err) => {
+            console.error("Delete error:", err); // Log error if delete request fails
+            let errorMessage = "Error deleting data";
+            if (
+              err.response &&
+              err.response.data &&
+              err.response.data.message
+            ) {
+              errorMessage = err.response.data.message;
+            }
+            Swal.fire({
+              title: "Error",
+              text: errorMessage,
+              icon: "error",
+            });
+          });
+      }
+    });
   };
 
   useEffect(() => {
@@ -70,66 +123,13 @@ const EventCat = () => {
         console.log(err);
       });
   }, []);
+
   useEffect(() => {
     const token = Cookies.get("token");
     if (!token) {
       window.location.href = "/login";
     }
   }, []);
-
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(
-            `https://denticadentalstudio.com/api/event_category/delete/${id}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${Cookies.get("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res.data);
-            // After successful deletion, update the state to remove the deleted item
-            setData(data.filter((item) => item.id !== id));
-            setFilteredData(filteredData.filter((item) => item.id !== id));
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Data Deleted Successfully!",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-          })
-          .catch((err) => {
-            console.error(err);
-            let errorMessage = "Error deleting data";
-            if (
-              err.response &&
-              err.response.data &&
-              err.response.data.message
-            ) {
-              errorMessage = err.response.data.message;
-            }
-            Swal.fire({
-              title: "Error",
-              text: errorMessage,
-              icon: "error",
-            });
-          });
-      }
-    });
-  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -168,7 +168,7 @@ const EventCat = () => {
             <div className="container-fluid">
               <div className="row mb-2">
                 <div className="col-sm-6 text-left">
-                  <h1>Event Catagory</h1>
+                  <h1>Event Category</h1>
                 </div>
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
@@ -179,7 +179,7 @@ const EventCat = () => {
                       className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      Event Catagory
+                      Event Category
                     </li>
                   </ol>
                 </div>
@@ -198,7 +198,7 @@ const EventCat = () => {
                       className="card-header"
                       style={{ backgroundColor: "rgb(37, 111, 152)" }}
                     >
-                      <h3 className="card-title">Add Event Catagory</h3>
+                      <h3 className="card-title">Add Event Category</h3>
                     </div>
                     <form className="text-left" onSubmit={handleSubmit}>
                       <div className="card-body">
@@ -223,7 +223,6 @@ const EventCat = () => {
                                   const file = e.target.files[0];
                                   setImage(file);
                                 }}
-                                // value={image}
                               />
                             </div>
                           </div>
@@ -238,7 +237,6 @@ const EventCat = () => {
                                   const file = e.target.files[0];
                                   setVideo(file);
                                 }}
-                                // value={video}
                               />
                             </div>
                           </div>
@@ -265,7 +263,7 @@ const EventCat = () => {
                             className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 className="card-title">Event Catagory List</h3>
+                            <h3 className="card-title">Event Category List</h3>
                           </div>
                           <div className="search-bar">
                             <OutlinedInput
@@ -286,7 +284,7 @@ const EventCat = () => {
                                 <thead>
                                   <tr>
                                     <th>SL</th>
-                                    <th>Catagory</th>
+                                    <th>Category</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                   </tr>
@@ -320,7 +318,7 @@ const EventCat = () => {
                                           </span>
                                         </Link>
                                         <Link
-                                          to={`/event-catagory/edit/${ele.id}`}
+                                          to={`/event_category/edit/${ele.id}`}
                                           className="form-btn"
                                           style={{
                                             border: "1px solid #17a2b8",

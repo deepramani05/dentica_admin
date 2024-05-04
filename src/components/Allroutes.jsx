@@ -59,7 +59,7 @@ const Allroutes = () => {
         <Route path="/review/edit/:id" element={<ReviewEdit />} />
         <Route path="/meta/edit/:id" element={<MetaEdit />} />
         <Route path="/team/edit/:id" element={<TeamEdit />} />
-        <Route path="/event-catagory/edit/:id" element={<EventCatEdit />} />
+        <Route path="/event_category/edit/:id" element={<EventCatEdit />} />
         <Route path="/event/edit/:id" element={<EventEdit />} />
         <Route path="/event/add" element={<EventAdd />} />
         <Route path="/users/edit/:id" element={<UserEdit />} />
