@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom"; // Import useParams
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -7,7 +7,6 @@ import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import "../css/style.css";
 
-// Output with the entire content of the User component
 const User = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -34,7 +33,7 @@ const User = () => {
       })
       .then((res) => {
         setData(res.data.data.users);
-        console.log(res.data.data.users); // Added console log to check fetched data
+        console.log(res.data.data.users);
       })
       .catch((err) => {
         console.error(err);
@@ -74,6 +73,10 @@ const User = () => {
           text: "Failed to save user data",
         });
       });
+
+    setName("");
+    setEmail("");
+    setPass("");
   };
 
   const handleDelete = (id) => {
@@ -117,7 +120,6 @@ const User = () => {
     });
   };
 
-  // Pagination logic
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
@@ -264,7 +266,7 @@ const User = () => {
                               <td>{user.email}</td>
                               <td>
                                 <Link
-                                  to={`/users/edit/${user.id}`}
+                                  to={`/users/edit/${user.id}`} // Add dynamic route for editing
                                   className="form-btn"
                                   style={{
                                     border: "1px solid #17a2b8",
@@ -283,10 +285,10 @@ const User = () => {
                                     border: "1px solid red",
                                     padding: "4px",
                                     backgroundColor: "white",
-                                    color:"red"
+                                    color: "red",
                                   }}
                                 >
-                                  <MdDelete/>
+                                  <MdDelete />
                                 </button>
                               </td>
                             </tr>

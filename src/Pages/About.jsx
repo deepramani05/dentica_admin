@@ -176,7 +176,7 @@ const About = () => {
                               <tr key={ele.id}>
                                 <td>{startIndex + index + 1}</td>
                                 <td>{ele.title}</td>
-                                <td>{ele.desc}</td>
+                                <td dangerouslySetInnerHTML={{ __html: ele.desc }}></td>
                                 <td className="align-middle">
                                   <Link
                                     className="form-btn"
