@@ -132,14 +132,6 @@ const Gallary = () => {
             title: "Deleted!",
             text: "Your file has been deleted.",
             icon: "success",
-          }).then(() => {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Your work has been saved",
-              showConfirmButton: false,
-              timer: 1500,
-            });
           });
           fetchData(); // Refresh data after deletion
         }
@@ -182,20 +174,22 @@ const Gallary = () => {
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination and search query
-  // const filteredData = data.filter((item) => {
-  //   return (
-  //     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     item.cat.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  // });
+  // Filter the data based on the search query
+  const filteredData = data.filter((item) => {
+    // Convert item.title and item.cat to strings before calling toLowerCase()
+    const title = item.title ? item.title.toString().toLowerCase() : "";
+    const cat = item.cat ? item.cat.toString().toLowerCase() : "";
+    const searchQueryLower = searchQuery.toLowerCase();
 
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = currentPage * itemsPerPage;
-  // const displayedData = filteredData.slice(startIndex, endIndex);
+    return title.includes(searchQueryLower) || cat.includes(searchQueryLower);
+  });
 
-  // console.log("displayed data:", filteredData);
-  // console.log("data", data);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
+
+  console.log("displayed data:", filteredData);
+  console.log("data", data);
   return (
     <div>
       <div class="wrapper">
