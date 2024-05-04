@@ -23,6 +23,7 @@ const GalleryEdit = () => {
       .post(`https://denticadentalstudio.com/api/show/gallery`,{id: id})
       .then((res) => {
         const data = res.data;
+        console.log("data",data); 
         setFormData({
           title: data.title,
           meta_title: data.mtitle,
@@ -35,6 +36,7 @@ const GalleryEdit = () => {
       .catch((err) => {
         console.log(err);
       });
+     
   }, [id]);
 
   const handleChange = (e) => {
