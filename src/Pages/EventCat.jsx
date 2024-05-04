@@ -29,7 +29,14 @@ const EventCat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/eventCatagory`, obj)
+      .post(`https://denticadentalstudio.com/api/event_category/store`, obj,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", 
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -48,11 +55,18 @@ const EventCat = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/eventCatagory`)
-      .then((res) => {
-        console.log(res.data);
-        setData(res.data);
-        setFilteredData(res.data);
+      .get(`https://denticadentalstudio.com/api/event_category`,{
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
+      .then((response) => {
+        if(response.data.status === "success"){
+          console.log(response.data.data.event_category);
+          setData(response.data.data.event_category);
+          setFilteredData(response.data.data.event_category);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -77,7 +91,14 @@ const EventCat = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/eventCatagory/${id}`)
+          .post(`https://denticadentalstudio.com/api/event_category/delete/${id}`,
+            {
+              headers:{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              }
+            }
+          )
           .then((res) => {
             console.log(res.data);
             // After successful deletion, update the state to remove the deleted item
@@ -192,8 +213,11 @@ const EventCat = () => {
                             <div className="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) =>{ 
+                                  const file = e.target.files[0];
+                                  setImage(file);
+                                }}
+                                // value={image}
                               />
                             </div>
                           </div>
@@ -204,8 +228,11 @@ const EventCat = () => {
                             <div className="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setVideo(e.target.value)}
-                                value={video}
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setVideo(file)
+                                }}
+                                // value={video}
                               />
                             </div>
                           </div>
@@ -264,7 +291,7 @@ const EventCat = () => {
                                       <td>{startIndex + id + 1}</td>
                                       <td>{ele.name}</td>
                                       <td>
-                                        <img src={ele.image} alt="" />
+                                        <img src={ele.image} alt="" style={{ height: '100px', width: '100px' }} />
                                       </td>
                                       <td className="align-middle">
                                         <Link
