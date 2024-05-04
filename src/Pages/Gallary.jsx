@@ -45,8 +45,8 @@ const Gallary = () => {
       formData.append("meta_title", mtitle);
       formData.append("meta_keyword", keyword);
       formData.append("meta_description", desc);
-      formData.append("image",image[0]);
-      formData.append("categoery",cat);
+      formData.append("image", image[0]);
+      formData.append("categoery", cat);
 
       const res = await axios.post(
         `https://denticadentalstudio.com/api/gallery/store`,
@@ -81,20 +81,23 @@ const Gallary = () => {
 
   const fetchData = async () => {
     try {
-      axios.get(`https://denticadentalstudio.com/api/gallery`,{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        }
-      }).then((response)=>{
-        if(response.data.status === "success"){
-          setData(response.data.data);
-        }else{
-          setData([]);
-        }
-      }).catch((error)=>{
-        console.log(error);
-      })
+      axios
+        .get(`https://denticadentalstudio.com/api/gallery`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            setData(response.data.data.gallery);
+          } else {
+            setData([]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -106,7 +109,9 @@ const Gallary = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/gallaryImage/${id}`);
+      const res = await axios.delete(
+        `http://localhost:5000/gallaryImage/${id}`
+      );
       console.log(res.data);
       Swal.fire({
         position: "center",
@@ -127,7 +132,8 @@ const Gallary = () => {
 
   const itemsPerPage = 10;
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages =
+    data && data.length ? Math.ceil(data.length / itemsPerPage) : 0;
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -165,7 +171,7 @@ const Gallary = () => {
   // const displayedData = filteredData.slice(startIndex, endIndex);
 
   // console.log("displayed data:", filteredData);
-  console.log("data",data);
+  // console.log("data", data);
   return (
     <div>
       <div class="wrapper">
@@ -353,65 +359,71 @@ const Gallary = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data.map((ele, id) => (
-                                    <tr key={id}>
-                                      <td>
-                                        {(currentPage - 1) * itemsPerPage +
-                                          id +
-                                          1}
-                                      </td>
-                                      <td style={{ width: "150px" }}>
-                                        <img
-                                          src={ele.image}
-                                          alt=""
-                                          style={{ width: "100%" }}
-                                        />
-                                      </td>
-                                      <td>{ele.cat}</td>
-                                      <td className="align-middle">
-                                        <Link
-                                          className="form-btn"
-                                          style={{
-                                            border: "1px solid #17a2b8",
-                                            backgroundColor: "white",
-                                            padding: "2px 5px",
-                                          }}
-                                        >
-                                          <span style={{ color: "#17a2b8" }}>
-                                            <FaRegEye />
-                                          </span>
-                                        </Link>
-                                        <Link
-                                          to={`/gallary/edit/${ele.id}`}
-                                          className="form-btn"
-                                          style={{
-                                            border: "1px solid #17a2b8",
-                                            backgroundColor: "white",
-                                            padding: "2px 5px",
-                                          }}
-                                        >
-                                          <span style={{ color: "#17a2b8" }}>
-                                            <FiEdit />
-                                          </span>
-                                        </Link>
-                                        <Link
-                                          className="form-btn-dlt"
-                                          style={{
-                                            border: "1px solid red",
-                                            backgroundColor: "white",
-                                            padding: "2px 5px",
-                                          }}
-                                          onClick={() => {
-                                            handleDelete(ele.id);
-                                          }}
-                                        >
-                                          <span style={{ color: "red" }}>
-                                            <MdDelete />
-                                          </span>
-                                        </Link>
-                                      </td>
+                                  {data && data.length > 0 ? (
+                                    data.map((ele, id) => (
+                                      <tr key={id}>
+                                        <td>
+                                          {(currentPage - 1) * itemsPerPage +
+                                            id +
+                                            1}
+                                        </td>
+                                        <td style={{ width: "150px" }}>
+                                          <img
+                                            src={ele.image}
+                                            alt=""
+                                            style={{ width: "100%" }}
+                                          />
+                                        </td>
+                                        <td>{ele.cat}</td>
+                                        <td className="align-middle">
+                                          <Link
+                                            className="form-btn"
+                                            style={{
+                                              border: "1px solid #17a2b8",
+                                              backgroundColor: "white",
+                                              padding: "2px 5px",
+                                            }}
+                                          >
+                                            <span style={{ color: "#17a2b8" }}>
+                                              <FaRegEye />
+                                            </span>
+                                          </Link>
+                                          <Link
+                                            to={`/gallary/edit/${ele.id}`}
+                                            className="form-btn"
+                                            style={{
+                                              border: "1px solid #17a2b8",
+                                              backgroundColor: "white",
+                                              padding: "2px 5px",
+                                            }}
+                                          >
+                                            <span style={{ color: "#17a2b8" }}>
+                                              <FiEdit />
+                                            </span>
+                                          </Link>
+                                          <Link
+                                            className="form-btn-dlt"
+                                            style={{
+                                              border: "1px solid red",
+                                              backgroundColor: "white",
+                                              padding: "2px 5px",
+                                            }}
+                                            onClick={() => {
+                                              handleDelete(ele.id);
+                                            }}
+                                          >
+                                            <span style={{ color: "red" }}>
+                                              <MdDelete />
+                                            </span>
+                                          </Link>
+                                        </td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    <tr>
+                                      <td colSpan="4">No data available</td>
                                     </tr>
-                                  ))}
+                                  )}
                                 </tbody>
                               </table>
                             </div>
@@ -426,14 +438,15 @@ const Gallary = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                Showing{" "}
-                                {currentPage * itemsPerPage - itemsPerPage + 1}{" "}
-                                to{" "}
-                                {Math.min(
-                                  currentPage * itemsPerPage,
-                                  data.length
-                                )}{" "}
-                                of {data.length} entries
+                                {data &&
+                                  `Showing ${
+                                    currentPage * itemsPerPage -
+                                    itemsPerPage +
+                                    1
+                                  } to ${Math.min(
+                                    currentPage * itemsPerPage,
+                                    data.length
+                                  )} of ${data.length} entries`}
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">
@@ -441,49 +454,7 @@ const Gallary = () => {
                                 className="dataTables_paginate paging_simple_numbers"
                                 id="example1_paginate"
                               >
-                                <ul className="pagination">
-                                  <li
-                                    className={`paginate_button page-item previous ${
-                                      currentPage === 1 ? "disabled" : ""
-                                    }`}
-                                    id="example1_previous"
-                                  >
-                                    <a
-                                      href="#"
-                                      aria-controls="example1"
-                                      data-dt-idx="10"
-                                      tabIndex="0"
-                                      className="page-link"
-                                      onClick={() =>
-                                        setCurrentPage(currentPage - 1)
-                                      }
-                                    >
-                                      Previous
-                                    </a>
-                                  </li>
-                                  {paginationButtons}
-                                  <li
-                                    className={`paginate_button page-item next ${
-                                      currentPage === totalPages
-                                        ? "disabled"
-                                        : ""
-                                    }`}
-                                    id="example1_next"
-                                  >
-                                    <a
-                                      href="#"
-                                      aria-controls="example1"
-                                      data-dt-idx="0"
-                                      tabIndex="0"
-                                      className="page-link"
-                                      onClick={() =>
-                                        setCurrentPage(currentPage + 1)
-                                      }
-                                    >
-                                      Next
-                                    </a>
-                                  </li>
-                                </ul>
+                                {/* Pagination buttons */}
                               </div>
                             </div>
                           </div>
