@@ -16,27 +16,31 @@ const EventCatEdit = () => {
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/event_category`,{id:id},
-      {
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }
+      .post(
+        `https://denticadentalstudio.com/api/show/event_category`,
+        { id: id },
+        {
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
       )
       .then((res) => {
         console.log(res.data.data.event_category);
         setData(res.data.data.event_category);
 
-        if (Array.isArray(res.data)){
+        if (Array.isArray(res.data)) {
           setData(res.data.data.event_category);
-        }else if(typeof res.data === "object"){
+        } else if (typeof res.data === "object") {
           setData([res.data.data.event_category]);
         }
+
+        // Set the form data with the fetched data
         setFormData({
-          name: res.data.name,
-          image: res.data.image,
-          video: res.data.video,
+          name: res.data.data.event_category.name,
+          image: res.data.data.event_category.image,
+          video: res.data.data.event_category.video,
         });
       })
       .catch((error) => {
@@ -46,7 +50,7 @@ const EventCatEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-  
+
     if (files) {
       // If files exist, it's a file input
       // We only take the first file from the files array
@@ -61,32 +65,51 @@ const EventCatEdit = () => {
         [name]: value,
       }));
     }
-  };  
-    
+  };
+
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    // Create a FormData object for the updated data
     const formDataToUpdate = new FormData();
-    formDataToUpdate.append("name", formData.name);
-    formDataToUpdate.append("image", formData.image);
-    formDataToUpdate.append("video", formData.video);
-    formDataToUpdate.append("id", id);
-
-    // const formDataToUpdate ={
-    //   name: formData.name,
-    //   image: formData.image,
-    //   video: formData.video,
-    // }
-    console.log("Token",Cookies.get("token"));
-    axios
-      .post(`https://denticadentalstudio.com/api/event_category/update/`, formDataToUpdate,
-     { 
-        headers: {
-          "content-type": "multipart/form-data",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
+  
+    // Iterate through form data and add fields to update
+    for (const key in formData) {
+      // Check if field is a file
+      if (formData[key] instanceof File) {
+        formDataToUpdate.append(key, formData[key]);
+      } else {
+        // Check if field is changed
+        if (formData[key] !== data[0][key]) {
+          formDataToUpdate.append(key, formData[key]);
+        }
       }
-      )  
+    }
+  
+    // Log formDataToUpdate for debugging
+    console.log("formDataToUpdate:", formDataToUpdate);
+  
+    // Make sure there's something to update
+    if (formDataToUpdate.keys().length === 0) {
+      alert("No changes made.");
+      return;
+    }
+  
+    // Append id to form data
+    formDataToUpdate.append("id", id);
+  
+    // Send updated data to server
+    axios
+      .post(
+        `https://denticadentalstudio.com/api/event_category/update/`,
+        formDataToUpdate,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -95,8 +118,7 @@ const EventCatEdit = () => {
           title: "Data updated successfully!",
           showConfirmButton: false,
           timer: 1000,
-        })
-        .then(() => {
+        }).then(() => {
           window.location.href = "/event-catagory";
         });
       })
@@ -105,6 +127,7 @@ const EventCatEdit = () => {
         alert("Error updating data:", err);
       });
   };
+  
 
   return (
     <div>
@@ -144,8 +167,12 @@ const EventCatEdit = () => {
                     >
                       <h3 className="card-title">Edit Event Category</h3>
                     </div>
-                    {data.map((ele)=>(
-                      <form onSubmit={handleSubmit} className="text-left" key={ele.id}>
+                    {data.map((ele) => (
+                      <form
+                        onSubmit={handleSubmit}
+                        className="text-left"
+                        key={ele.id}
+                      >
                         <div className="card-body">
                           <div className="form-group">
                             <label htmlFor="exampleInputName">Name</label>
@@ -154,7 +181,7 @@ const EventCatEdit = () => {
                               className="form-control"
                               id="exampleInputName"
                               name="name"
-                              value={formData.name}
+                              value={formData.name} // Use formData.name
                               onChange={handleChange}
                             />
                           </div>
@@ -165,9 +192,16 @@ const EventCatEdit = () => {
                               className="form-control"
                               id="exampleInputImage"
                               name="image"
-                              // value={ele.image}
                               onChange={handleChange}
                             />
+                            {formData.image &&
+                              typeof formData.image !== "string" && (
+                                <img
+                                  src={URL.createObjectURL(formData.image)}
+                                  alt="Event Image"
+                                  style={{ width: "100px", marginTop: "10px" }}
+                                />
+                              )}
                           </div>
                           <div className="form-group">
                             <label htmlFor="exampleInputVideo">Video</label>
@@ -176,9 +210,18 @@ const EventCatEdit = () => {
                               className="form-control"
                               id="exampleInputVideo"
                               name="video"
-                              // value={ele.video}
                               onChange={handleChange}
                             />
+                            {formData.video &&
+                              typeof formData.video !== "string" && (
+                                <video
+                                  controls
+                                  src={URL.createObjectURL(formData.video)}
+                                  style={{ width: "100%", marginTop: "10px" }}
+                                >
+                                  Your browser does not support the video tag.
+                                </video>
+                              )}
                           </div>
                         </div>
                         <div className="card-footer">
