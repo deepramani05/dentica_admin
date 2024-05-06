@@ -16,7 +16,7 @@ const EventCatEdit = () => {
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/event_category`,{id: id},
+      .post(`https://denticadentalstudio.com/api/show/event_category`,{id:id},
       {
         headers: {
           "content-type": "application/json",
@@ -44,29 +44,49 @@ const EventCatEdit = () => {
       });
   }, [id]);
 
-  // Function to handle changes to form fields
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image" || name === "viseo"){
-      setFormData((prevData)=>({
-            ...prevData,
-            [name]: files[0] ,
-          }));
-    } else{
-      setFormData((prevData)=>({
-       ...prevData,
+  
+    if (files) {
+      // If files exist, it's a file input
+      // We only take the first file from the files array
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+    } else {
+      // For non-file inputs, we update the state normally
+      setFormData((prevData) => ({
+        ...prevData,
         [name]: value,
       }));
     }
+  };  
     
-  };
-
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    const formDataToUpdate = new FormData();
+    formDataToUpdate.append("name", formData.name);
+    formDataToUpdate.append("image", formData.image);
+    formDataToUpdate.append("video", formData.video);
+    formDataToUpdate.append("id", id);
+
+    // const formDataToUpdate ={
+    //   name: formData.name,
+    //   image: formData.image,
+    //   video: formData.video,
+    // }
+    console.log("Token",Cookies.get("token"));
     axios
-      .post(`https://denticadentalstudio.com/api/event_category/update ${id}`, formData)
+      .post(`https://denticadentalstudio.com/api/event_category/update/`, formDataToUpdate,
+     { 
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }
+      )  
       .then((res) => {
         console.log(res.data);
         Swal.fire({
