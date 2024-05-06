@@ -65,7 +65,7 @@ const EventCat = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://denticadentalstudio.com/api/event_category/${id}`, {
+          .post(`https://denticadentalstudio.com/api/event_category/delete/`,{id}, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${Cookies.get("token")}`,

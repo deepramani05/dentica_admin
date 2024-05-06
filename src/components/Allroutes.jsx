@@ -51,7 +51,7 @@ const Allroutes = () => {
         <Route path="/event-catagory" element={<EventCat />} />
         <Route path="/event" element={<Event />} />
         <Route path="/about/edit" element={<Edit />} />
-        <Route path="/gallary/edit/:id" element={<Gallaryedit />} />
+        <Route path="/gallery/edit/:id" element={<Gallaryedit />} />
         <Route path="/blog/edit/:id" element={<Blogedit />} />
         <Route path="/blog/add" element={<Blogadd />} />
         <Route path="/product/add" element={<ProductAdd />} />

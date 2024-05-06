@@ -410,7 +410,7 @@ const Gallary = () => {
                                             </span>
                                           </Link>
                                           <Link
-                                            to={`/gallary/edit/${ele.id}`}
+                                            to={`/gallery/edit/${ele.id}`}
                                             className="form-btn"
                                             style={{
                                               border: "1px solid #17a2b8",
