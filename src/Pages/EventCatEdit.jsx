@@ -26,7 +26,7 @@ const EventCatEdit = () => {
       )
       .then((res) => {
         console.log(res.data.data.event_category);
-        const data = res.data.data.event_category;
+        setData(res.data.data.event_category)
 
         if (Array.isArray(res.data)){
           setData(res.data.data.event_category);
