@@ -117,7 +117,6 @@ const Gallary = () => {
           },
         }
       );
-      console.log(res.data);
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -128,12 +127,21 @@ const Gallary = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
+          console.log(res.data); // Check response data in console
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
             icon: "success",
+          }).then(() => {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            fetchData(); // Refresh data after deletion
           });
-          fetchData(); // Refresh data after deletion
         }
       });
     } catch (err) {
