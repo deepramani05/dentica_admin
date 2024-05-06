@@ -48,18 +48,18 @@ const EventCatEdit = () => {
       });
   }, [id]);
 
+  // Update the handleChange function to handle file uploads properly
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (files) {
-      // If files exist, it's a file input
-      // We only take the first file from the files array
+      // If files exist, store the file data in state
       setFormData((prevData) => ({
         ...prevData,
         [name]: files[0],
       }));
     } else {
-      // For non-file inputs, we update the state normally
+      // For non-file inputs, update the state normally
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -67,38 +67,26 @@ const EventCatEdit = () => {
     }
   };
 
-  // Function to handle form submission
+  // Update the handleSubmit function to construct file paths and send data to server
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Create a FormData object for the updated data
+
     const formDataToUpdate = new FormData();
-  
-    // Iterate through form data and add fields to update
+
     for (const key in formData) {
-      // Check if field is a file
+      // Check if the field is a file
       if (formData[key] instanceof File) {
+        // Append the file to formDataToUpdate
         formDataToUpdate.append(key, formData[key]);
       } else {
-        // Check if field is changed
-        if (formData[key] !== data[0][key]) {
-          formDataToUpdate.append(key, formData[key]);
-        }
+        // For non-file inputs, update formDataToUpdate normally
+        formDataToUpdate.append(key, formData[key]);
       }
     }
-  
-    // Log formDataToUpdate for debugging
-    console.log("formDataToUpdate:", formDataToUpdate);
-  
-    // Make sure there's something to update
-    if (formDataToUpdate.keys().length === 0) {
-      alert("No changes made.");
-      return;
-    }
-  
-    // Append id to form data
+
+    // Append id to formDataToUpdate
     formDataToUpdate.append("id", id);
-  
+
     // Send updated data to server
     axios
       .post(
@@ -127,7 +115,6 @@ const EventCatEdit = () => {
         alert("Error updating data:", err);
       });
   };
-  
 
   return (
     <div>
