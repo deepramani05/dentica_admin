@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const MetaEdit = () => {
   const { id } = useParams(); // Extracting the id from URL parameters
   const [metaData, setMetaData] = useState({
-    url: "",
-    title: "",
-    keyword: "",
-    description: "",
+    meta_url: "",
+    meta_title: "",
+    meta_keyword: "",
+    meta_description: "",
   });
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMetaData({
@@ -19,13 +20,22 @@ const MetaEdit = () => {
       [name]: value,
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedMetaData = {
+      ...metaData,
+      id: id // Include the id in the metaData object
+    };
     axios
-      .patch(`http://localhost:5000/meta/${id}`, metaData)
+      .post(`https://denticadentalstudio.com/api/meta/update/` ,
+      updatedMetaData,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -51,15 +61,20 @@ const MetaEdit = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/meta/${id}`)
-      .then((res) => {
-        setMetaData(res.data);
+      .post(`https://denticadentalstudio.com/api/show/meta`,{ id },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
+      .then((response) => {
+        setMetaData(response.data.data.meta);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [id]); // Fetching meta data when the id changes
-
+  // console.log("meta data",metaData.meta_url);
   return (
     <div>
       <div class="wrapper">
@@ -102,7 +117,7 @@ const MetaEdit = () => {
                       class="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Add Meta data</h3>
+                      <h3 class="card-title">Edit Meta data</h3>
                     </div>
                     {/* /.card-header */}
                     {/* form start */}
@@ -115,9 +130,9 @@ const MetaEdit = () => {
                             class="form-control"
                             id="exampleInputEmail1"
                             placeholder="Title"
-                            name="url"
+                            name="meta_url"
                             onChange={handleChange}
-                            value={metaData.url}
+                            value={metaData.meta_url}
                           />
                         </div>
                         <div class="form-group">
@@ -127,9 +142,9 @@ const MetaEdit = () => {
                             class="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Title"
-                            name="title"
+                            name="meta_title"
                             onChange={handleChange}
-                            value={metaData.title}
+                            value={metaData.meta_title}
                           />
                         </div>
                         <div class="form-group">
@@ -141,9 +156,9 @@ const MetaEdit = () => {
                             class="form-control"
                             id="exampleInputPassword1"
                             placeholder="Meta Keyword"
-                            name="keyword"
+                            name="meta_keyword"
                             onChange={handleChange}
-                            value={metaData.keyword}
+                            value={metaData.meta_keyword}
                           />
                         </div>
                         <div class="form-group">
@@ -152,9 +167,9 @@ const MetaEdit = () => {
                             class="form-control"
                             rows="3"
                             placeholder="Enter ..."
-                            name="description"
+                            name="meta_description"
                             onChange={handleChange}
-                            value={metaData.description}
+                            value={metaData.meta_description}
                           ></textarea>
                         </div>
                       </div>

@@ -28,25 +28,31 @@ const Meta = () => {
   };
 
   const obj = {
-    url: url,
-    title: title,
-    keyword: keyword,
-    desc: desc,
+    meta_url: url,
+    meta_title: title,
+    meta_keyword: keyword,
+    meta_description: desc,
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/meta`, obj)
+      .post(`https://denticadentalstudio.com/api/meta/store`, obj,{
+          headers: { 
+            "Content-Type":"application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          }
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Review Saved Successfully !",
+          title: "Data Saved Successfully !",
           showConfirmButton: false,
           timer: 1000,
         });
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);
@@ -62,22 +68,41 @@ const Meta = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/meta`).then((res) => {
-      console.log(res.data);
-      setData(res.data);
-      setFilteredData(res.data);
+    axios
+      .get(`https://denticadentalstudio.com/api/meta`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === "success"){
+          console.log(response.data.data.meta);
+          setData(response.data.data.meta);
+          // setFilteredData(response.data.data.meta);
+        }
     });
-  }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
   }, []);
 
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:5000/meta/${id}`)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result)=>{
+      if(result.isConfirmed){
+        axios
+      .post(`https://denticadentalstudio.com/api/meta/delete`,{ id },
+      {
+        headers: { 
+          "Content-Type":"application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -95,6 +120,9 @@ const Meta = () => {
         console.log(err);
         alert("Error deleting meta !");
       });
+      }
+      
+    }) 
   };
 
   const itemsPerPage = 5;
@@ -128,7 +156,7 @@ const Meta = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-
+//  console.log("data",data );
   return (
     <div>
       <div className="wrapper">
@@ -269,13 +297,13 @@ const Meta = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {displayedData.map((ele, id) => (
+                                  {data && data.length>0 ?(data.map((ele, id) => (
                                     <tr key={id}>
                                       <td>{startIndex + id + 1}</td>
-                                      <td>{ele.url}</td>
-                                      <td>{ele.title}</td>
-                                      <td>{ele.keyword}</td>
-                                      <td>{ele.desc}</td>
+                                      <td>{ele.meta_url}</td>
+                                      <td>{ele.meta_title}</td>
+                                      <td>{ele.meta_keyword}</td>
+                                      <td>{ele.meta_description}</td>
                                       <td className="align-middle d-flex">
                                         <Link
                                           to={`/meta/edit/${ele.id}`}
@@ -305,7 +333,12 @@ const Meta = () => {
                                         </button>
                                       </td>
                                     </tr>
-                                  ))}
+                                  ))
+                                  ):( 
+                                    <tr>
+                                      <td colSpan="4">No data available</td>
+                                    </tr>)
+                                  }
                                 </tbody>
                               </table>
                             </div>
