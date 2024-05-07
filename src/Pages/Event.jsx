@@ -17,19 +17,19 @@ const Event = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
 
   const fetchData = () => {
     axios
-      .get(`http://localhost:5000/event`)
+      .get(`https://denticadentalstudio.com/api/event`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setData(res.data);
-        setFilteredData(res.data);
+        console.log(res.data.data.event);
+        setData(res.data.data.event);
+        setFilteredData(res.data.data.event);
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +48,12 @@ const Event = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/event/${id}`)
+          .delete(`https://denticadentalstudio.com/api/event/delete`,{id},{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
           .then((res) => {
             setData(data.filter((item) => item.id !== id));
             setFilteredData(filteredData.filter((item) => item.id !== id));
