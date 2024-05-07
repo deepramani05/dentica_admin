@@ -20,7 +20,6 @@ const Team = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
-
   useEffect(() => {
     axios
       .get(`https://denticadentalstudio.com/api/team`, {
@@ -79,7 +78,12 @@ const Team = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/team/${id}`)
+          .post(`https://denticadentalstudio.com/api/team/delete`,{id},{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
           .then((res) => {
             console.log(res.data.data.team);
             setData(data.filter((item) => item.id !== id));

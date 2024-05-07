@@ -2,37 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const TeamEdit = () => {
   const { id } = useParams();
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
+  const [teamData, setTeamData] = useState({
+    name: "",
+    image: "",
+    post: "",
+  });
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/team/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/team`,{id},{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        const { name, image, post } = res.data;
-        setName(name);
-        setImage(image);
-        setPost(post);
+        console.log(res.data.data.team);
+        setTeamData(res.data.data.team);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); 
       });
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedTeamMember = {
-      name: name,
-      image: image,
-      post: post,
+      name: teamData.name,
+      image: teamData.image,
+      post: teamData.post,
+      id: id,
     };
 
     axios
-      .put(`http://localhost:5000/team/${id}`, updatedTeamMember)
+      .post(`https://denticadentalstudio.com/api/team/update`, updatedTeamMember,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -49,6 +64,14 @@ const TeamEdit = () => {
         console.log(err);
       });
   };
+  const handleChange = (e) => {
+    const {name,value, files} = e.target;
+    setTeamData({
+     ...teamData,
+      [name]: value,
+    });
+  };
+  console.log("data",teamData);
 
   return (
     <div>
@@ -91,8 +114,9 @@ const TeamEdit = () => {
                             className="form-control"
                             id="exampleInputName"
                             placeholder="Enter Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            name="name"
+                            value={teamData.name}
+                            onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
@@ -101,7 +125,7 @@ const TeamEdit = () => {
                             type="file"
                             className="form-control-file"
                             id="exampleInputFile"
-                            onChange={(e) => setImage(e.target.files[0])}
+                            onChange={handleChange}
                             // Note: File input value is not set directly
                           />
                         </div>
@@ -112,8 +136,9 @@ const TeamEdit = () => {
                             id="exampleInputPost"
                             rows="3"
                             placeholder="Enter Post"
-                            value={post}
-                            onChange={(e) => setPost(e.target.value)}
+                            name="post"
+                            value={teamData.post}
+                            onChange={handleChange}
                           ></textarea>
                         </div>
                       </div>
