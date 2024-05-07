@@ -5,10 +5,11 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Blogadd = () => {
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [desc, setDesc] = useState("");
   const [sdesc, setSdesc] = useState("");
   const [mdesc, setMdesc] = useState("");
@@ -16,22 +17,27 @@ const Blogadd = () => {
   const [keyword, setKeyword] = useState("");
   const [tags, setTags] = useState([]);
   const [currentTag, setCurrentTag] = useState("");
-
-  const obj = {
-    title: title,
-    image: image,
-    desc: desc,
-    sdesc: sdesc,
-    mdesc: mdesc,
-    mtitle: mtitle,
-    keyword: keyword,
-    tags: tags,
-  };
-
+  console.log("imagedata",image);
+  
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("image", image);
+    formData.append("description", desc);
+    formData.append("sdescription", sdesc);
+    formData.append("mdescription", mdesc);
+    formData.append("mtitle", mtitle);
+    formData.append("mkeyword", keyword);
+    formData.append("tags", tags.join(","));
+
     axios
-      .post(`http://localhost:5000/blog`, obj)
+      .post(`https://denticadentalstudio.com/api/blog/store`, formData,{
+        headers:{
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -110,7 +116,7 @@ const Blogadd = () => {
                       className="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 className="card-title">About</h3>
+                      <h3 className="card-title">Add Blog</h3>
                     </div>
 
                     <form
@@ -142,9 +148,11 @@ const Blogadd = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
-                              onChange={(e) => setImage(e.target.value)}
-                              value={image}
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                setImage(file);
+                              }}
+                              // value={image}
                             />
                             <label
                               className="custom-file-label"
@@ -162,6 +170,7 @@ const Blogadd = () => {
                             value={desc}
                             onChange={(value) => setDesc(value)}
                             placeholder="Place Some Text Here"
+                            name="description"
                             modules={{
                               toolbar: [
                                 [
@@ -214,7 +223,7 @@ const Blogadd = () => {
                             className="form-control"
                             id="exampleInputShortDescription"
                             placeholder="Enter Short Description"
-                            name="sdesc"
+                            name="sdescription"
                             onChange={(e) => setSdesc(e.target.value)}
                             value={sdesc}
                           />
@@ -228,7 +237,7 @@ const Blogadd = () => {
                             className="form-control"
                             id="exampleInputMetaDescription"
                             placeholder="Enter meta Description"
-                            name="mdesc"
+                            name="mdescription"
                             onChange={(e) => setMdesc(e.target.value)}
                             value={mdesc}
                           />
@@ -256,7 +265,7 @@ const Blogadd = () => {
                             className="form-control"
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
-                            name="keyword"
+                            name="mkeyword"
                             onChange={(e) => setKeyword(e.target.value)}
                             value={keyword}
                           />
