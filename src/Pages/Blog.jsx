@@ -32,8 +32,6 @@ const Blog = () => {
       });
   }, []);
 
-
-
   const handledelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -46,12 +44,16 @@ const Blog = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/blog/delete`,{id}, {
-            headers:{
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
+          .post(
+            `https://denticadentalstudio.com/api/blog/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
             }
-          })
+          )
           .then((res) => {
             console.log(res.data);
             Swal.fire({
@@ -72,7 +74,7 @@ const Blog = () => {
               icon: "error",
             });
           });
-          // setTimeout(() => window.location.reload(), 1000)
+        // setTimeout(() => window.location.reload(), 1000)
       }
     });
   };
@@ -116,7 +118,7 @@ const Blog = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-  console.log("data",displayedData);
+  console.log("data", displayedData);
 
   return (
     <div>
@@ -203,7 +205,9 @@ const Blog = () => {
                             <tr key={ele.id}>
                               <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
-                              <td dangerouslySetInnerHTML={{ __html: ele.desc }}></td>
+                              <td
+                                dangerouslySetInnerHTML={{ __html: ele.desc }}
+                              ></td>
                               <td width={"15%"}>
                                 <Link
                                   className="form-btn"

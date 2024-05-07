@@ -162,22 +162,10 @@
   ],
   "event": [
     {
+      "id": "e400",
       "cat": "Deep Ramani",
-      "image": "",
-      "layout": "Horizontal",
-      "id": "cb87"
-    },
-    {
-      "id": "f4bf",
-      "cat": "Nice !",
-      "image": "",
-      "layout": "Vertical"
-    },
-    {
-      "id": "b564",
-      "cat": "weqdfeqw",
-      "image": "",
-      "layout": "Vertical"
+      "image": "C:\\fakepath\\dent_page.png",
+      "layout": "Horizontal"
     }
   ]
 }

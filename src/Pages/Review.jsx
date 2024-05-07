@@ -45,7 +45,7 @@ const Review = () => {
       .catch((err) => {
         console.log(err);
       });
-    // setTimeout(() => window.location.reload(), 1000);
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
