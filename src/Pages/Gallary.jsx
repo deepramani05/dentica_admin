@@ -6,9 +6,8 @@ import { Link } from "react-router-dom";
 import "../css/style.css";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { OutlinedInput, formControlLabelClasses } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import Cookies from "js-cookie";
-import { CatchingPokemonSharp } from "@mui/icons-material";
 
 const Gallary = () => {
   let [title, setTitle] = useState("");
@@ -24,10 +23,6 @@ const Gallary = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // useEffect(() => {
-  //   fetchData(); // Fetch data initially
-  // }, []);
-
   const handlegallarySubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +32,7 @@ const Gallary = () => {
       formData.append("meta_title", mtitle);
       formData.append("meta_keyword", keyword);
       formData.append("meta_description", desc);
-      formData.append("image", image); // Append image file
+      formData.append("image", image);
       formData.append("categoery", cat);
 
       const res = await axios.post(
@@ -45,7 +40,7 @@ const Gallary = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
         }
@@ -75,25 +70,22 @@ const Gallary = () => {
 
   const fetchData = async () => {
     try {
-      axios
-        .get(`https://denticadentalstudio.com/api/gallery`, {
+      const response = await axios.get(
+        `https://denticadentalstudio.com/api/gallery`,
+        {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
-        })
-        .then((response) => {
-          if (response.data.status === "success") {
-            setData(response.data.data.gallery);
-          } else {
-            setData([]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (err) {
-      console.log(err);
+        }
+      );
+      if (response.data.status === "success") {
+        setData(response.data.data.gallery);
+      } else {
+        setData([]);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -115,9 +107,7 @@ const Gallary = () => {
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
-        // Use async in the callback function
         if (result.isConfirmed) {
-          // Check if the user confirmed the action
           const res = await axios.post(
             `https://denticadentalstudio.com/api/gallery/delete`,
             { id: id },
@@ -127,13 +117,13 @@ const Gallary = () => {
               },
             }
           );
-          console.log(res.data); // Check response data in console
+          console.log(res.data);
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
             icon: "success",
           }).then(() => {
-            fetchData(); // Refresh data after deletion
+            fetchData();
           });
         }
       });
@@ -149,35 +139,7 @@ const Gallary = () => {
 
   const itemsPerPage = 5;
 
-  const totalPages =
-    data && data.length ? Math.ceil(data.length / itemsPerPage) : 0;
-
-  const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <li
-        key={i}
-        className={`paginate_button page-item ${
-          currentPage === i ? "active" : ""
-        }`}
-      >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </a>
-      </li>
-    );
-  }
-
-  // Filter the data based on the search query
   const filteredData = data.filter((item) => {
-    // Convert item.title and item.cat to strings before calling toLowerCase()
     const title = item.title ? item.title.toString().toLowerCase() : "";
     const cat = item.cat ? item.cat.toString().toLowerCase() : "";
     const searchQueryLower = searchQuery.toLowerCase();
@@ -188,8 +150,6 @@ const Gallary = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-
-  console.log("displayed data:", filteredData);
 
   return (
     <div>
@@ -354,7 +314,6 @@ const Gallary = () => {
                             <h3 class="card-title">Gallery List</h3>
                           </div>
                           <div className="search-bar">
-                            {/* <label>Search: </label> */}
                             <OutlinedInput
                               type="text"
                               variant="outlined"
@@ -381,8 +340,8 @@ const Gallary = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data && data.length > 0 ? (
-                                    data.map((ele, id) => (
+                                  {displayedData && displayedData.length > 0 ? (
+                                    displayedData.map((ele, id) => (
                                       <tr key={id}>
                                         <td>
                                           {(currentPage - 1) * itemsPerPage +
@@ -460,15 +419,15 @@ const Gallary = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                {data &&
+                                {displayedData &&
                                   `Showing ${
                                     currentPage * itemsPerPage -
                                     itemsPerPage +
                                     1
                                   } to ${Math.min(
                                     currentPage * itemsPerPage,
-                                    data.length
-                                  )} of ${data.length} entries`}
+                                    filteredData.length
+                                  )} of ${filteredData.length} entries`}
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">
