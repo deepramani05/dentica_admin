@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 
 const Team = () => {
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const [data, setData] = useState([]);
   const { id } = useParams();
@@ -26,12 +26,18 @@ const Team = () => {
     image: image,
     post: post,
   };
-
+  console.log("image",image);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:5000/team`, obj)
+      .post(`https://denticadentalstudio.com/api/team/store`, obj,{
+        headers: { 
+          "Content-Type":"application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+      }
+    }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -45,25 +51,24 @@ const Team = () => {
       .catch((err) => {
         console.log(err);
       });
-      setTimeout(() => window.location.reload(),1000);
+      // setTimeout(() => window.location.reload(),1000);
   };
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/team`)
+      .get(`https://denticadentalstudio.com/api/team`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        console.log(res.data);
-        setData(res.data);
+        console.log(res.data.data.team);
+        setData(res.data.data.team);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
   }, []);
 
   const handleDelete = (id) => {
@@ -80,7 +85,7 @@ const Team = () => {
         axios
           .delete(`http://localhost:5000/team/${id}`)
           .then((res) => {
-            console.log(res.data);
+            console.log(res.data.data.team);
             setData(data.filter((item) => item.id !== id));
             Swal.fire({
               position: "center",
@@ -185,8 +190,11 @@ const Team = () => {
                               <input
                                 type="file"
                                 className="custom-file-input"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setImage(file);
+                                }}
+                                // value={image}
                               />
                               <label className="custom-file-label">Choose file</label>
                             </div>
