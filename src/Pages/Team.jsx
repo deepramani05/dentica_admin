@@ -21,42 +21,9 @@ const Team = () => {
     setSearchQuery(query);
   };
 
-  const obj = {
-    name: name,
-    image: image,
-    post: post,
-  };
-  console.log("image",image);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .post(`https://denticadentalstudio.com/api/team/store`, obj,{
-        headers: { 
-          "Content-Type":"application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-      }
-    }
-      )
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Saved !",
-          showConfirmButton: false,
-          timer: 1000
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      // setTimeout(() => window.location.reload(),1000);
-  };
-
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/team`,{
+      .get(`https://denticadentalstudio.com/api/team`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -71,6 +38,35 @@ const Team = () => {
       });
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("image", image);
+    formData.append("post", post);
+
+    axios
+      .post(`https://denticadentalstudio.com/api/team/store`, formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Data Saved !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -79,7 +75,7 @@ const Team = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -101,7 +97,6 @@ const Team = () => {
       }
     });
   };
-  
 
   const itemsPerPage = 5;
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -109,16 +104,8 @@ const Team = () => {
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
-      <li
-        key={i}
-        className={`page-item ${
-          currentPage === i ? "active" : ""
-        }`}
-      >
-        <button
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
+      <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
           {i}
         </button>
       </li>
@@ -150,7 +137,10 @@ const Team = () => {
                     <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
-                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
                       Team
                     </li>
                   </ol>
@@ -194,9 +184,10 @@ const Team = () => {
                                   const file = e.target.files[0];
                                   setImage(file);
                                 }}
-                                // value={image}
                               />
-                              <label className="custom-file-label">Choose file</label>
+                              <label className="custom-file-label">
+                                Choose file
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -269,7 +260,10 @@ const Team = () => {
                                         <img
                                           src={ele.image}
                                           alt={ele.name}
-                                          style={{ width: "100px", height: "auto" }}
+                                          style={{
+                                            width: "100px",
+                                            height: "auto",
+                                          }}
                                         />
                                       </td>
                                       <td className="align-middle">
@@ -314,13 +308,9 @@ const Team = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                Showing{" "}
-                                {startIndex + 1} to{" "}
-                                {Math.min(
-                                  endIndex,
-                                  data.length
-                                )}{" "}
-                                of {data.length} entries
+                                Showing {startIndex + 1} to{" "}
+                                {Math.min(endIndex, data.length)} of{" "}
+                                {data.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">
@@ -352,7 +342,9 @@ const Team = () => {
                                   {paginationButtons}
                                   <li
                                     className={`page-item ${
-                                      currentPage === totalPages ? "disabled" : ""
+                                      currentPage === totalPages
+                                        ? "disabled"
+                                        : ""
                                     }`}
                                   >
                                     <button
