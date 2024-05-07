@@ -6,45 +6,47 @@ import Cookies from "js-cookie";
 
 const TeamEdit = () => {
   const { id } = useParams();
-  const [name, setName] = useState("");
-  const [image, setImage] = useState(null);
-  const [post, setPost] = useState("");
   const [teamData, setTeamData] = useState({
     name: "",
-    image: "",
+    image: null,
     post: "",
   });
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/team`,{id},{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/team`,
+        { id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data.data.team);
         setTeamData(res.data.data.team);
       })
       .catch((err) => {
-        console.log(err); 
+        console.log(err);
       });
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedTeamMember = {
-      name: teamData.name,
-      image: teamData.image,
-      post: teamData.post,
-      id: id,
-    };
+    const formData = new FormData();
+    formData.append("name", teamData.name);
+    formData.append("post", teamData.post);
+    formData.append("id", id);
+    if (teamData.image) {
+      formData.append("image", teamData.image);
+    }
 
     axios
-      .post(`https://denticadentalstudio.com/api/team/update`, updatedTeamMember,{
+      .post(`https://denticadentalstudio.com/api/team/update`, formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
@@ -64,14 +66,21 @@ const TeamEdit = () => {
         console.log(err);
       });
   };
+
   const handleChange = (e) => {
-    const {name,value, files} = e.target;
-    setTeamData({
-     ...teamData,
-      [name]: value,
-    });
+    const { name, value, files } = e.target;
+    if (name === "image") {
+      setTeamData({
+        ...teamData,
+        [name]: files[0],
+      });
+    } else {
+      setTeamData({
+        ...teamData,
+        [name]: value,
+      });
+    }
   };
-  console.log("data",teamData);
 
   return (
     <div>
@@ -88,7 +97,10 @@ const TeamEdit = () => {
                     <li className="breadcrumb-item">
                       <Link to="/team">Team</Link>
                     </li>
-                    <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
                       Edit
                     </li>
                   </ol>
@@ -102,7 +114,10 @@ const TeamEdit = () => {
               <div className="row">
                 <div className="col-md-5">
                   <div className="card card-primary">
-                    <div className="card-header" style={{ backgroundColor: "rgb(37, 111, 152)" }}>
+                    <div
+                      className="card-header"
+                      style={{ backgroundColor: "rgb(37, 111, 152)" }}
+                    >
                       <h3 className="card-title">Edit Team Member</h3>
                     </div>
                     <form className="text-left" onSubmit={handleSubmit}>
@@ -126,8 +141,17 @@ const TeamEdit = () => {
                             className="form-control-file"
                             id="exampleInputFile"
                             onChange={handleChange}
-                            // Note: File input value is not set directly
+                            name="image"
+                            accept="image/*"
                           />
+                          {teamData.image &&
+                            typeof teamData.image !== "string" && (
+                              <img
+                                src={URL.createObjectURL(teamData.image)}
+                                alt="Preview"
+                                style={{ marginTop: "10px", maxWidth: "200px" }}
+                              />
+                            )}
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputPost">Post</label>

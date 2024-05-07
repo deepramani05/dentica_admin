@@ -13,7 +13,7 @@ const GalleryEdit = () => {
     meta_keyword: "",
     meta_description: "",
     image: "",
-    categoery: "",
+    category: "", // Changed to category from categoery
   });
 
   useEffect(() => {
@@ -55,11 +55,16 @@ const GalleryEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToUpdate = new FormData();
-    for (const key in formData) {
-      formDataToUpdate.append(key, formData[key]);
-    }
-    formDataToUpdate.append("id", id);
+
+    const formDataToUpdate = {
+      id,
+      title: formData.title,
+      meta_title: formData.meta_title,
+      meta_keyword: formData.meta_keyword,
+      meta_description: formData.meta_description,
+      image: formData.image,
+      category: formData.category,
+    };
 
     axios
       .post(
@@ -67,7 +72,7 @@ const GalleryEdit = () => {
         formDataToUpdate,
         {
           headers: {
-            "content-type": "multipart/form-data",
+            "content-type": "application/json",
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
         }
@@ -207,7 +212,11 @@ const GalleryEdit = () => {
                               </div>
                             </div>
                             <div style={{ width: "150px" }}>
-                              <img src={formData.img} alt="" style={{ width: "100%" }} />
+                              <img
+                                src={formData.img}
+                                alt=""
+                                style={{ width: "100%" }}
+                              />
                             </div>
                           </div>
                         </div>
@@ -217,14 +226,13 @@ const GalleryEdit = () => {
                           </label>
                           <select
                             onChange={handleChange}
-                            value={formData.categoery || ""}
+                            value={formData.category || ""} // Changed to category
                             className="form-control"
                             id="exampleFormControlSelect1"
-                            name="categoery"
+                            name="category" // Changed to category
                           >
-                            <option value="Select Category">
-                              Select Category
-                            </option>
+                            <option value="">Select Category</option>{" "}
+                            {/* Added empty option */}
                             <option value="Before & After">
                               Before & After
                             </option>

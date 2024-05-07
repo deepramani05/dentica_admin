@@ -60,6 +60,7 @@ const Team = () => {
           showConfirmButton: false,
           timer: 1000,
         });
+        setTimeout(() => window.location.reload(),1000)
       })
       .catch((err) => {
         console.log(err);

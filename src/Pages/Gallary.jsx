@@ -97,8 +97,6 @@ const Gallary = () => {
     }
   };
 
-  console.log(data);
-
   useEffect(() => {
     if (!dataFetched) {
       fetchData();
@@ -135,13 +133,6 @@ const Gallary = () => {
             text: "Your file has been deleted.",
             icon: "success",
           }).then(() => {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Your work has been saved",
-              showConfirmButton: false,
-              timer: 1500,
-            });
             fetchData(); // Refresh data after deletion
           });
         }
@@ -156,7 +147,7 @@ const Gallary = () => {
     setSearchQuery(query);
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   const totalPages =
     data && data.length ? Math.ceil(data.length / itemsPerPage) : 0;
@@ -199,7 +190,7 @@ const Gallary = () => {
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   console.log("displayed data:", filteredData);
-  console.log("data", data);
+
   return (
     <div>
       <div class="wrapper">
