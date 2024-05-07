@@ -57,7 +57,7 @@ const GalleryEdit = () => {
     e.preventDefault();
 
     const formDataToUpdate = {
-      id:id,
+      id: id:id,
       title: formData.title,
       meta_title: formData.meta_title,
       meta_keyword: formData.meta_keyword,
