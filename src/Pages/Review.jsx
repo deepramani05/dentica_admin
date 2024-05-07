@@ -11,7 +11,7 @@ const Review = () => {
   const [name, setName] = useState("");
   const [num, setNum] = useState("");
   const [review, setReview] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,17 +22,16 @@ const Review = () => {
     setCurrentPage(1); // Reset current page when search query changes
   };
 
-  const obj = {
-    name: name,
-    num: num,
-    review: review,
-    image: image,
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("mobile", num);
+    formData.append("review", review);
+    formData.append("image", image);
     axios
-      .post(`http://localhost:5000/review`, obj)
+      .post(`https://denticadentalstudio.com/api/review`, formData)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -46,7 +45,7 @@ const Review = () => {
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(() => window.location.reload(), 1000);
+    // setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
@@ -182,6 +181,7 @@ const Review = () => {
                             className="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter Name"
+                            name="name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
                           />
@@ -193,6 +193,7 @@ const Review = () => {
                             className="form-control"
                             id="exampleInputSubtitle"
                             placeholder="Enter Number"
+                            name="number"
                             onChange={(e) => setNum(e.target.value)}
                             value={num}
                           />
@@ -203,6 +204,7 @@ const Review = () => {
                             className="form-control"
                             rows="3"
                             placeholder="Enter ..."
+                            name="review"
                             onChange={(e) => setReview(e.target.value)}
                             value={review}
                           ></textarea>
@@ -213,8 +215,11 @@ const Review = () => {
                             <div className="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setImage(file);
+                                }}
+                                // value={image}
                               />
                             </div>
                           </div>
