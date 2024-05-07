@@ -20,6 +20,7 @@ const Team = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
+
   useEffect(() => {
     axios
       .get(`https://denticadentalstudio.com/api/team`, {

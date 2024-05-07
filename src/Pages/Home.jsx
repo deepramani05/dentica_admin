@@ -9,7 +9,7 @@ const Home = () => {
   let [title, setTitle] = useState("");
   let [subtitle, setSubtitle] = useState("");
   let [desc, setDesc] = useState("");
-  let [image, setImage] = useState("");
+  let [image, setImage] = useState(null);
 
   let [wp, setWp] = useState("");
   let [insta, setInsta] = useState("");
@@ -26,14 +26,24 @@ const Home = () => {
   let obj = {
     title: title,
     subtitle: subtitle,
-    desc: desc,
+    description: desc,
     image: image,
   };
 
   const handleFormsubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("subtitle", subtitle);
+    formData.append("description", desc);
+    formData.append("image", image); 
     axios
-      .post(`http://localhost:5000/homedata`, obj)
+      .post(`https://denticadentalstudio.com/api/home/store`, formData,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -43,10 +53,10 @@ const Home = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        setTitle("")
-        setSubtitle("")
-        setDesc("")
-        setImage("")
+        // setTitle("")
+        // setSubtitle("")
+        // setDesc("")
+        // setImage("")
       })
       .catch((err) => {
         console.log(err);
@@ -186,8 +196,10 @@ const Home = () => {
                             <div class="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setImage(file);
+                                }}
                               />
                             </div>
                           </div>
