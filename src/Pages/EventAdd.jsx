@@ -4,25 +4,27 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TbArrowsVertical } from "react-icons/tb";
 import { BiMoveHorizontal } from "react-icons/bi";
+import Cookies from "js-cookie";
 
 const EventAdd = () => {
   let [cat, setCat] = useState("");
-  let [image, setImage] = useState("");
+  let [image, setImage] = useState(null);
 
   let [data, setData] = useState([]);
-
-  let obj = {
-    cat: cat,
-    image: image,
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const layout = document.querySelector('input[name="layout"]:checked').value;
+    const formData = new FormData();
+    formData.append("category", cat);
+    formData.append("image", image);
+    formData.append("dimension", layout);
+    console.log("formdata", formData);
     axios
-      .post(`http://localhost:5000/event`, {
-        ...obj,
-        layout: layout,
+      .post(`https://denticadentalstudio.com/api/event/store`, formData,{
+        headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -43,10 +45,15 @@ const EventAdd = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/eventCatagory`)
+      .get(`https://denticadentalstudio.com/api/event_category`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        console.log(res.data);
-        setData(res.data); // Update the data state with the fetched data
+        console.log(res.data.data.event_category);
+        setData(res.data.data.event_category); // Update the data state with the fetched data
       })
       .catch((err) => {
         console.log(err);
@@ -107,7 +114,7 @@ const EventAdd = () => {
                           </label>
                           <br />
                           <select
-                            name=""
+                            name="category"
                             id=""
                             className="w-100 p-2"
                             onChange={(e) => setCat(e.target.value)}
@@ -131,8 +138,11 @@ const EventAdd = () => {
                             <div class="custom-file">
                               <input
                                 type="file"
-                                onChange={(e) => setImage(e.target.value)}
-                                value={image}
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  setImage(file);
+                                }}
+                                // value={image}
                               />
                             </div>
                           </div>
@@ -147,7 +157,7 @@ const EventAdd = () => {
                                 <input
                                   type="radio"
                                   name="layout"
-                                  value="Vertical"
+                                  value="0"
                                   required
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
@@ -161,7 +171,7 @@ const EventAdd = () => {
                                 <input
                                   type="radio"
                                   name="layout"
-                                  value="Horizontal"
+                                  value="1"
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
                                   <span>
