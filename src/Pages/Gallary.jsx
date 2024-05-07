@@ -108,15 +108,6 @@ const Gallary = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.post(
-        `https://denticadentalstudio.com/api/gallery/delete`,
-        { id: id },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
-      );
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -125,8 +116,19 @@ const Gallary = () => {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
+      }).then(async (result) => {
+        // Use async in the callback function
         if (result.isConfirmed) {
+          // Check if the user confirmed the action
+          const res = await axios.post(
+            `https://denticadentalstudio.com/api/gallery/delete`,
+            { id: id },
+            {
+              headers: {
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          );
           console.log(res.data); // Check response data in console
           Swal.fire({
             title: "Deleted!",
