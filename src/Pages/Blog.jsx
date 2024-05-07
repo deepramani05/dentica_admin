@@ -32,13 +32,7 @@ const Blog = () => {
       });
   }, []);
 
-  //checking for token
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
+
 
   const handledelete = (id) => {
     Swal.fire({
@@ -52,7 +46,12 @@ const Blog = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/blog/${id}`)
+          .post(`https://denticadentalstudio.com/api/blog/delete`,{id}, {
+            headers:{
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            }
+          })
           .then((res) => {
             console.log(res.data);
             Swal.fire({
