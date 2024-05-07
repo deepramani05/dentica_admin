@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const UserEdit = () => {
   const [name, setName] = useState("");
@@ -11,7 +12,12 @@ const UserEdit = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/user/update/${id}`)
+      .post(`https://denticadentalstudio.com/api/user`,{id},{
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         const userData = res.data;
         setName(userData.name);
@@ -34,7 +40,12 @@ const UserEdit = () => {
   
 
     axios
-      .post(`https://denticadentalstudio.com/api/user/update`, userData)
+      .post(`https://denticadentalstudio.com/api/user/update`, userData,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
