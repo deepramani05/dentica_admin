@@ -12,7 +12,7 @@ const UserEdit = () => {
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/user`,{id},{
+      .post(`https://denticadentalstudio.com/api/show/user`,{id},{
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -38,6 +38,7 @@ const UserEdit = () => {
       userData.append("email",email);
       userData.append("password",pass);
   
+      console.log("userData", userData);
 
     axios
       .post(`https://denticadentalstudio.com/api/user/update`, userData,{
