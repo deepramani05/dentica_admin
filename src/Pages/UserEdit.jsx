@@ -9,20 +9,25 @@ const UserEdit = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const { id } = useParams();
+  let [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/user`,{id},{
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/user`,
+        { id },
+        {
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
-        const userData = res.data;
+        const userData = res.data.data.user;
         setName(userData.name);
         setEmail(userData.email);
-        setPass(userData.password);
+        // Assuming you don't want to populate password field with fetched data
       })
       .catch((err) => {
         console.log(err);
@@ -32,16 +37,14 @@ const UserEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = new FormData(); 
-      userData.append("id",id);
-      userData.append("name", name);
-      userData.append("email",email);
-      userData.append("password",pass);
-  
-      console.log("userData", userData);
+    const userData = new FormData();
+    userData.append("id", id);
+    userData.append("name", name);
+    userData.append("email", email);
+    userData.append("password", pass);
 
     axios
-      .post(`https://denticadentalstudio.com/api/user/update`, userData,{
+      .post(`https://denticadentalstudio.com/api/user/update`, userData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -54,14 +57,14 @@ const UserEdit = () => {
           icon: "success",
           title: "Data Updated Successfully !",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
-        setTimeout(() => (window.location.href = '/users'), 1000);
+        setTimeout(() => (window.location.href = "/users"), 1000);
       })
       .catch((err) => {
         console.log(err);
       });
-  };  
+  };
 
   return (
     <div>
