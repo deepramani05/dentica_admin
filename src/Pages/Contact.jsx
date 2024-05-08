@@ -15,20 +15,19 @@ const Contact = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/contacts`)
+      .get(`https://denticadentalstudio.com/api/contactus`,{
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data); // Log response data
-        setData(res.data);
+        setData(res.data.data.contact);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
   }, []);
 
   // Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
@@ -51,7 +50,12 @@ const Contact = () => {
       if (result.isConfirmed) {
         // Proceed with the deletion
         axios
-          .delete(`http://localhost:5000/contacts/${id}`)
+          .post(`https://denticadentalstudio.com/api/contactus/delete`,{id},{
+            headers:{
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            }
+          })
           .then((res) => {
             // Handle success response
             console.log("Contact deleted successfully:", res.data);

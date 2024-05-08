@@ -49,7 +49,7 @@ const About = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(
+          .post(
             `https://denticadentalstudio.com/api/about/delete`,
             { id },
             {
