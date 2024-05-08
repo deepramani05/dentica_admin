@@ -49,7 +49,12 @@ const About = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/aboutEdit/${id}`)
+          .delete(`https://denticadentalstudio.com/api/about/delete`,{id},{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
           .then((res) => {
             console.log(res.data);
             fetchData(); // Refresh data after deletion
