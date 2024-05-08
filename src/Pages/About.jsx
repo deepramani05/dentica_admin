@@ -19,10 +19,9 @@ const About = () => {
     fetchData(); // Fetch data initially
   }, []);
 
-
   const fetchData = () => {
     axios
-      .get(`https://denticadentalstudio.com/api/abouts`,{
+      .get(`https://denticadentalstudio.com/api/abouts`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -31,6 +30,7 @@ const About = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data.data.about);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -49,12 +49,16 @@ const About = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://denticadentalstudio.com/api/about/delete`,{id},{
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .delete(
+            `https://denticadentalstudio.com/api/about/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data);
             fetchData(); // Refresh data after deletion
@@ -180,7 +184,8 @@ const About = () => {
                               <tr key={ele.id}>
                                 <td>{startIndex + index + 1}</td>
                                 <td>{ele.title}</td>
-                                <td dangerouslySetInnerHTML={{ __html: ele.desc }}></td>
+                                <td dangerouslySetInnerHTML={{ __html: ele.description }}></td>
+
                                 <td className="align-middle">
                                   <Link
                                     className="form-btn"

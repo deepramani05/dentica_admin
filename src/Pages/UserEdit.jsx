@@ -57,7 +57,7 @@ const UserEdit = () => {
           icon: "success",
           title: "Data Updated Successfully !",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
         });
         setTimeout(() => (window.location.href = "/users"), 1000);
       })
