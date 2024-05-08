@@ -15,21 +15,6 @@ const Home = () => {
   let [insta, setInsta] = useState("");
   let [fb, setFb] = useState("");
 
-  // Check if token is available
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
-
-  let obj = {
-    title: title,
-    subtitle: subtitle,
-    description: desc,
-    image: image,
-  };
-
   const handleFormsubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -74,13 +59,18 @@ const Home = () => {
   const handleSocialsubmit = (e) => {
     e.preventDefault();
     const formData = {
-      wp: wp || undefined,
-      insta: insta || undefined,
-      fb: fb || undefined,
+      whatsapp: wp || undefined,
+      instagram: insta || undefined,
+      facebook: fb || undefined,
     };
 
     axios
-      .post(`http://localhost:5000/socialMedia`, formData)
+      .post(`https://denticadentalstudio.com/api/socialmedia/store`, formData,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({

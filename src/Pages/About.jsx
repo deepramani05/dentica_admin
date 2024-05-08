@@ -19,19 +19,18 @@ const About = () => {
     fetchData(); // Fetch data initially
   }, []);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
-  
 
   const fetchData = () => {
     axios
-      .get(`http://localhost:5000/aboutEdit`)
+      .get(`https://denticadentalstudio.com/api/abouts`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setData(res.data);
+        console.log(res.data);
+        setData(res.data.data.about);
       })
       .catch((err) => {
         console.log(err);
