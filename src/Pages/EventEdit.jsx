@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TbArrowsVertical } from "react-icons/tb";
 import { BiMoveHorizontal } from "react-icons/bi";
+import Cookies from "js-cookie";
 
 
 const EventEdit = () => {
@@ -17,9 +18,15 @@ const EventEdit = () => {
   useEffect(() => {
     // Fetch event categories
     axios
-      .get(`http://localhost:5000/eventCatagory`)
+      .get(`https://denticadentalstudio.com/api/event_category`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setData(res.data);
+        console.log(res.data.data.event_category);
+        setData(res.data.data.event_category);
       })
       .catch((err) => {
         console.log(err);
@@ -27,7 +34,12 @@ const EventEdit = () => {
 
     // Fetch event data for the specified ID
     axios
-      .get(`http://localhost:5000/event/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/event`,{id},{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         const eventData = res.data;
         setFormData({
@@ -41,19 +53,35 @@ const EventEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value,files } = e.target;
+    if (name === "image"){
+       setFormData({
+        ...formData,
+         [name]: files[0],
+       }) 
+    } else{
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+    
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const formDataToSend = new FormData();
+    formDataToSend.append("categoey", formData.cat);
+    formDataToSend.append("image", formData.image);
+    formDataToSend.append("id", id);
     // Send PUT request to update the event data
     axios
-      .put(`http://localhost:5000/event/${id}`, formData)
+      .post(`https://denticadentalstudio.com/api/event/update`, formDataToSend,{
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -120,7 +148,7 @@ const EventEdit = () => {
                           </label>
                           <br />
                           <select
-                            name="cat"
+                            name="categoey"
                             className="w-100 p-2"
                             onChange={handleChange}
                             value={formData.cat}
@@ -143,7 +171,7 @@ const EventEdit = () => {
                                 type="file"
                                 name="image"
                                 onChange={handleChange}
-                                value={formData.image}
+                                // value={formData.image}
                               />
                             </div>
                           </div>
@@ -158,9 +186,9 @@ const EventEdit = () => {
                                 <input
                                   type="radio"
                                   name="layout"
-                                  value="Vertical"
+                                  value="1"
                                   onChange={handleChange}
-                                  checked={formData.layout === "Vertical"}
+                                  checked={formData.layout === "1"}
                                   required
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
@@ -171,9 +199,9 @@ const EventEdit = () => {
                                 <input
                                   type="radio"
                                   name="layout"
-                                  value="Horizontal"
+                                  value="0"
                                   onChange={handleChange}
-                                  checked={formData.layout === "Horizontal"}
+                                  checked={formData.layout === "0"}
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
                                   <span><BiMoveHorizontal /></span> Horizontal

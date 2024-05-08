@@ -48,7 +48,7 @@ const Event = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://denticadentalstudio.com/api/event/delete`,{id},{
+          .post(`https://denticadentalstudio.com/api/event/delete`,{id},{
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${Cookies.get("token")}`,
