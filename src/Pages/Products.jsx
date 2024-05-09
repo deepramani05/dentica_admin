@@ -39,7 +39,12 @@
      
     const handledelete = (id) => {
       axios
-        .delete(`http://localhost:5000/products/${id}`)
+        .post(`https://denticadentalstudio.com/api/product/delete`,{id},{
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
         .then((res) => {
           console.log(res.data);
           Swal.fire({
@@ -191,7 +196,7 @@
                                   <td>{ele.title}</td>
                                   <td style={{ width: "200px", height: "150px" }}>
                                     <img
-                                      src={ele.images}
+                                      src={ele.image}
                                       alt={ele.title}
                                       style={{ width: "100%", height: "100%" }}
                                     />
