@@ -212,7 +212,7 @@ const Blog = () => {
                               <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
                               <td
-                                dangerouslySetInnerHTML={{ __html: ele.desc }}
+                                dangerouslySetInnerHTML={{ __html: ele.description }}
                               ></td>
                               <td width={"15%"}>
                                 <Link

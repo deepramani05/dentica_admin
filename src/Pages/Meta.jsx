@@ -18,15 +18,6 @@ const Meta = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filtered = data.filter((item) =>
-      item.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredData(filtered);
-    setCurrentPage(1); // Reset current page when search query changes
-  };
-
   const obj = {
     meta_url: url,
     meta_title: title,
@@ -37,11 +28,11 @@ const Meta = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`https://denticadentalstudio.com/api/meta/store`, obj,{
-          headers: { 
-            "Content-Type":"application/json",
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          }
+      .post(`https://denticadentalstudio.com/api/meta/store`, obj, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -64,24 +55,28 @@ const Meta = () => {
           timer: 1000,
         });
       });
-      setTimeout(() => window.location.reload(), 1000)
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/meta`,{
+      .get(`https://denticadentalstudio.com/api/meta`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((response) => {
-        if (response.data.status === "success"){
-          console.log(response.data.data.meta);
+        if (response.data.status === "success") {
+          console.log("Fetched data:", response.data.data.meta);
           setData(response.data.data.meta);
-          // setFilteredData(response.data.data.meta);
+          setFilteredData(response.data.data.meta); // Ensure filteredData is also updated
+          console.log(data);
         }
-    });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
   const handleDelete = (id) => {
@@ -93,36 +88,48 @@ const Meta = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result)=>{
-      if(result.isConfirmed){
+    }).then((result) => {
+      if (result.isConfirmed) {
         axios
-      .post(`https://denticadentalstudio.com/api/meta/delete`,{ id },
-      {
-        headers: { 
-          "Content-Type":"application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        }
-      })
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Meta post deleted successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        // Remove the deleted meta post from both data arrays
-        setData(data.filter((post) => post.id !== id));
-        setFilteredData(filteredData.filter((post) => post.id !== id));
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error deleting meta !");
-      });
+          .post(
+            `https://denticadentalstudio.com/api/meta/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Meta post deleted successfully !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            // Remove the deleted meta post from both data arrays
+            setData(data.filter((post) => post.id !== id));
+            setFilteredData(filteredData.filter((post) => post.id !== id));
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("Error deleting meta !");
+          });
       }
-      
-    }) 
+    });
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const filtered = data.filter((item) =>
+      item.meta_title.toLowerCase().includes(query.toLowerCase())
+    );
+    console.log("Filtered data:", filtered); // Log the filtered data
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
   const itemsPerPage = 10;
@@ -156,7 +163,7 @@ const Meta = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-//  console.log("data",data );
+  //  console.log("data",data );
   return (
     <div>
       <div className="wrapper">
@@ -276,7 +283,7 @@ const Meta = () => {
                               variant="outlined"
                               placeholder="Search Meta Title Here ..."
                               value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
+                              onChange={(e) => handleSearch(e.target.value)} // Ensure correct value is passed
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
@@ -297,48 +304,49 @@ const Meta = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data && data.length>0 ?(data.map((ele, id) => (
-                                    <tr key={id}>
-                                      <td>{startIndex + id + 1}</td>
-                                      <td>{ele.meta_url}</td>
-                                      <td>{ele.meta_title}</td>
-                                      <td>{ele.meta_keyword}</td>
-                                      <td>{ele.meta_description}</td>
-                                      <td className="align-middle d-flex">
-                                        <Link
-                                          to={`/meta/edit/${ele.id}`}
-                                          className="form-btn"
-                                          style={{
-                                            border: "1px solid #17a2b8",
-                                            backgroundColor: "white",
-                                            padding: "2px 5px",
-                                          }}
-                                        >
-                                          <span style={{ color: "#17a2b8" }}>
-                                            <FiEdit />
-                                          </span>
-                                        </Link>
-                                        <button
-                                          onClick={() => handleDelete(ele.id)}
-                                          className="form-btn-dlt"
-                                          style={{
-                                            border: "1px solid red",
-                                            backgroundColor: "white",
-                                            padding: "2px 5px",
-                                          }}
-                                        >
-                                          <span style={{ color: "red" }}>
-                                            <MdDelete />
-                                          </span>
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  ))
-                                  ):( 
+                                  {data && data.length > 0 ? (
+                                    data.map((ele, id) => (
+                                      <tr key={id}>
+                                        <td>{startIndex + id + 1}</td>
+                                        <td>{ele.meta_url}</td>
+                                        <td>{ele.meta_title}</td>
+                                        <td>{ele.meta_keyword}</td>
+                                        <td>{ele.meta_description}</td>
+                                        <td className="align-middle d-flex">
+                                          <Link
+                                            to={`/meta/edit/${ele.id}`}
+                                            className="form-btn"
+                                            style={{
+                                              border: "1px solid #17a2b8",
+                                              backgroundColor: "white",
+                                              padding: "2px 5px",
+                                            }}
+                                          >
+                                            <span style={{ color: "#17a2b8" }}>
+                                              <FiEdit />
+                                            </span>
+                                          </Link>
+                                          <button
+                                            onClick={() => handleDelete(ele.id)}
+                                            className="form-btn-dlt"
+                                            style={{
+                                              border: "1px solid red",
+                                              backgroundColor: "white",
+                                              padding: "2px 5px",
+                                            }}
+                                          >
+                                            <span style={{ color: "red" }}>
+                                              <MdDelete />
+                                            </span>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    ))
+                                  ) : (
                                     <tr>
                                       <td colSpan="4">No data available</td>
-                                    </tr>)
-                                  }
+                                    </tr>
+                                  )}
                                 </tbody>
                               </table>
                             </div>
