@@ -17,20 +17,21 @@ const Career = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/career`)
+      .get(`https://denticadentalstudio.com/api/career`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setData(res.data);
+        console.log(res.data.data.career);
+        setData(res.data.data.career);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -43,7 +44,12 @@ const Career = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/career/${id}`)
+          .post(`https://denticadentalstudio.com/api/career/delete`,{id},{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
           .then((res) => {
             // Update the state by filtering out the deleted item
             setData((prevData) => prevData.filter((item) => item.id !== id));
@@ -162,9 +168,9 @@ const Career = () => {
                                 <td>{startIndex + id + 1}</td>
                                 <td>{ele.name}</td>
                                 <td>
-                                  <p className="m-0">Mo : - {ele.num}</p>
+                                  <p className="m-0">Mo : - {ele.phone}</p>
                                   <p className="m-0">
-                                    E-mail ID : - {ele.mail}
+                                    E-mail ID : - {ele.email}
                                   </p>
                                 </td>
                                 <td>{ele.subject}</td>

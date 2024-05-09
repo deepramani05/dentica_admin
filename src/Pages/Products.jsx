@@ -22,23 +22,21 @@
 
     useEffect(() => {
       axios
-        .get("http://localhost:5000/products")
+        .get("https://denticadentalstudio.com/api/product",{
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        })
         .then((res) => {
           console.log(res.data);
-          setData(res.data);
+          setData(res.data.data.product);
         })
         .catch((err) => {
           console.log(err);
         });
     }, []);
      
-    useEffect(() => {
-        const token = Cookies.get("token");
-        if (!token) {
-          window.location.href = "/login";
-        }
-      }, []);
-
     const handledelete = (id) => {
       axios
         .delete(`http://localhost:5000/products/${id}`)
@@ -199,7 +197,7 @@
                                     />
                                   </td>
                                   <td style={{ overflowY: "scroll" }}>
-                                    {ele.desc}
+                                    {ele.description}
                                   </td>
                                   <td>
                                     <Link
