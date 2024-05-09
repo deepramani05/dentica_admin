@@ -15,15 +15,16 @@ const Contact = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/contactus`,{
-        headers:{
+      .get(`https://denticadentalstudio.com/api/contactus`, {
+        headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
-        }
+        },
       })
       .then((res) => {
         console.log(res.data); // Log response data
         setData(res.data.data.contact);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -50,12 +51,16 @@ const Contact = () => {
       if (result.isConfirmed) {
         // Proceed with the deletion
         axios
-          .post(`https://denticadentalstudio.com/api/contactus/delete`,{id},{
-            headers:{
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
+          .post(
+            `https://denticadentalstudio.com/api/contactus/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
             }
-          })
+          )
           .then((res) => {
             // Handle success response
             console.log("Contact deleted successfully:", res.data);
@@ -94,7 +99,7 @@ const Contact = () => {
       item.sub.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginationButtons = [];
@@ -195,8 +200,15 @@ const Contact = () => {
                                   {(currentPage - 1) * itemsPerPage + id + 1}
                                 </td>
                                 <td>{ele.name}</td>
-                                <td>{ele.info}</td>
-                                <td>{ele.sub}</td>
+                                <td>
+                                  <p>
+                                    Mo : - <span>{ele.mobile_number}</span>
+                                  </p>
+                                  <p>
+                                    Email : - <span>{ele.email}</span>
+                                  </p>
+                                </td>
+                                <td>{ele.subject}</td>
                                 <td className="align-middle">
                                   <button
                                     className="form-btn"
