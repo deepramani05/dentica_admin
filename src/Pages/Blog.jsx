@@ -23,9 +23,15 @@ const Blog = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/blog")
+      .get("https://denticadentalstudio.com/api/blogs",{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setData(res.data);
+        console.log(res.data);
+        setData(res.data.data.blog);
       })
       .catch((err) => {
         console.log(err);
