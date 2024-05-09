@@ -2,22 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const ReviewEdit = () => {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     name: "",
-    num: "",
+    moblie: "",
     review: "",
     image: "",
   });
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/review/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/review`,{id},{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
-        setFormData(res.data);
+        setFormData(res.data.data.review);
       })
       .catch((err) => {
         console.log(err);
@@ -25,17 +30,29 @@ const ReviewEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    const { name, value, files} = e.target;
+    if(files && files.length > 0){
+       setFormData({
+      ...formData,
+      [name]: files[0], // Assuming 'desc' is the key for ReactQuill content in your state
+    });
+    } else{
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     axios
-      .patch(`http://localhost:5000/review/${id}`, formData)
+      .post(`https://denticadentalstudio.com/api/review/update`,{id}, formData,{
+        header:{
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -142,7 +159,7 @@ const ReviewEdit = () => {
                                 id="exampleInputFile"
                                 name="image"
                                 onChange={handleChange}
-                                value={formData.image}
+                                //value={formData.image}
                               />
                               <label
                                 class="custom-file-label"

@@ -31,7 +31,7 @@ const Review = () => {
     formData.append("review", review);
     formData.append("image", image);
     axios
-      .post(`https://denticadentalstudio.com/api/review`, formData)
+      .post(`http://denticadentalstudio.com/api/review/store`, formData)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -50,20 +50,19 @@ const Review = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/review`)
+      .get(`https://denticadentalstudio.com/api/review`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
-        setData(res.data);
+        setData(res.data.data.review);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
   }, []);
   const handleDelete = (id) => {
     Swal.fire({
@@ -77,7 +76,12 @@ const Review = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/review/${id}`)
+          .post(`https://denticadentalstudio.com/api/review/delete`,{id},{
+            headers:{
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            }
+          })
           .then((res) => {
             Swal.fire({
               position: "center",
@@ -193,7 +197,7 @@ const Review = () => {
                             className="form-control"
                             id="exampleInputSubtitle"
                             placeholder="Enter Number"
-                            name="number"
+                            name="mobile"
                             onChange={(e) => setNum(e.target.value)}
                             value={num}
                           />
@@ -278,7 +282,10 @@ const Review = () => {
                                     <td>{ele.name}</td>
                                     <td>{ele.review}</td>
                                     <td>
-                                      <img src={ele.image} alt={ele.name} />
+                                      <img 
+                                        src={ele.image} alt={ele.name}
+                                        style={{ height: "100px", width: "100px" }}
+                                        />
                                     </td>
                                     <td className="align-middle">
                                       <Link
