@@ -99,15 +99,7 @@
       "desc": ""
     }
   ],
-  "review": [
-    {
-      "id": "4a5e",
-      "name": "Deep",
-      "num": "1234567890",
-      "review": "Good Services !",
-      "image": ""
-    }
-  ],
+  "review": [],
   "meta": [
     {
       "id": "c0c6",
