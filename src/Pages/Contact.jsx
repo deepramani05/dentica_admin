@@ -90,14 +90,20 @@ const Contact = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset current page when search query changes
   };
 
-  const filteredData = data.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.info.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.sub.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = data
+    ? data.filter(
+        (item) =>
+          (item.name &&
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.info &&
+            item.info.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.sub &&
+            item.sub.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : [];
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -111,21 +117,13 @@ const Contact = () => {
           currentPage === i ? "active" : ""
         }`}
       >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
           {i}
-        </a>
+        </button>
       </li>
     );
   }
 
-  // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
@@ -271,16 +269,12 @@ const Contact = () => {
                               }`}
                               id="example1_previous"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage - 1)}
                               >
                                 Previous
-                              </a>
+                              </button>
                             </li>
                             {paginationButtons}
                             <li
@@ -289,16 +283,12 @@ const Contact = () => {
                               }`}
                               id="example1_next"
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
+                              <button
                                 className="page-link"
                                 onClick={() => setCurrentPage(currentPage + 1)}
                               >
                                 Next
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>

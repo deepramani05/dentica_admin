@@ -140,7 +140,7 @@ const EventCat = () => {
     setCurrentPage(1);
   };
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;

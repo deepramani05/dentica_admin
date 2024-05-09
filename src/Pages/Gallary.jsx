@@ -9,7 +9,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { OutlinedInput } from "@mui/material";
 import Cookies from "js-cookie";
 
-const Gallary = () => {
+const Gallery = () => {
   let [title, setTitle] = useState("");
   let [mtitle, setMtitle] = useState("");
   let [keyword, setKeyword] = useState("");
@@ -22,8 +22,9 @@ const Gallary = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  const handlegallarySubmit = async (e) => {
+  const handlegallerySubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -33,7 +34,7 @@ const Gallary = () => {
       formData.append("meta_keyword", keyword);
       formData.append("meta_description", desc);
       formData.append("image", image);
-      formData.append("categoery", cat);
+      formData.append("category", cat);
 
       const res = await axios.post(
         `https://denticadentalstudio.com/api/gallery/store`,
@@ -137,146 +138,142 @@ const Gallary = () => {
     setSearchQuery(query);
   };
 
-  const itemsPerPage = 5;
-
   const filteredData = data.filter((item) => {
-    const title = item.title ? item.title.toString().toLowerCase() : "";
-    const cat = item.cat ? item.cat.toString().toLowerCase() : "";
+    const category = item.category
+      ? item.category.toString().toLowerCase()
+      : "";
     const searchQueryLower = searchQuery.toLowerCase();
 
-    return title.includes(searchQueryLower) || cat.includes(searchQueryLower);
+    return (
+      title.includes(searchQueryLower) || category.includes(searchQueryLower)
+    );
   });
 
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  // Generate pagination buttons
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
+          {i}
+        </button>
+      </li>
+    );
+  }
+
+  // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
-      <div class="wrapper">
-        {/* <!-- Content Wrapper. Contains page content --> */}
-        <div class="content-wrapper">
-          {/* <!-- Content Header (Page header) --> */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>General Form</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/">Home</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
-                      Gallary
+                      Gallery
                     </li>
                   </ol>
                 </div>
               </div>
             </div>
-            {/* <!-- /.cont/ainer-fluid --> */}
           </section>
 
-          {/* <!-- Main content --> */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
-                {/* <!-- left column --> */}
-                <div class="col-md-4">
-                  {/* <!-- general form elements --> */}
-                  <div class="card card-primary">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card card-primary">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Add images</h3>
+                      <h3 className="card-title">Add images</h3>
                     </div>
-                    {/* <!-- /.card-header --> */}
-                    {/* <!-- form start --> */}
-                    <form className="text-left" onSubmit={handlegallarySubmit}>
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Title</label>
+                    <form className="text-left" onSubmit={handlegallerySubmit}>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label>Title</label>
                           <input
                             type="text"
-                            class="form-control"
-                            id="exampleInputtitle"
+                            className="form-control"
                             placeholder="Title"
                             onChange={(e) => setTitle(e.target.value)}
                             value={title}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Meta Title</label>
+                        <div className="form-group">
+                          <label>Meta Title</label>
                           <input
                             type="text"
-                            class="form-control"
-                            id="exampleInputMetaTitle"
+                            className="form-control"
                             placeholder="Meta Title"
                             onChange={(e) => setMtitle(e.target.value)}
                             value={mtitle}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">
-                            Meta Keyword
-                          </label>
+                        <div className="form-group">
+                          <label>Meta Keyword</label>
                           <input
                             type="text"
-                            class="form-control"
-                            id="exampleInputMetakeyword"
+                            className="form-control"
                             placeholder="Meta Keyword"
                             onChange={(e) => setKeyword(e.target.value)}
                             value={keyword}
                           />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Meta Description</label>
                           <input
                             type="text"
-                            class="form-control"
-                            rows="3"
-                            placeholder="Enter ..."
+                            className="form-control"
+                            placeholder="Meta Description"
                             onChange={(e) => setDesc(e.target.value)}
                             value={desc}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputFile">
-                            Image <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <div class="input-group">
-                            <div class="custom-file">
-                              <input
-                                type="file"
-                                onChange={(e) => {
-                                  const file = e.target.files[0];
-                                  setImage(file);
-                                }}
-                                // value={image}
-                              />
-                            </div>
+                        <div className="form-group">
+                          <label>Image</label>
+                          <div className="custom-file">
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                setImage(file);
+                              }}
+                            />
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">
-                            Catagory <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <br />
+                        <div className="form-group">
+                          <label>Category</label>
                           <select
-                            name=""
-                            id=""
-                            className="w-100 p-2"
+                            className="form-control"
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
-                            <option value="Select Catagory">
-                              Select Catagory
-                            </option>
+                            <option value="">Select Category</option>
                             <option value="Before & After">
                               Before & After
                             </option>
@@ -285,12 +282,10 @@ const Gallary = () => {
                           </select>
                         </div>
                       </div>
-                      {/* <!-- /.card-body --> */}
-
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary text-light border-0 form-dlt-btn"
+                          className="btn btn-primary text-light border-0 form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
                         >
                           Submit
@@ -298,44 +293,36 @@ const Gallary = () => {
                       </div>
                     </form>
                   </div>
-                  {/* <!-- /.card --> */}
                 </div>
-                {/* <!--/.col (left) --> */}
-                {/* <!-- Main content --> */}
-                <section class="content col-md-8">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
+                <section className="content col-md-8">
+                  <div className="container-fluid">
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card">
                           <div
-                            class="card-header text-light"
+                            className="card-header text-light"
                             style={{ backgroundColor: "rgb(37, 111, 152)" }}
                           >
-                            <h3 class="card-title">Gallery List</h3>
+                            <h3 className="card-title">Gallery List</h3>
                           </div>
                           <div className="search-bar">
                             <OutlinedInput
                               type="text"
                               variant="outlined"
-                              placeholder="Search.."
+                              placeholder="Search catagory ..."
                               value={searchQuery}
                               onChange={(e) => handleSearch(e.target.value)}
                               style={{ height: "30px", margin: "10px 0" }}
                             />
                           </div>
-                          {/* <!-- /.card-header --> */}
                           <div className="table-container">
                             <div className="card-body table-reponsive">
-                              <table
-                                id="example2"
-                                class="table table-bordered table-hover"
-                                style={{ overflowX: "auto" }}
-                              >
+                              <table className="table table-bordered table-hover">
                                 <thead>
                                   <tr>
                                     <th>SL</th>
                                     <th>Image</th>
-                                    <th>Catagory</th>
+                                    <th>Category</th>
                                     <th>Action</th>
                                   </tr>
                                 </thead>
@@ -409,8 +396,7 @@ const Gallary = () => {
                               </table>
                             </div>
                           </div>
-                          {/* <!-- /.card-body --> */}
-                          {/* pagination started */}
+                          {/* Pagination */}
                           <div className="row" style={{ display: "flex" }}>
                             <div className="col-sm-12 col-md-5">
                               <div
@@ -435,30 +421,56 @@ const Gallary = () => {
                                 className="dataTables_paginate paging_simple_numbers"
                                 id="example1_paginate"
                               >
-                                {/* Pagination buttons */}
+                                <ul className="pagination">
+                                  <li
+                                    className={`paginate_button page-item previous ${
+                                      currentPage === 1 ? "disabled" : ""
+                                    }`}
+                                  >
+                                    <button
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage - 1)
+                                      }
+                                      disabled={currentPage === 1}
+                                    >
+                                      Previous
+                                    </button>
+                                  </li>
+                                  {paginationButtons}
+                                  <li
+                                    className={`paginate_button page-item next ${
+                                      currentPage === totalPages
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                  >
+                                    <button
+                                      className="page-link"
+                                      onClick={() =>
+                                        setCurrentPage(currentPage + 1)
+                                      }
+                                      disabled={currentPage === totalPages}
+                                    >
+                                      Next
+                                    </button>
+                                  </li>
+                                </ul>
                               </div>
                             </div>
                           </div>
                         </div>
-                        {/* <!-- /.card --> */}
                       </div>
-                      {/* <!-- /.col --> */}
                     </div>
-                    {/* <!-- /.row --> */}
                   </div>
-                  {/* <!-- /.container-fluid --> */}
                 </section>
-                {/* <!-- /.content --> */}
               </div>
-              {/* <!-- /.row --> */}
             </div>
-            {/* <!-- /.container-fluid --> */}
           </section>
-          {/* <!-- /.content --> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default Gallary;
+export default Gallery;

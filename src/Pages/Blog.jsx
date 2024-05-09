@@ -90,7 +90,7 @@ const Blog = () => {
     return temp.textContent || temp.innerText || "";
   };
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const filteredData = data.filter((post) =>
     post.title.toLowerCase().includes(searchQuery)
   );

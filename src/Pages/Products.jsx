@@ -73,7 +73,7 @@
     
     
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const totalPages = Math.ceil(data.length / itemsPerPage);
 
     const filteredData = data.filter((item) =>

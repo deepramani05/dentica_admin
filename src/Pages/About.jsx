@@ -28,12 +28,11 @@ const About = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
-        setData(res.data.data.about);
-        console.log(data);
+        console.log("API Response Data:", res.data.data.about); // Log the fetched data
+        setData(res.data.data.about || []); // Update data with response if available, or empty array
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error fetching data:", err);
       });
   };
 
@@ -77,16 +76,20 @@ const About = () => {
   };
 
   const handleSearch = (query) => {
-    setSearchQuery(query);
+    setSearchQuery(query); // This function should correctly update the searchQuery state
   };
 
-  const filteredData = data.filter(
-    (item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.desc.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = data
+    ? data.filter(
+        (item) =>
+          (item.title &&
+            item.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.desc &&
+            item.desc.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : [];
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginationButtons = [];
@@ -159,9 +162,9 @@ const About = () => {
                       <OutlinedInput
                         type="text"
                         variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
+                        placeholder="Search title ..."
+                        value={searchQuery} // Value should be bound to searchQuery
+                        onChange={(e) => handleSearch(e.target.value)} // onChange should update the searchQuery state
                         style={{ height: "30px", margin: "10px 0" }}
                       />
                     </div>
@@ -184,7 +187,11 @@ const About = () => {
                               <tr key={ele.id}>
                                 <td>{startIndex + index + 1}</td>
                                 <td>{ele.title}</td>
-                                <td dangerouslySetInnerHTML={{ __html: ele.description }}></td>
+                                <td
+                                  dangerouslySetInnerHTML={{
+                                    __html: ele.description,
+                                  }}
+                                ></td>
 
                                 <td className="align-middle">
                                   <Link
