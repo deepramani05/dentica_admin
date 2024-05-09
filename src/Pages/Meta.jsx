@@ -127,10 +127,10 @@ const Meta = () => {
     const filtered = data.filter((item) =>
       item.meta_title.toLowerCase().includes(query.toLowerCase())
     );
-    console.log("Filtered data:", filtered); // Log the filtered data
     setFilteredData(filtered);
     setCurrentPage(1); // Reset current page when search query changes
   };
+  
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -304,8 +304,8 @@ const Meta = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {data && data.length > 0 ? (
-                                    data.map((ele, id) => (
+                                  {displayedData && displayedData.length > 0 ? (
+                                    displayedData.map((ele, id) => (
                                       <tr key={id}>
                                         <td>{startIndex + id + 1}</td>
                                         <td>{ele.meta_url}</td>
