@@ -3,38 +3,50 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const ProductAdd = () => {
-  let [title, setTitle] = useState("");
-  let [sdesc, setSdesc] = useState("");
-  let [mtitle, setMtitle] = useState("");
-  let [mdesc, setMdesc] = useState("");
-  let [keyword, setKeyword] = useState("");
-  let [cat, setCat] = useState("");
-  let [himage, setHimage] = useState("");
-  let [bimage, setBimage] = useState("");
-  let [fimage, setFimage] = useState("");
-  let [images, setImages] = useState("");
-  let [desc, setDesc] = useState("");
+  const [title, setTitle] = useState("");
+  const [sdesc, setSdesc] = useState("");
+  const [mtitle, setMtitle] = useState("");
+  const [mdesc, setMdesc] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [cat, setCat] = useState("");
+  const [headerimage, setHeaderimage] = useState(null);
+  const [bgimage, setBgimage] = useState(null);
+  const [featuredimage, setFeaturedimage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [desc, setDesc] = useState("");
 
-  let obj = {
-    title: title,
-    sdesc: sdesc,
-    mtitle: mtitle,
-    mdesc: mdesc,
-    keyword: keyword,
-    cat: cat,
-    himage: himage,
-    bimage: bimage,
-    fimage: fimage,
-    images: images,
-    desc: desc,
-  };
+  const handleImageChange = (e) =>{
+    const filesArray = Array.from(e.target.files);
+    setImages(filesArray);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('sdescription',sdesc);
+    formData.append('meta_title', mtitle);
+    formData.append('meta_description', mdesc);
+    formData.append('meta_keyword', keyword);
+    formData.append('product_type',cat);
+    formData.append('headerimage', headerimage);
+    formData.append('background_image', bgimage);
+    formData.append('image', featuredimage);
+    formData.append('description',desc);
+    images.forEach((image, index) => { 
+      formData.append(`productimage${index + 1}`, image);
+    });
+
+
     axios
-      .post(`http://localhost:5000/products`, obj)
+      .post(`https://denticadentalstudio.com/api/product/store`, formData,{
+        headers:{
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        }
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -116,7 +128,7 @@ const ProductAdd = () => {
                             className="form-control"
                             id="exampleInputShortDescription"
                             placeholder="Enter Short Description"
-                            name="sdesc"
+                            name="sdescription"
                             onChange={(e) => setSdesc(e.target.value)}
                             value={sdesc}
                           />
@@ -130,7 +142,7 @@ const ProductAdd = () => {
                             className="form-control"
                             id="exampleInputMetaTitle"
                             placeholder="Enter meta title"
-                            name="mtitle"
+                            name="meta_title"
                             onChange={(e) => setMtitle(e.target.value)}
                             value={mtitle}
                           />
@@ -144,7 +156,7 @@ const ProductAdd = () => {
                             className="form-control"
                             id="exampleInputMetaDescription"
                             placeholder="Enter meta Description"
-                            name="mdesc"
+                            name="meta_description"
                             onChange={(e) => setMdesc(e.target.value)}
                             value={mdesc}
                           />
@@ -158,7 +170,7 @@ const ProductAdd = () => {
                             className="form-control"
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
-                            name="keyword"
+                            name="meta_keyword"
                             onChange={(e) => setKeyword(e.target.value)}
                             value={keyword}
                           />
@@ -169,13 +181,13 @@ const ProductAdd = () => {
                           </label>
                           <br />
                           <select
-                            name=""
+                            name="product_type"
                             id=""
                             className="w-100 p-2"
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
-                            <option value="Select Tyep">Select Type</option>
+                            <option value="Select Type">Select Type</option>
                             <option value="Digital Dentistry">
                               Digital Dentistry
                             </option>
@@ -189,9 +201,12 @@ const ProductAdd = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
-                              onChange={(e) => setHimage(e.target.value)}
-                              value={himage}
+                              name="headerimage"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                setHeaderimage(file);
+                              }}
+                              
                             />
                             <label
                               className="custom-file-label"
@@ -210,9 +225,10 @@ const ProductAdd = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
-                              onChange={(e) => setBimage(e.target.value)}
-                              value={bimage}
+                              name="background_image"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                setBgimage(file)}}
                             />
                             <label
                               className="custom-file-label"
@@ -232,8 +248,10 @@ const ProductAdd = () => {
                               className="custom-file-input"
                               id="exampleInputFile"
                               name="image"
-                              onChange={(e) => setFimage(e.target.value)}
-                              value={fimage}
+                              onChange={(e) =>{ 
+                                const file = e.target.files[0];
+                                setFeaturedimage(file)}}
+                              
                             />
                             <label
                               className="custom-file-label"
@@ -250,9 +268,8 @@ const ProductAdd = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
-                              onChange={(e) => setImages(e.target.value)}
-                              value={images}
+                              name="productimage"
+                              onChange={handleImageChange}
                             />
                             <label
                               className="custom-file-label"
@@ -270,9 +287,10 @@ const ProductAdd = () => {
                             id="exampleInputDescription"
                             rows="10"
                             placeholder="Place Some Text Here"
-                            name="desc"
-                            onChange={(e) => setDesc(e.target.value)}
-                            value={desc}
+                            name="description"
+                            // onChange={(e) => setDesc(e.target.value)}
+                            onChange={setDesc}
+                            // value={desc}
                             modules={{
                               toolbar: [
                                 [

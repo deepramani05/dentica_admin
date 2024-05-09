@@ -3,47 +3,78 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const ProductEdit = () => {
   const [formData, setFormData] = useState({
     title: "",
-    sdesc: "",
-    mtitle: "",
-    mdesc: "",
-    keyword: "",
-    cat: "",
-    himage: "",
-    bimage: "",
-    fimage: "",
-    images: "",
-    desc: "",
+    sdescription: "",
+    meta_title: "",
+    meta_description: "",
+    meta_keyword: "",
+    product_type: "",
+    headerimage: "",
+    background_image: "",
+    image: "",
+    productimage: "",
+    description: "",
   });
 
   const { id } = useParams("");
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/product`,{id},{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        setFormData(res.data);
+        console.log(res.data.data.product);
+        setFormData(res.data.data.product);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [id]);
 
-  const handleChange = (content, delta, source, editor) => {
+
+  const handleChange = (e) => {
     // 'content' contains the updated text from ReactQuill
+    const { name, value, files} = e.target;
+    if(files && files.length > 0){
+       setFormData({
+      ...formData,
+      [name]: files[0], // Assuming 'desc' is the key for ReactQuill content in your state
+    });
+    } else{
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+   
+  };
+
+  const handleChange1 = (content, delta, source, editor) => {
     setFormData({
       ...formData,
-      desc: content, // Assuming 'desc' is the key for ReactQuill content in your state
+      description: content, // Assuming 'description' is the key for ReactQuill content in your state
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedProductData = {
+      ...formData,
+      id: id, // Include the id in the formData object
+    }
     axios
-      .put(`http://localhost:5000/products/${id}`, formData)
+      .post(`https://denticadentalstudio.com/api/product/update`,{id}, updatedProductData,{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -126,9 +157,9 @@ const ProductEdit = () => {
                             className="form-control"
                             id="exampleInputShortDescription"
                             placeholder="Enter Short Description"
-                            name="sdesc"
+                            name="sdescription"
                             onChange={handleChange}
-                            value={formData.sdesc}
+                            value={formData.sdescription}
                           />
                         </div>
                         <div className="form-group">
@@ -140,9 +171,9 @@ const ProductEdit = () => {
                             className="form-control"
                             id="exampleInputMetaTitle"
                             placeholder="Enter meta title"
-                            name="mtitle"
+                            name="meta_title"
                             onChange={handleChange}
-                            value={formData.mtitle}
+                            value={formData.meta_title}
                           />
                         </div>
                         <div className="form-group">
@@ -154,9 +185,9 @@ const ProductEdit = () => {
                             className="form-control"
                             id="exampleInputMetaDescription"
                             placeholder="Enter meta Description"
-                            name="mdesc"
+                            name="meta_description"
                             onChange={handleChange}
-                            value={formData.mdesc}
+                            value={formData.meta_description}
                           />
                         </div>
                         <div className="form-group">
@@ -168,9 +199,9 @@ const ProductEdit = () => {
                             className="form-control"
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
-                            name="keyword"
+                            name="meta_keyword"
                             onChange={handleChange}
-                            value={formData.keyword}
+                            value={formData.meta_keyword}
                           />
                         </div>
                         <div class="form-group">
@@ -181,8 +212,8 @@ const ProductEdit = () => {
                           <select
                             className="w-100 p-2"
                             onChange={handleChange}
-                            value={formData.cat}
-                            name="cat"
+                            value={formData.product_type}
+                            name="product_type"
                           >
                             <option value="">Select Type</option>
                             <option value="Digital Dentistry">
@@ -198,9 +229,9 @@ const ProductEdit = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
+                              name="headerimage"
                               onChange={handleChange}
-                              value={formData.himage}
+                              // value={formData.headerimage}
                             />
                             <label
                               className="custom-file-label"
@@ -219,9 +250,9 @@ const ProductEdit = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
+                              name="background_image"
                               onChange={handleChange}
-                              value={formData.bimage}
+                              // value={formData.background_image}
                             />
                             <label
                               className="custom-file-label"
@@ -242,7 +273,7 @@ const ProductEdit = () => {
                               id="exampleInputFile"
                               name="image"
                               onChange={handleChange}
-                              value={formData.fimage}
+                              // value={formData.image}
                             />
                             <label
                               className="custom-file-label"
@@ -259,9 +290,9 @@ const ProductEdit = () => {
                               type="file"
                               className="custom-file-input"
                               id="exampleInputFile"
-                              name="image"
+                              name="productimage"
                               onChange={handleChange}
-                              value={formData.images}
+                              // value={formData.productimage}
                             />
                             <label
                               className="custom-file-label"
@@ -279,8 +310,8 @@ const ProductEdit = () => {
                             id="exampleInputDescription"
                             rows="10"
                             placeholder="Place Some Text Here"
-                            onChange={handleChange}
-                            value={formData.desc}
+                            onChange={handleChange1}
+                            value={formData.description}
                             modules={{
                               toolbar: [
                                 [
