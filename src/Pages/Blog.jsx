@@ -90,7 +90,7 @@ const Blog = () => {
     return temp.textContent || temp.innerText || "";
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const filteredData = data.filter((post) =>
     post.title.toLowerCase().includes(searchQuery)
   );
@@ -212,7 +212,7 @@ const Blog = () => {
                               <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
                               <td
-                                dangerouslySetInnerHTML={{ __html: ele.description }}
+                                dangerouslySetInnerHTML={{ __html: ele.desc }}
                               ></td>
                               <td width={"15%"}>
                                 <Link

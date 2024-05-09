@@ -70,8 +70,8 @@ const Blogedit = () => {
         console.log(res.data);
         Swal.fire({
           position: "top-end",
-          icon  : "success",
-          title: "Data Changed !",
+          icon: "success",
+          title: "Data Changed!",
           showConfirmButton: false,
           timer: 1000,
         }).then(() => {
@@ -80,7 +80,7 @@ const Blogedit = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("Error !");
+        alert("Error!");
       });
   };
 
@@ -159,7 +159,10 @@ const Blogedit = () => {
                             value={formData.title}
                           />
                         </div>
-                        <div className="form-group">
+                        <div
+                          className="form-group"
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
                           <label htmlFor="exampleInputFile">Image</label>
                           <input
                             type="file"
@@ -173,6 +176,15 @@ const Blogedit = () => {
                               })
                             }
                           />
+                          {formData.image && ( // Check if formData.image exists (i.e., image is uploaded)
+                            <div style={{ width: "150px", height: "100px" }}>
+                              <img
+                                src={URL.createObjectURL(formData.image)}
+                                alt=""
+                                style={{ width: "100%", height: "100%" }}
+                              />
+                            </div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputDescription">
@@ -334,11 +346,6 @@ const Blogedit = () => {
                           type="submit"
                           className="btn btn-primary text-light border-0 form-dlt-btn"
                           style={{ backgroundColor: "#ca629d" }}
-                          // onClick={handleSubmit}
-                          // onKeyDown={(e)=>{if(e.key === 'enter'){
-                          //   e.preventDefault();
-                          // }}
-                          // }
                         >
                           Submit
                         </button>

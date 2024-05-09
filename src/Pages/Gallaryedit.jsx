@@ -13,8 +13,9 @@ const GalleryEdit = () => {
     meta_keyword: "",
     meta_description: "",
     image: "",
-    category: "", // Changed to category from categoery
+    category: "",
   });
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     axios
@@ -33,13 +34,12 @@ const GalleryEdit = () => {
         const fetchedData = res.data.data;
         if (fetchedData && fetchedData.gallery) {
           setData(fetchedData.gallery);
-          setFormData(fetchedData.gallery); // Set formData initially with fetched data
+          setFormData(fetchedData.gallery);
         } else {
           console.error(
             "Fetched data is not in the expected format:",
             fetchedData
           );
-          // Handle this case as per your application logic
         }
       })
       .catch((err) => {
@@ -49,22 +49,32 @@ const GalleryEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    const updatedFormData = name === "image" ? files[0] : value;
-    setFormData((prevData) => ({ ...prevData, [name]: updatedFormData }));
+    if (name === "image" && files && files[0]) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formDataToUpdate = {
-      id:id,
-      title: formData.title,
-      meta_title: formData.meta_title,
-      meta_keyword: formData.meta_keyword,
-      meta_description: formData.meta_description,
-      image: formData.image,
-      category: formData.category,
-    };
+    const formDataToUpdate = new FormData();
+    formDataToUpdate.append("id", id);
+    formDataToUpdate.append("title", formData.title);
+    formDataToUpdate.append("meta_title", formData.meta_title);
+    formDataToUpdate.append("meta_keyword", formData.meta_keyword);
+    formDataToUpdate.append("meta_description", formData.meta_description);
+    formDataToUpdate.append("image", formData.image);
+    formDataToUpdate.append("category", formData.category);
 
     axios
       .post(
@@ -72,7 +82,7 @@ const GalleryEdit = () => {
         formDataToUpdate,
         {
           headers: {
-            "content-type": "application/json",
+            "content-type": "multipart/form-data",
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
         }
@@ -87,7 +97,6 @@ const GalleryEdit = () => {
           timer: 1000,
         }).then(() => {
           setTimeout(() => (window.location.href = "/gallery"), 1000);
-          // Redirect to the gallery page after successful update
         });
       })
       .catch((error) => {
@@ -99,9 +108,7 @@ const GalleryEdit = () => {
   return (
     <div>
       <div className="wrapper">
-        {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
-          {/* Content Header (Page header) */}
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
@@ -123,16 +130,12 @@ const GalleryEdit = () => {
                 </div>
               </div>
             </div>
-            {/* /.container-fluid */}
           </section>
 
-          {/* Main content */}
           <section className="content">
             <div className="container-fluid">
               <div className="row">
-                {/* left column */}
                 <div className="col-md-6">
-                  {/* general form elements */}
                   <div className="card card-primary">
                     <div
                       className="card-header"
@@ -140,8 +143,6 @@ const GalleryEdit = () => {
                     >
                       <h3 className="card-title">Edit Data</h3>
                     </div>
-                    {/* /.card-header */}
-                    {/* form start */}
                     <form onSubmit={handleSubmit} className="text-left">
                       <div className="card-body">
                         <div className="form-group">
@@ -211,13 +212,13 @@ const GalleryEdit = () => {
                                 />
                               </div>
                             </div>
-                            <div style={{ width: "150px" }}>
+                            {imagePreview && (
                               <img
-                                src={formData.img}
+                                src={imagePreview}
                                 alt=""
-                                style={{ width: "100%" }}
+                                style={{ width: "150px", marginLeft: "10px" }}
                               />
-                            </div>
+                            )}
                           </div>
                         </div>
                         <div className="form-group">
@@ -226,13 +227,12 @@ const GalleryEdit = () => {
                           </label>
                           <select
                             onChange={handleChange}
-                            value={formData.category || ""} // Changed to category
+                            value={formData.category || ""}
                             className="form-control"
                             id="exampleFormControlSelect1"
-                            name="category" // Changed to category
+                            name="category"
                           >
-                            <option value="">Select Category</option>{" "}
-                            {/* Added empty option */}
+                            <option value="">Select Category</option>
                             <option value="Before & After">
                               Before & After
                             </option>
@@ -241,7 +241,6 @@ const GalleryEdit = () => {
                           </select>
                         </div>
                       </div>
-                      {/* /.card-body */}
 
                       <div className="card-footer">
                         <button
@@ -257,17 +256,11 @@ const GalleryEdit = () => {
                       </div>
                     </form>
                   </div>
-                  {/* /.card */}
                 </div>
-                {/* /.col (left) */}
               </div>
-              {/* /.row */}
             </div>
-            {/* /.container-fluid */}
           </section>
-          {/* /.content */}
         </div>
-        {/* /.content-wrapper */}
       </div>
     </div>
   );
