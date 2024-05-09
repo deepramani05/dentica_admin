@@ -6,19 +6,8 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
 const ProductEdit = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    sdescription: "",
-    meta_title: "",
-    meta_description: "",
-    meta_keyword: "",
-    product_type: "",
-    headerimage: "",
-    background_image: "",
-    image: "",
-    productimage: "",
-    description: "",
-  });
+  const [formData, setFormData] = useState(null);
+
 
   const { id } = useParams("");
 
@@ -31,14 +20,29 @@ const ProductEdit = () => {
       })
       .then((res) => {
         console.log(res.data.data.product);
-        setFormData(res.data.data.product);
+        const data = res.data.data.product;
+        const productData = {
+          title: data.title,
+          sdescription: data.sdescription,
+          meta_title: data.meta_title,
+          meta_description: data.meta_description,
+          meta_keyword: data.meta_keyword,
+          product_type: data.product_type,
+          headerimage: data.headerimage,
+          background_image: data.background_image,
+          image: data.image,
+          productimage: data.productimage,
+          description: data.description,
+        };
+        setFormData(productData);
+        console.log("formData.....",formData);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [id]);
 
-
+  console.log("formData",formData);
   const handleChange = (e) => {
     // 'content' contains the updated text from ReactQuill
     const { name, value, files} = e.target;
@@ -92,6 +96,9 @@ const ProductEdit = () => {
         alert("Error !");
       });
   };
+  if (formData === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
