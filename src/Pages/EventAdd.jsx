@@ -102,7 +102,7 @@ const EventAdd = () => {
                       class="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 class="card-title">Edit Events</h3>
+                      <h3 class="card-title">Add Events</h3>
                     </div>
                     {/* <!-- /.card-header --> */}
                     {/* <!-- form start --> */}

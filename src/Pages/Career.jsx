@@ -95,10 +95,19 @@ const Career = () => {
       </li>
     );
   }
+  const downloadPDF = (fileUrl) => {
+    const link = document.createElement('a');
+    window.open(fileUrl, '_blank');
+    link.download = 'file.pdf'; // You can specify the name of the downloaded file here
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
+  
 
   return (
     <div>
@@ -181,6 +190,7 @@ const Career = () => {
                                       backgroundColor: "white",
                                       border: "1px solid red",
                                     }}
+                                     onClick={() => downloadPDF(ele.file)}
                                   >
                                     <span
                                       style={{

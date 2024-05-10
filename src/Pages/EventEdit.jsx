@@ -71,7 +71,7 @@ const EventEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    formDataToSend.append("categoey", formData.cat);
+    formDataToSend.append("category", formData.cat);
     formDataToSend.append("image", formData.image);
     formDataToSend.append("id", id);
     // Send PUT request to update the event data
@@ -93,7 +93,7 @@ const EventEdit = () => {
         })
           // Handle success, maybe redirect or show a success message
           .then(() => {
-            window.location.href = "/event";
+             window.location.href = "/event";
           });
       })
       .catch((err) => {
@@ -148,7 +148,7 @@ const EventEdit = () => {
                           </label>
                           <br />
                           <select
-                            name="categoey"
+                            name="category"
                             className="w-100 p-2"
                             onChange={handleChange}
                             value={formData.cat}
