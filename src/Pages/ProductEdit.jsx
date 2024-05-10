@@ -4,26 +4,31 @@ import ReactQuill from "react-quill";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import logo from "../images/Logo.png";
 
 const ProductEdit = () => {
   const [formData, setFormData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-
-  const { id } = useParams("");
+  const { id } = useParams();
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/product`,{id},{
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/product`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data.data.product);
         const data = res.data.data.product;
         const productData = {
           title: data.title,
-          sdescription: data.sdescription,
+          sdescription: data.short_description,
           meta_title: data.meta_title,
           meta_description: data.meta_description,
           meta_keyword: data.meta_keyword,
@@ -35,35 +40,41 @@ const ProductEdit = () => {
           description: data.description,
         };
         setFormData(productData);
-        console.log("formData.....",formData);
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
+        setLoading(false);
       });
   }, [id]);
 
-  console.log("formData",formData);
+  useEffect(() => {
+    const preloader = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+
+    return () => clearTimeout(preloader);
+  }, []);
+
   const handleChange = (e) => {
-    // 'content' contains the updated text from ReactQuill
-    const { name, value, files} = e.target;
-    if(files && files.length > 0){
-       setFormData({
-      ...formData,
-      [name]: files[0], // Assuming 'desc' is the key for ReactQuill content in your state
-    });
-    } else{
+    const { name, value, files } = e.target;
+    if (files && files.length > 0) {
+      setFormData({
+        ...formData,
+        [name]: files[0],
+      });
+    } else {
       setFormData({
         ...formData,
         [name]: value,
       });
     }
-   
   };
 
   const handleChange1 = (content, delta, source, editor) => {
     setFormData({
       ...formData,
-      description: content, // Assuming 'description' is the key for ReactQuill content in your state
+      description: content,
     });
   };
 
@@ -71,14 +82,18 @@ const ProductEdit = () => {
     e.preventDefault();
     const updatedProductData = {
       ...formData,
-      id: id, // Include the id in the formData object
-    }
+      id: id,
+    };
     axios
-      .post(`https://denticadentalstudio.com/api/product/update`,{id}, updatedProductData,{
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/product/update`,
+        updatedProductData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -96,16 +111,23 @@ const ProductEdit = () => {
         alert("Error !");
       });
   };
-  if (formData === null) {
-    return <div>Loading...</div>;
+
+  if (loading) {
+    return (
+      <div className="preloaderContainer">
+        <div className="preloaderBg">
+          <div className="preloader"></div>
+          <div className="preloader2"></div>
+          {/* <img src={logo} alt="Logo" className="loaderLogo" /> */}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
       <div className="wrapper">
-        {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
-          {/* Content Header (Page header) */}
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
@@ -127,7 +149,6 @@ const ProductEdit = () => {
                 </div>
               </div>
             </div>
-            {/* /.container-fluid */}
           </section>
 
           <section className="content col-md-12">
@@ -139,7 +160,7 @@ const ProductEdit = () => {
                       className="card-header"
                       style={{ backgroundColor: "#256f98" }}
                     >
-                      <h3 className="card-title">Add Product</h3>
+                      <h3 className="card-title">Edit Product</h3>
                     </div>
                     <form className="text-left" onSubmit={handleSubmit}>
                       <div className="card-body">
@@ -211,13 +232,12 @@ const ProductEdit = () => {
                             value={formData.meta_keyword}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputProductType">
                             Product Type
                           </label>
-                          <br />
                           <select
-                            className="w-100 p-2"
+                            className="form-control"
                             onChange={handleChange}
                             value={formData.product_type}
                             name="product_type"
@@ -230,84 +250,50 @@ const ProductEdit = () => {
                           </select>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">Header Image</label>
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="exampleInputFile"
-                              name="headerimage"
-                              onChange={handleChange}
-                              // value={formData.headerimage}
-                            />
-                            <label
-                              className="custom-file-label"
-                              htmlFor="exampleInputFile"
-                            >
-                              Choose file
-                            </label>
-                          </div>
+                          <label htmlFor="exampleInputHeaderImage">
+                            Header Image
+                          </label>
+                          <input
+                            type="file"
+                            className="form-control-file"
+                            id="exampleInputHeaderImage"
+                            name="headerimage"
+                            onChange={handleChange}
+                          />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">
+                          <label htmlFor="exampleInputBackgroundImage">
                             Background Image
                           </label>
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="exampleInputFile"
-                              name="background_image"
-                              onChange={handleChange}
-                              // value={formData.background_image}
-                            />
-                            <label
-                              className="custom-file-label"
-                              htmlFor="exampleInputFile"
-                            >
-                              Choose file
-                            </label>
-                          </div>
+                          <input
+                            type="file"
+                            className="form-control-file"
+                            id="exampleInputBackgroundImage"
+                            name="background_image"
+                            onChange={handleChange}
+                          />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">
+                          <label htmlFor="exampleInputFeaturedImage">
                             Featured Image
                           </label>
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="exampleInputFile"
-                              name="image"
-                              onChange={handleChange}
-                              // value={formData.image}
-                            />
-                            <label
-                              className="custom-file-label"
-                              htmlFor="exampleInputFile"
-                            >
-                              Choose file
-                            </label>
-                          </div>
+                          <input
+                            type="file"
+                            className="form-control-file"
+                            id="exampleInputFeaturedImage"
+                            name="image"
+                            onChange={handleChange}
+                          />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">Images</label>
-                          <div className="custom-file">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="exampleInputFile"
-                              name="productimage"
-                              onChange={handleChange}
-                              // value={formData.productimage}
-                            />
-                            <label
-                              className="custom-file-label"
-                              htmlFor="exampleInputFile"
-                            >
-                              Choose file
-                            </label>
-                          </div>
+                          <label htmlFor="exampleInputImages">Images</label>
+                          <input
+                            type="file"
+                            className="form-control-file"
+                            id="exampleInputImages"
+                            name="productimage"
+                            onChange={handleChange}
+                          />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputDescription">
