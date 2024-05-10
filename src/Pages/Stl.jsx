@@ -26,11 +26,16 @@ const Stl = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/stl`)
+      .get(`https://denticadentalstudio.com/api/stl`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
-        setData(res.data);
-        setFilteredData(res.data); // Set filtered data initially with all data
+        setData(res.data.data.stl);
+        setFilteredData(res.data.data.stl); // Set filtered data initially with all data
       })
       .catch((err) => {
         console.log(err);
@@ -55,7 +60,12 @@ const Stl = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/stl/${id}`)
+          .post(`https://denticadentalstudio.com/api/stl/delete`,{id},{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+          })
           .then((res) => {
             console.log(res.data);
             // After successful deletion, update the state to remove the deleted item
@@ -174,9 +184,9 @@ const Stl = () => {
                             {displayedData.map((ele, index) => (
                               <tr key={index}>
                                 <td>{startIndex + index + 1}</td>
-                                <td>{ele.name}</td>
-                                <td>{ele.num}</td>
-                                <td>{ele.msg}</td>
+                                <td>{ele.fname}</td>
+                                <td>{ele.phone_number}</td>
+                                <td>{ele.message}</td>
                                 <td>
                                   <button
                                     className="form-btn-dlt"
