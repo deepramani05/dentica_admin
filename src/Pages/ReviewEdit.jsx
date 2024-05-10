@@ -15,11 +15,15 @@ const ReviewEdit = () => {
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/review`,{id},{
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/review`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         setFormData(res.data.data.review);
@@ -30,17 +34,17 @@ const ReviewEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value, files} = e.target;
-    if(files && files.length > 0){
-       setFormData({
-      ...formData,
-      [name]: files[0], // Assuming 'desc' is the key for ReactQuill content in your state
-    });
-    } else{
-      setFormData({
-        ...formData,
+    const { name, value, files } = e.target;
+    if (files && files.length > 0) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         [name]: value,
-      });
+      }));
     }
   };
 
@@ -48,10 +52,10 @@ const ReviewEdit = () => {
     e.preventDefault();
 
     axios
-      .post(`https://denticadentalstudio.com/api/review/update`,{id}, formData,{
-        header:{
+      .post(`https://denticadentalstudio.com/api/review/update`, formData, {
+        headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
-        }
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -80,23 +84,23 @@ const ReviewEdit = () => {
 
   return (
     <div>
-      <div class="wrapper">
+      <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
-        <div class="content-wrapper">
+        <div className="content-wrapper">
           {/* Content Header (Page header) */}
-          <section class="content-header">
-            <div class="container-fluid">
-              <div class="row mb-2">
-                <div class="col-sm-6 text-left">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6 text-left">
                   <h1>Review</h1>
                 </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
                       <Link to="/review">Review</Link>
                     </li>
                     <li
-                      class="breadcrumb-item active"
+                      className="breadcrumb-item active"
                       style={{ color: "#ca629d" }}
                     >
                       Edit
@@ -109,28 +113,28 @@ const ReviewEdit = () => {
           </section>
 
           {/* Main content */}
-          <section class="content">
-            <div class="container-fluid">
-              <div class="row">
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
                 {/* left column */}
-                <div class="col-md-5">
+                <div className="col-md-5">
                   {/* general form elements */}
-                  <div class="card card-primary">
+                  <div className="card card-primary">
                     <div
-                      class="card-header"
+                      className="card-header"
                       style={{ backgroundColor: "rgb(37, 111, 152)" }}
                     >
-                      <h3 class="card-title">Review</h3>
+                      <h3 className="card-title">Review</h3>
                     </div>
                     {/* /.card-header */}
                     {/* form start */}
                     <form className="text-left" onSubmit={handleSubmit}>
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Name</label>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail1">Name</label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="exampleInputTitle"
                             placeholder="Enter Name"
                             name="name"
@@ -138,10 +142,10 @@ const ReviewEdit = () => {
                             value={formData.name}
                           />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Review</label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             rows="3"
                             placeholder="Enter ..."
                             name="review"
@@ -149,21 +153,20 @@ const ReviewEdit = () => {
                             value={formData.review}
                           ></textarea>
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputFile">Image</label>
-                          <div class="input-group">
-                            <div class="custom-file">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputFile">Image</label>
+                          <div className="input-group">
+                            <div className="custom-file">
                               <input
                                 type="file"
-                                class="custom-file-input"
+                                className="custom-file-input"
                                 id="exampleInputFile"
                                 name="image"
                                 onChange={handleChange}
-                                //value={formData.image}
                               />
                               <label
-                                class="custom-file-label"
-                                for="exampleInputFile"
+                                className="custom-file-label"
+                                htmlFor="exampleInputFile"
                               >
                                 Choose file
                               </label>
@@ -173,10 +176,10 @@ const ReviewEdit = () => {
                       </div>
                       {/* /.card-body */}
 
-                      <div class="card-footer">
+                      <div className="card-footer">
                         <button
                           type="submit"
-                          class="btn btn-primary form-dlt-btn"
+                          className="btn btn-primary form-dlt-btn"
                           style={{ backgroundColor: "#ca629d", border: "0" }}
                         >
                           Submit

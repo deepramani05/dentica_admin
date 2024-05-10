@@ -15,7 +15,7 @@ const Gallery = () => {
   let [keyword, setKeyword] = useState("");
   let [desc, setDesc] = useState("");
   let [image, setImage] = useState(null);
-  let [cat, setCat] = useState("");
+  let [category, setCat] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
 
   const [data, setData] = useState([]);
@@ -34,7 +34,7 @@ const Gallery = () => {
       formData.append("meta_keyword", keyword);
       formData.append("meta_description", desc);
       formData.append("image", image);
-      formData.append("categoery", cat);
+      formData.append("category", category);
 
       const res = await axios.post(
         `https://denticadentalstudio.com/api/gallery/store`,
@@ -271,7 +271,7 @@ const Gallery = () => {
                           <select
                             className="form-control"
                             onChange={(e) => setCat(e.target.value)}
-                            value={cat}
+                            value={category}
                           >
                             <option value="">Select Category</option>
                             <option value="Before & After">
