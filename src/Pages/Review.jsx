@@ -31,7 +31,7 @@ const Review = () => {
     formData.append("review", review);
     formData.append("image", image);
     axios
-      .post(`http://denticadentalstudio.com/api/review/store`, formData)
+      .post(`https://denticadentalstudio.com/api/review/store`, formData)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -45,7 +45,7 @@ const Review = () => {
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(() => window.location.reload(), 1000);
+     setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {

@@ -50,9 +50,9 @@ const ReviewEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const updatedFormData = {...formData,id: id}
     axios
-      .post(`https://denticadentalstudio.com/api/review/update`, formData, {
+      .post(`https://denticadentalstudio.com/api/review/update`, updatedFormData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -66,7 +66,7 @@ const ReviewEdit = () => {
           showConfirmButton: false,
           timer: 1000,
         }).then(() => {
-          window.location.href = "/review";
+           window.location.href = "/review";
         });
       })
       .catch((err) => {
