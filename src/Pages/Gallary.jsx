@@ -34,7 +34,7 @@ const Gallery = () => {
       formData.append("meta_keyword", keyword);
       formData.append("meta_description", desc);
       formData.append("image", image);
-      formData.append("category", cat);
+      formData.append("categoery", cat);
 
       const res = await axios.post(
         `https://denticadentalstudio.com/api/gallery/store`,
