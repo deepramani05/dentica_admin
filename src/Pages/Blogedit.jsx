@@ -5,17 +5,18 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Cookies from "js-cookie";
 
 const Blogedit = () => {
   const [formData, setFormData] = useState({
     title: "",
     image: null,
-    desc: "",
-    sdesc: "",
-    mdesc: "",
+    description: "",
+    sdescription: "",
+    mdescription: "",
     mtitle: "",
-    keyword: "",
-    tag: "",
+    mkeyword: "",
+    tags: "",
   });
   const [tags, setTags] = useState([]);
   const [currentTag, setCurrentTag] = useState("");
@@ -24,20 +25,25 @@ const Blogedit = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/blog/${id}`)
+      .post(`https://denticadentalstudio.com/api/show/blog`,{id},{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
-        const { title, image, desc, sdesc, medesc, mtitle, keyword, tag } =
-          res.data;
+        console.log("Response",res.data.data.blo);
+        const { title, image, description, sdescription, mdescription, mtitle, mkeyword, tags } =
+          res.data.data.blog;
 
         setFormData({
           title,
           image,
-          desc,
-          sdesc,
-          medesc,
+          description,
+          sdescription,
+          mdescription,
           mtitle,
-          keyword,
-          tag,
+          mkeyword,
+          tags,
         });
         setTags(res.data.tags || []);
       })
@@ -45,27 +51,35 @@ const Blogedit = () => {
         console.error(err);
       });
   }, [id]);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const file = e.target.files[0];
     setFormData({
       ...formData,
       [name]: value,
+      image: file,
+      imageUrl: URL.createObjectURL(file),
     });
   };
   const handleChange1 = (value) => {
     setFormData({
       ...formData,
       desc: value, // Assuming 'desc' is the field for description in your form data
+      
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedFormData = { ...formData, tags: tags }; // Include tags in formData
+    const updatedFormData = { ...formData, tags: tags, id: id }; // Include tags in formData
     console.log("Data to be sent:", updatedFormData); // Log the data before sending
     axios
-      .put(`http://localhost:5000/blog/${id}`, updatedFormData) // Send updatedFormData to the server
+      .post(`https://denticadentalstudio.com/api/blog/update`, updatedFormData,{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }) // Send updatedFormData to the server
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -176,10 +190,10 @@ const Blogedit = () => {
                               })
                             }
                           />
-                          {formData.image && ( // Check if formData.image exists (i.e., image is uploaded)
+                          {formData.imageUrl  && ( // Check if formData.image exists (i.e., image is uploaded)
                             <div style={{ width: "150px", height: "100px" }}>
                               <img
-                                src={URL.createObjectURL(formData.image)}
+                                src={URL.createObjectURL(formData.imageUrl)}
                                 alt=""
                                 style={{ width: "100%", height: "100%" }}
                               />
@@ -196,7 +210,7 @@ const Blogedit = () => {
                             placeholder="Place Some Text Here"
                             name="desc"
                             onChange={handleChange1}
-                            value={formData.desc}
+                            value={formData.description}
                             modules={{
                               toolbar: [
                                 [
@@ -251,7 +265,7 @@ const Blogedit = () => {
                             placeholder="Enter Short Description"
                             name="sdesc"
                             onChange={handleChange}
-                            value={formData.sdesc}
+                            value={formData.sdescription}
                           />
                         </div>
                         <div className="form-group">
@@ -265,7 +279,7 @@ const Blogedit = () => {
                             placeholder="Enter meta Description"
                             name="mdesc"
                             onChange={handleChange}
-                            value={formData.mdesc}
+                            value={formData.mdescription}
                           />
                         </div>
                         <div className="form-group">
@@ -293,7 +307,7 @@ const Blogedit = () => {
                             placeholder="Enter meta keyword"
                             name="keyword"
                             onChange={handleChange}
-                            value={formData.keyword}
+                            value={formData.mkeyword}
                           />
                         </div>
                         <div className="form-group">
