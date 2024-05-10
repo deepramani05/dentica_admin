@@ -1,91 +1,112 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Cookies from "js-cookie";
 
 const Blogedit = () => {
   const [formData, setFormData] = useState({
     title: "",
     image: null,
     description: "",
-    sdescription: "",
-    mdescription: "",
-    mtitle: "",
-    mkeyword: "",
-    tags: "",
+    short_description: "",
+    meta_description: "",
+    meta_title: "",
+    meta_keyword: "",
+    meta_tag: [],
   });
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState([]); // Initialize tags as an empty array
   const [currentTag, setCurrentTag] = useState("");
 
   const { id } = useParams("");
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/blog`,{id},{
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/blog`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
-        console.log("Response",res.data.data.blo);
-        const { title, image, description, sdescription, mdescription, mtitle, mkeyword, tags } =
-          res.data.data.blog;
+        console.log("Response", res.data.data.blog);
+        const {
+          title,
+          image,
+          description,
+          short_description,
+          meta_description,
+          meta_title,
+          meta_keyword,
+          meta_tag,
+        } = res.data.data.blog;
 
         setFormData({
           title,
           image,
           description,
-          sdescription,
-          mdescription,
-          mtitle,
-          mkeyword,
-          tags,
+          short_description,
+          meta_description,
+          meta_title,
+          meta_keyword,
+          meta_tag,
         });
-        setTags(res.data.tags || []);
+        setTags(meta_tag || []);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [id]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const file = e.target.files[0];
+    const file = e.target.files ? e.target.files[0] : null;
     setFormData({
       ...formData,
       [name]: value,
       image: file,
-      imageUrl: URL.createObjectURL(file),
+      imageUrl: file ? URL.createObjectURL(file) : null,
     });
   };
+
   const handleChange1 = (value) => {
     setFormData({
       ...formData,
-      desc: value, // Assuming 'desc' is the field for description in your form data
-      
+      description: value, // Assuming 'description' is the field for description in your form data
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedFormData = { ...formData, tags: tags, id: id }; // Include tags in formData
-    console.log("Data to be sent:", updatedFormData); // Log the data before sending
+    const updatedFormData = new FormData();
+    for (const key in formData) {
+      updatedFormData.append(key, formData[key]);
+    }
+    updatedFormData.append("tags", tags);
+    updatedFormData.append("id", id);
+
     axios
-      .post(`https://denticadentalstudio.com/api/blog/update`, updatedFormData,{
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }) // Send updatedFormData to the server
+      .post(
+        `https://denticadentalstudio.com/api/blog/update`,
+        updatedFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Data Changed!",
+          title: "Data Updated Successfully !",
           showConfirmButton: false,
           timer: 1000,
         }).then(() => {
@@ -94,7 +115,7 @@ const Blogedit = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("Error!");
+        // Handle error, show an error message maybe
       });
   };
 
@@ -105,13 +126,23 @@ const Blogedit = () => {
       if (trimmedTag) {
         setTags([...tags, trimmedTag]);
         setCurrentTag("");
+        setFormData({
+          ...formData,
+          meta_tag: [...formData.meta_tag, trimmedTag],
+        });
       }
     }
   };
 
   const handleRemoveTag = (id) => {
     setTags(tags.filter((_, index) => index !== id));
+    const updatedTags = formData.meta_tag.filter((_, index) => index !== id);
+    setFormData({
+      ...formData,
+      meta_tag: updatedTags,
+    });
   };
+
   return (
     <div>
       <div className="wrapper">
@@ -183,17 +214,12 @@ const Blogedit = () => {
                             className="form-control-file"
                             id="exampleInputFile"
                             name="image"
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                image: e.target.files[0],
-                              })
-                            }
+                            onChange={handleChange}
                           />
-                          {formData.imageUrl  && ( // Check if formData.image exists (i.e., image is uploaded)
+                          {formData.imageUrl && (
                             <div style={{ width: "150px", height: "100px" }}>
                               <img
-                                src={URL.createObjectURL(formData.imageUrl)}
+                                src={URL.createObjectURL(formData.image)}
                                 alt=""
                                 style={{ width: "100%", height: "100%" }}
                               />
@@ -208,50 +234,9 @@ const Blogedit = () => {
                             id="exampleInputDescription"
                             rows="10"
                             placeholder="Place Some Text Here"
-                            name="desc"
+                            name="description"
                             onChange={handleChange1}
                             value={formData.description}
-                            modules={{
-                              toolbar: [
-                                [
-                                  { header: "1" },
-                                  { header: "2" },
-                                  { font: [] },
-                                ],
-                                [{ size: [] }],
-                                [
-                                  "bold",
-                                  "italic",
-                                  "underline",
-                                  "strike",
-                                  "blockquote",
-                                ],
-                                [
-                                  { list: "ordered" },
-                                  { list: "bullet" },
-                                  { indent: "-1" },
-                                  { indent: "+1" },
-                                ],
-                                ["link", "image", "video"],
-                                ["clean"],
-                              ],
-                            }}
-                            formats={[
-                              "header",
-                              "font",
-                              "size",
-                              "bold",
-                              "italic",
-                              "underline",
-                              "strike",
-                              "blockquote",
-                              "list",
-                              "bullet",
-                              "indent",
-                              "link",
-                              "image",
-                              "video",
-                            ]}
                           />
                         </div>
                         <div className="form-group">
@@ -263,9 +248,9 @@ const Blogedit = () => {
                             className="form-control"
                             id="exampleInputShortDescription"
                             placeholder="Enter Short Description"
-                            name="sdesc"
+                            name="short_description"
                             onChange={handleChange}
-                            value={formData.sdescription}
+                            value={formData.short_description}
                           />
                         </div>
                         <div className="form-group">
@@ -277,9 +262,9 @@ const Blogedit = () => {
                             className="form-control"
                             id="exampleInputMetaDescription"
                             placeholder="Enter meta Description"
-                            name="mdesc"
+                            name="meta_description"
                             onChange={handleChange}
-                            value={formData.mdescription}
+                            value={formData.meta_description}
                           />
                         </div>
                         <div className="form-group">
@@ -291,9 +276,9 @@ const Blogedit = () => {
                             className="form-control"
                             id="exampleInputMetaTitle"
                             placeholder="Enter meta title"
-                            name="mtitle"
+                            name="meta_title"
                             onChange={handleChange}
-                            value={formData.mtitle}
+                            value={formData.meta_title}
                           />
                         </div>
                         <div className="form-group">
@@ -305,53 +290,53 @@ const Blogedit = () => {
                             className="form-control"
                             id="exampleInputMetaKeyword"
                             placeholder="Enter meta keyword"
-                            name="keyword"
+                            name="meta_keyword"
                             onChange={handleChange}
-                            value={formData.mkeyword}
+                            value={formData.meta_keyword}
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputMetaKeyword">Tag</label>
+                          <label htmlFor="exampleInputTag">Tag</label>
                           <input
-                            type=""
+                            type="text"
                             className="form-control"
-                            id="exampleInputMetaKeyword"
-                            placeholder="Enter meta keyword"
-                            name="tag"
+                            id="exampleInputTag"
+                            placeholder="Enter tag"
+                            value={currentTag}
                             onChange={(e) => setCurrentTag(e.target.value)}
                             onKeyDown={handleTag}
-                            value={currentTag}
                           />
                         </div>
                         <div className="form-group">
                           <div>
-                            {tags.map((tag, id) => (
-                              <span
-                                key={id}
-                                className="badge-secondary mr-1"
-                                style={{
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  padding: "2px 7px",
-                                  backgroundColor: "#ca629d",
-                                  borderRadius: "5px",
-                                }}
-                              >
-                                {tag}
+                            {Array.isArray(tags) &&
+                              tags.map((tag, id) => (
                                 <span
-                                  className="remove-tag"
+                                  key={id}
+                                  className="badge-secondary mr-1"
                                   style={{
-                                    cursor: "pointer",
-                                    marginLeft: "5px",
-                                    color: "#12448b",
-                                    paddingBottom: "2px",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    padding: "2px 7px",
+                                    backgroundColor: "#ca629d",
+                                    borderRadius: "5px",
                                   }}
-                                  onClick={() => handleRemoveTag(id)}
                                 >
-                                  <HighlightOffIcon fontSize="15px" />
+                                  {tag}
+                                  <span
+                                    className="remove-tag"
+                                    style={{
+                                      cursor: "pointer",
+                                      marginLeft: "5px",
+                                      color: "#12448b",
+                                      paddingBottom: "2px",
+                                    }}
+                                    onClick={() => handleRemoveTag(id)}
+                                  >
+                                    <HighlightOffIcon fontSize="15px" />
+                                  </span>
                                 </span>
-                              </span>
-                            ))}
+                              ))}
                           </div>
                         </div>
                       </div>
