@@ -91,7 +91,14 @@ const Stl = () => {
       }
     });
   };
-
+  const downloadPDF = (fileUrl) => {
+    const link = document.createElement('a');
+    window.open(fileUrl, '_blank');
+    link.download = 'file.pdf'; // You can specify the name of the downloaded file here
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -194,6 +201,7 @@ const Stl = () => {
                                       backgroundColor: "white",
                                       border: "1px solid red",
                                     }}
+                                    onClick={() => downloadPDF(ele.file_path)}
                                   >
                                     <span
                                       style={{
