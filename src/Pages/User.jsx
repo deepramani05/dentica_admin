@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"; // Import useParams
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -13,6 +13,7 @@ const User = () => {
   const [pass, setPass] = useState("");
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -120,39 +121,30 @@ const User = () => {
     });
   };
 
-  const itemsPerPage = 5;
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value)); // Update rows per page
+    setCurrentPage(1); // Reset current page when changing rows per page
+  };
+
+  const itemsPerPage = rowsPerPage;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = data.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
- 
-  // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-     if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-    ){
-        paginationButtons.push(
-            <li
-              key={i}
-              className={`paginate_button page-item ${
-                currentPage === i ? "active" : ""
-              }`}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(i)}>
-                {i}
-              </button>
-            </li>
-          );
-      } else if (
-        i === currentPage -2 || i === currentPage + 2
-      ){
-        paginationButtons.push(
-          <li key ={i} className={'page-item ellipsis'}>
-            <span className="ellipsis">...</span>
-          </li>
-        )
-      }  
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
+        <button
+          className="page-link"
+          onClick={() => setCurrentPage(i)}
+          disabled={currentPage === i}
+        >
+          {i}
+        </button>
+      </li>
+    );
   }
 
   return (
@@ -260,6 +252,21 @@ const User = () => {
                   <div className="search-bar"></div>
                   <div className="table-container">
                     <div className="card-body">
+                      <div className="form-group d-flex align-items-center" style={{gap:"10px"}}>
+                        <label htmlFor="rowsPerPage">Rows Per Page:</label>
+                        <select
+                          className="form-control"
+                          id="rowsPerPage"
+                          onChange={handleRowsPerPageChange}
+                          value={rowsPerPage}
+                          style={{width:"auto"}}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={20}>20</option>
+                          <option value={50}>50</option>
+                        </select>
+                      </div>
                       <table
                         className="table table-bordered table-hover"
                         style={{ overflowX: "auto" }}
@@ -280,7 +287,7 @@ const User = () => {
                               <td>{user.email}</td>
                               <td>
                                 <Link
-                                  to={`/users/edit/${user.id}`} // Add dynamic route for editing
+                                  to={`/users/edit/${user.id}`}
                                   className="form-btn"
                                   style={{
                                     border: "1px solid #17a2b8",
