@@ -99,25 +99,37 @@ const Blog = () => {
   // Generate pagination buttons
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <li
-        key={i}
-        className={`paginate_button page-item ${
-          currentPage === i ? "active" : ""
-        }`}
-      >
-        <a
-          href="#"
-          aria-controls="example1"
-          data-dt-idx="0"
-          tabIndex="0"
-          className="page-link"
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </a>
-      </li>
-    );
+    if ( i === 1 || i === currentPage || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+          paginationButtons.push(
+          <li
+            key={i}
+            className={`paginate_button page-item ${
+              currentPage === i ? "active" : ""
+            }`}
+          >
+            <a
+              href="#"
+              aria-controls="example1"
+              data-dt-idx="0"
+              tabIndex="0"
+              className="page-link"
+              onClick={() => setCurrentPage(i)}
+            >
+              {i}
+            </a>
+          </li>
+        );
+      } else if(
+        i === currentPage -2 || i === currentPage + 2
+      ){
+        paginationButtons.push(
+          <li key ={i} className={'page-item ellipsis'}>
+            <span className="ellipsis">...</span>
+          </li>
+        )
+      }
+   
   }
 
   // Slice the data array to show only the relevant entries based on pagination

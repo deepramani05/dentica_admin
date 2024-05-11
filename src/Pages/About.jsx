@@ -94,7 +94,9 @@ const About = () => {
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
+    if ( i === 1 || i === currentPage || i === totalPages || (i >= currentPage -1 && i<= currentPage + 1)
+    ){
+       paginationButtons.push(
       <li
         key={i}
         className={`paginate_button page-item ${
@@ -113,6 +115,15 @@ const About = () => {
         </a>
       </li>
     );
+    }else if (
+      i === currentPage - 2 || i === currentPage +2
+    ){
+      paginationButtons.push(
+        <li key={i} className={'page-item ellipsis'}>
+          <span className="ellipis">...</span>
+        </li>
+      )
+    }   
   }
 
   // Slice the data array to show only the relevant entries based on pagination

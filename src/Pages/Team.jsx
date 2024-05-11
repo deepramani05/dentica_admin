@@ -107,15 +107,32 @@ const Team = () => {
   const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
+  // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <li key={i} className={`page-item ${currentPage === i ? "active" : ""}`}>
-        <button className="page-link" onClick={() => setCurrentPage(i)}>
-          {i}
-        </button>
-      </li>
-    );
+  for (let i = 1 ; i <= totalPages; i++) {
+     if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
+    ){
+        paginationButtons.push(
+            <li
+              key={i}
+              className={`paginate_button page-item ${
+                currentPage === i ? "active" : ""
+              }`}
+            >
+              <button className="page-link" onClick={() => setCurrentPage(i)}>
+                {i}
+              </button>
+            </li>
+          );
+      } else if (
+        i === currentPage -2 || i === currentPage + 2
+      ){
+        paginationButtons.push(
+          <li key ={i} className={'page-item ellipsis'}>
+            <span className="ellipsis">...</span>
+          </li>
+        )
+      }  
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage;

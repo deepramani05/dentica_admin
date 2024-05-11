@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const [stlFilesCount, setStlFilesCount] = useState(0);
-  const [reviewed, setReviewed] = useState(3);
+  const [reviewed, setReviewed] = useState(0);
 
   useEffect(()=>{
     const fetchData = async () =>{
