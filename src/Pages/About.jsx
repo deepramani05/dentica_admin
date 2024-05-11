@@ -12,6 +12,7 @@ const About = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // State for rows per page
 
   let { id } = useParams();
 
@@ -79,6 +80,11 @@ const About = () => {
     setSearchQuery(query); // This function should correctly update the searchQuery state
   };
 
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value)); // Update rows per page
+    setCurrentPage(1); // Reset current page when changing rows per page
+  };
+
   const filteredData = data
     ? data.filter(
         (item) =>
@@ -89,14 +95,12 @@ const About = () => {
       )
     : [];
 
-  const itemsPerPage = 10;
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i === totalPages || (i >= currentPage -1 && i<= currentPage + 1)
-    ){
-       paginationButtons.push(
+    paginationButtons.push(
       <li
         key={i}
         className={`paginate_button page-item ${
@@ -115,15 +119,6 @@ const About = () => {
         </a>
       </li>
     );
-    }else if (
-      i === currentPage - 2 || i === currentPage +2
-    ){
-      paginationButtons.push(
-        <li key={i} className={'page-item ellipsis'}>
-          <span className="ellipis">...</span>
-        </li>
-      )
-    }   
   }
 
   // Slice the data array to show only the relevant entries based on pagination
@@ -169,15 +164,37 @@ const About = () => {
                     >
                       <h3 className="card-title">About</h3>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search title ..."
-                        value={searchQuery} // Value should be bound to searchQuery
-                        onChange={(e) => handleSearch(e.target.value)} // onChange should update the searchQuery state
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex">
+                      <div
+                        className="form-group d-flex align-items-center"
+                        style={{ margin: "10px", width: "auto", gap: "10px" }}
+                      >
+                        <label htmlFor="rowsPerPage" style={{ width: "100%" }}>
+                          Rows Per Page:
+                        </label>
+                        <select
+                          className="form-control"
+                          id="rowsPerPage"
+                          onChange={handleRowsPerPageChange}
+                          value={rowsPerPage}
+                          style={{ width: "auto" }}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={20}>20</option>
+                          <option value={50}>50</option>
+                        </select>
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search title ..."
+                          value={searchQuery} // Value should be bound to searchQuery
+                          onChange={(e) => handleSearch(e.target.value)} // onChange should update the searchQuery state
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     <div className="table-container">
                       <div className="card-body">
