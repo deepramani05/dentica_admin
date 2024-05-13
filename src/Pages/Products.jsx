@@ -216,12 +216,18 @@ const Products = () => {
                                 ></td>
                                 <td>
                                   <Link
+                                    to={
+                                      ele.title === "Digital Dentristry"
+                                        ? `https://denticadentalstudio.com/digital-dentistry/${ele.title.replace(/\s+/g, "-")}`
+                                        : `https://denticadentalstudio.com/product/${ele.title.replace(/\s+/g, "-")}`
+                                    }
                                     className="form-btn"
                                     style={{
                                       border: "1px solid #17a2b8",
                                       padding: "5px",
                                       backgroundColor: "white",
                                     }}
+                                    target="_blank"
                                   >
                                     <span style={{ color: "#17a2b8" }}>
                                       <FaEye />

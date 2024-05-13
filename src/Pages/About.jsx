@@ -223,12 +223,14 @@ const About = () => {
 
                                 <td className="align-middle">
                                   <Link
+                                    to = "https://denticadentalstudio.com/about"
                                     className="form-btn"
                                     style={{
                                       border: "1px solid #17a2b8",
                                       backgroundColor: "white",
                                       padding: "2px 5px",
                                     }}
+                                    target="_blank"
                                   >
                                     <span style={{ color: "#17a2b8" }}>
                                       <FaRegEye />
