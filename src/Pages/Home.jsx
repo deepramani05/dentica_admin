@@ -10,7 +10,6 @@ const Home = () => {
   let [subtitle, setSubtitle] = useState("");
   let [desc, setDesc] = useState("");
   let [image, setImage] = useState(null);
-
   let [wp, setWp] = useState("");
   let [insta, setInsta] = useState("");
   let [fb, setFb] = useState("");
@@ -38,10 +37,10 @@ const Home = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        // setTitle("")
-        // setSubtitle("")
-        // setDesc("")
-        // setImage("")
+        setTitle("")
+        setSubtitle("")
+        setDesc("")
+        setImage("")
       })
       .catch((err) => {
         console.log(err);
@@ -63,6 +62,7 @@ const Home = () => {
       instagram: insta || undefined,
       facebook: fb || undefined,
     };
+
 
     axios
       .post(`https://denticadentalstudio.com/api/socialmedia/store`, formData,{
@@ -98,6 +98,30 @@ const Home = () => {
     // setTimeout(() => window.location.reload(), 1000);
   };
 
+  const fetchData = async () =>{
+    try{
+      const response = await axios.get(
+        `https://denticadentalstudio.com/api/home`
+      );
+      if (response.data.status === "success") {
+        console.log(response.data);
+        const homeData = response.data.data.home;
+        setTitle(homeData.title);
+        setSubtitle(homeData.subtitle);
+        setDesc(homeData.description);
+        setImage(homeData.image);  
+        setWp(response.data.data.whatsapp_url);
+        setInsta(response.data.data.instagram_url);
+        setFb(response.data.data.facebook_url);
+
+      } 
+    } catch(error){
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div>
       <div class="wrapper">
