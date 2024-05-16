@@ -29,6 +29,7 @@ import EventEdit from "../Pages/EventEdit";
 import EventAdd from "../Pages/EventAdd";
 import Login from "../Pages/login";
 import UserEdit from "../Pages/UserEdit";
+import ContactView from "../Pages/ContactView";
 
 const Allroutes = () => {
   return (
@@ -41,6 +42,7 @@ const Allroutes = () => {
         <Route path="/about-us" element={<About />} />
         <Route path="/gallery" element={<Gallary />} />
         <Route path="/contact" element={<Contacts />} />
+        <Route path="/contact/:id" element={<ContactView />} />
         <Route path="/career" element={<Career />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/product" element={<Products />} />
