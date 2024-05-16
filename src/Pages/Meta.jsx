@@ -17,6 +17,7 @@ const Meta = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   const obj = {
     meta_url: url,
@@ -130,44 +131,48 @@ const Meta = () => {
     setFilteredData(filtered);
     setCurrentPage(1); // Reset current page when search query changes
   };
-  
 
-  const itemsPerPage = 10;
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
+
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-   ){
-       paginationButtons.push(
-           <li
-             key={i}
-             className={`paginate_button page-item ${
-               currentPage === i ? "active" : ""
-             }`}
-           >
-             <button className="page-link" onClick={() => setCurrentPage(i)}>
-               {i}
-             </button>
-           </li>
-         );
-     } else if (
-       i === currentPage -2 || i === currentPage + 2
-     ){
-       paginationButtons.push(
-         <li key ={i} className={'page-item ellipsis'}>
-           <span className="ellipsis">...</span>
-         </li>
-       )
-     }  
- }
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
 
-  // Slice the filtered data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-  //  console.log("data",data );
+
   return (
     <div>
       <div className="wrapper">
@@ -281,15 +286,39 @@ const Meta = () => {
                           >
                             <h3 className="card-title">Meta List</h3>
                           </div>
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search Meta Title Here ..."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)} // Ensure correct value is passed
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                          <div
+                            className="d-flex"
+                            style={{ alignItems: "center" }}
+                          >
+                            <div className="rows-per-page">
+                              <span
+                                style={{
+                                  fontWeight: "600",
+                                  textTransform: "capitalize",
+                                  margin:"0 20px"
+                                }}
+                              >
+                                rows per page :
+                              </span>
+                              <input
+                                type="number"
+                                min="1"
+                                max={filteredData.length}
+                                value={rowsPerPage}
+                                onChange={handleRowsPerPageChange}
+                                style={{ width: "60px", marginRight: "5px" }}
+                              />
+                            </div>
+                            <div className="search-bar">
+                              <OutlinedInput
+                                type="text"
+                                variant="outlined"
+                                placeholder="Search Meta Title Here ..."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)} // Ensure correct value is passed
+                                style={{ height: "30px", margin: "10px 0" }}
+                              />
+                            </div>
                           </div>
                           <div className="table-container">
                             <div className="card-body">

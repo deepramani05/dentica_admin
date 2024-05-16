@@ -252,20 +252,20 @@ const User = () => {
                   <div className="search-bar"></div>
                   <div className="table-container">
                     <div className="card-body">
-                      <div className="form-group d-flex align-items-center" style={{gap:"10px"}}>
+                      <div
+                        className="form-group d-flex align-items-center"
+                        style={{ gap: "10px" }}
+                      >
                         <label htmlFor="rowsPerPage">Rows Per Page:</label>
-                        <select
+                        <input
+                          type="number"
                           className="form-control"
                           id="rowsPerPage"
+                          min="1"
                           onChange={handleRowsPerPageChange}
                           value={rowsPerPage}
-                          style={{width:"auto"}}
-                        >
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={20}>20</option>
-                          <option value={50}>50</option>
-                        </select>
+                          style={{ width: "100px" }}
+                        />
                       </div>
                       <table
                         className="table table-bordered table-hover"

@@ -3,10 +3,9 @@ import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import "../css/style.css";
+import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { OutlinedInput } from "@mui/material";
 import Cookies from "js-cookie";
 
 const Gallery = () => {
@@ -21,7 +20,7 @@ const Gallery = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
 
   const handlegallerySubmit = async (e) => {
     e.preventDefault();
@@ -148,43 +147,30 @@ const Gallery = () => {
     );
   });
 
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  // pagination buttons start
-  const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-    if (
-      i === 1 ||
-      i === currentPage ||
-      i === totalPages ||
-      (i >= currentPage - 1 && i <= currentPage + 1)
-    ) {
-      paginationButtons.push(
-        <li
-          key={i}
-          className={`paginate_button page-item ${
-            currentPage === i ? "active" : ""
-          }`}
-        >
-          <button className="page-link" onClick={() => setCurrentPage(i)}>
-            {i}
-          </button>
-        </li>
-      );
-    } else if (i === currentPage - 2 || i === currentPage + 2) {
-      paginationButtons.push(
-        <li key={i} className={"page-item ellipsis"}>
-          <span className="ellipsis">...</span>
-        </li>
-      );
-    }
-  }
-
-  // Slice the data array to show only the relevant entries based on pagination
+  // Calculate startIndex and endIndex for pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
+
+  // Slice the data array to show only the relevant entries based on pagination
   const displayedData = filteredData.slice(startIndex, endIndex);
+
+  // Generate pagination buttons
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <li
+        key={i}
+        className={`paginate_button page-item ${
+          currentPage === i ? "active" : ""
+        }`}
+      >
+        <button className="page-link" onClick={() => setCurrentPage(i)}>
+          {i}
+        </button>
+      </li>
+    );
+  }
 
   return (
     <div>
@@ -317,15 +303,40 @@ const Gallery = () => {
                           >
                             <h3 className="card-title">Gallery List</h3>
                           </div>
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search catagory ..."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                          <div className="d-flex align-items-center">
+                            <div
+                              className="d-flex"
+                              style={{
+                                alignItems: "center",
+                                gap: "10px",
+                                margin:"0 20px"
+                              }}
+                            >
+                              <label htmlFor="rowsPerPage">
+                                Rows per Page:{" "}
+                              </label>
+                              <input
+                                id="rowsPerPage"
+                                type="number"
+                                min="1"
+                                max={filteredData.length}
+                                value={itemsPerPage}
+                                onChange={(e) => {
+                                  setCurrentPage(1);
+                                  setItemsPerPage(parseInt(e.target.value));
+                                }}
+                              />
+                            </div>
+                            <div className="search-bar">
+                              <OutlinedInput
+                                type="text"
+                                variant="outlined"
+                                placeholder="Search category ..."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ height: "30px", margin: "10px 0" }}
+                              />
+                            </div>
                           </div>
                           <div className="table-container">
                             <div className="card-body table-reponsive">
@@ -342,11 +353,7 @@ const Gallery = () => {
                                   {displayedData && displayedData.length > 0 ? (
                                     displayedData.map((ele, id) => (
                                       <tr key={id}>
-                                        <td>
-                                          {(currentPage - 1) * itemsPerPage +
-                                            id +
-                                            1}
-                                        </td>
+                                        <td>{startIndex + id + 1}</td>
                                         <td style={{ width: "150px" }}>
                                           <img
                                             src={ele.image}
@@ -409,7 +416,7 @@ const Gallery = () => {
                             </div>
                           </div>
                           {/* Pagination */}
-                          <div className="row" style={{ display: "flex" }}>
+                          <div className="row mt-3">
                             <div className="col-sm-12 col-md-5">
                               <div
                                 className="dataTables_info"
@@ -417,15 +424,15 @@ const Gallery = () => {
                                 role="status"
                                 aria-live="polite"
                               >
-                                {displayedData &&
-                                  `Showing ${
-                                    currentPage * itemsPerPage -
-                                    itemsPerPage +
-                                    1
-                                  } to ${Math.min(
-                                    currentPage * itemsPerPage,
-                                    filteredData.length
-                                  )} of ${filteredData.length} entries`}
+                                Showing{" "}
+                                {startIndex + 1 > filteredData.length
+                                  ? filteredData.length
+                                  : startIndex + 1}{" "}
+                                to{" "}
+                                {endIndex > filteredData.length
+                                  ? filteredData.length
+                                  : endIndex}{" "}
+                                of {filteredData.length} entries
                               </div>
                             </div>
                             <div className="col-sm-12 col-md-7">
@@ -435,34 +442,30 @@ const Gallery = () => {
                               >
                                 <ul className="pagination">
                                   <li
-                                    className={`paginate_button page-item previous ${
+                                    className={`paginate_button page-item ${
                                       currentPage === 1 ? "disabled" : ""
                                     }`}
                                   >
                                     <button
                                       className="page-link"
                                       onClick={() =>
-                                        setCurrentPage(currentPage - 1)
+                                        setCurrentPage((prev) => prev - 1 || 1)
                                       }
-                                      disabled={currentPage === 1}
                                     >
                                       Previous
                                     </button>
                                   </li>
                                   {paginationButtons}
-                                  <li
-                                    className={`paginate_button page-item next ${
-                                      currentPage === totalPages
-                                        ? "disabled"
-                                        : ""
-                                    }`}
-                                  >
+                                  <li>
                                     <button
                                       className="page-link"
                                       onClick={() =>
-                                        setCurrentPage(currentPage + 1)
+                                        setCurrentPage((prev) =>
+                                          prev < totalPages
+                                            ? prev + 1
+                                            : totalPages
+                                        )
                                       }
-                                      disabled={currentPage === totalPages}
                                     >
                                       Next
                                     </button>

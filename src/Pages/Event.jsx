@@ -13,6 +13,7 @@ const Event = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   useEffect(() => {
     fetchData();
@@ -20,7 +21,7 @@ const Event = () => {
 
   const fetchData = () => {
     axios
-      .get(`https://denticadentalstudio.com/api/event`,{
+      .get(`https://denticadentalstudio.com/api/event`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -44,16 +45,20 @@ const Event = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/event/delete`,{id},{
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .post(
+            `https://denticadentalstudio.com/api/event/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             setData(data.filter((item) => item.id !== id));
             setFilteredData(filteredData.filter((item) => item.id !== id));
@@ -71,9 +76,6 @@ const Event = () => {
       }
     });
   };
-  
-  
-  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -84,39 +86,40 @@ const Event = () => {
     setCurrentPage(1);
   };
 
-  const itemsPerPage = 10;
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
+
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // pagination buttons start
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === currentPage || i === totalPages || (i >= currentPage -1 && i <= currentPage +1)
-    ){
-          paginationButtons.push(
-          <li
-            key={i}
-            className={`page-item ${
-              currentPage === i ? "active" : ""
-            }`}
-          >
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage(i)}
-            >
-              {i}
-            </button>
-          </li>
-        );
-      } else if(
-        i === currentPage -2 || i === currentPage +2
-      ){
-        paginationButtons.push(
-          <li key={i} className={'page-item ellipsis'}>
-            <span className="ellipsis">...</span>
-          </li>
-        )
-      }
-    
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? "active" : ""}`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -179,15 +182,30 @@ const Event = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex" style={{alignItems:"center"}}>
+                      <div className="page-item">
+                        <span style={{margin:"0 20px",fontWeight:"600"}}>Rows Per Page :</span>
+                        <input
+                          type="number"
+                          value={rowsPerPage}
+                          onChange={handleRowsPerPageChange}
+                          style={{
+                            width: "70px",
+                            marginRight: "5px",
+                          }}
+                        />
+                        
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search.."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     <div className="table-container">
                       <div className="card-body">
@@ -258,9 +276,8 @@ const Event = () => {
                           role="status"
                           aria-live="polite"
                         >
-                          Showing{" "}
-                          {startIndex + 1} to{" "}
-                          {endIndex} of {filteredData.length} entries
+                          Showing {startIndex + 1} to {endIndex} of{" "}
+                          {filteredData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">

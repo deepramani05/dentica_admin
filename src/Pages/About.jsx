@@ -172,18 +172,15 @@ const About = () => {
                         <label htmlFor="rowsPerPage" style={{ width: "100%" }}>
                           Rows Per Page:
                         </label>
-                        <select
+                        <input
+                          type="number"
                           className="form-control"
                           id="rowsPerPage"
                           onChange={handleRowsPerPageChange}
                           value={rowsPerPage}
-                          style={{ width: "auto" }}
-                        >
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={20}>20</option>
-                          <option value={50}>50</option>
-                        </select>
+                          min="1"
+                          style={{ width: "100px" }}
+                        />
                       </div>
                       <div className="search-bar">
                         <OutlinedInput
@@ -223,7 +220,7 @@ const About = () => {
 
                                 <td className="align-middle">
                                   <Link
-                                    to = "https://denticadentalstudio.com/about"
+                                    to="https://denticadentalstudio.com/about"
                                     className="form-btn"
                                     style={{
                                       border: "1px solid #17a2b8",

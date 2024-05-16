@@ -13,6 +13,7 @@ const Stl = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -26,7 +27,7 @@ const Stl = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/stl`,{
+      .get(`https://denticadentalstudio.com/api/stl`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -41,12 +42,13 @@ const Stl = () => {
         console.log(err);
       });
   }, []);
-    useEffect(() => {
-      const token = Cookies.get("token");
-      if (!token) {
-        window.location.href = "/login";
-      }
-    }, []);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -60,12 +62,16 @@ const Stl = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/stl/delete`,{id},{
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .post(
+            `https://denticadentalstudio.com/api/stl/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data);
             // After successful deletion, update the state to remove the deleted item
@@ -87,19 +93,26 @@ const Stl = () => {
               icon: "error",
             });
           });
-          setTimeout(() => window.location.reload(),1000)
+        setTimeout(() => window.location.reload(), 1000);
       }
     });
   };
+
   const downloadPDF = (fileUrl) => {
-    const link = document.createElement('a');
-    window.open(fileUrl, '_blank');
-    link.download = 'file.pdf'; // You can specify the name of the downloaded file here
+    const link = document.createElement("a");
+    window.open(fileUrl, "_blank");
+    link.download = "file.pdf"; // You can specify the name of the downloaded file here
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-  const itemsPerPage = 10;
+
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
+
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Slice the data array to show only the relevant entries based on pagination
@@ -109,31 +122,33 @@ const Stl = () => {
 
   // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-   ){
-       paginationButtons.push(
-           <li
-             key={i}
-             className={`paginate_button page-item ${
-               currentPage === i ? "active" : ""
-             }`}
-           >
-             <button className="page-link" onClick={() => setCurrentPage(i)}>
-               {i}
-             </button>
-           </li>
-         );
-     } else if (
-       i === currentPage -2 || i === currentPage + 2
-     ){
-       paginationButtons.push(
-         <li key ={i} className={'page-item ellipsis'}>
-           <span className="ellipsis">...</span>
-         </li>
-       )
-     }  
- }
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
 
   return (
     <div>
@@ -177,15 +192,36 @@ const Stl = () => {
                     >
                       <h3 className="card-title">Stl Form List</h3>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search Name Here ..."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex" style={{alignItems:"center"}}>
+                      <div className="rows-per-page">
+                        <span
+                          style={{
+                            fontWeight: "600",
+                            textTransform: "capitalize",
+                            margin: "0 20px",
+                          }}
+                        >
+                          rows per page :
+                        </span>
+                        <input
+                          type="number"
+                          min="1"
+                          max={filteredData.length}
+                          value={rowsPerPage}
+                          onChange={handleRowsPerPageChange}
+                          style={{ width: "60px", marginRight: "5px" }}
+                        />
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search Name Here ..."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
@@ -255,7 +291,6 @@ const Stl = () => {
                       </div>
                     </div>
                     {/* /.card-body */}
-                    {/* pagination started */}
                     <div className="row" style={{ display: "flex" }}>
                       <div className="col-sm-12 col-md-5">
                         <div

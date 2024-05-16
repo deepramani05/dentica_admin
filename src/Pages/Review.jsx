@@ -16,12 +16,17 @@ const Review = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   const handleSearch = (query) => {
     setSearchQuery(query);
     setCurrentPage(1); // Reset current page when search query changes
   };
 
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,12 +50,12 @@ const Review = () => {
       .catch((err) => {
         console.log(err);
       });
-     setTimeout(() => window.location.reload(), 1000);
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/review`,{
+      .get(`https://denticadentalstudio.com/api/review`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -64,6 +69,7 @@ const Review = () => {
         console.log(err);
       });
   }, []);
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -76,17 +82,21 @@ const Review = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/review/delete`,{id},{
-            headers:{
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
+          .post(
+            `https://denticadentalstudio.com/api/review/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
             }
-          })
+          )
           .then((res) => {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Your work has been saved",
+              title: "Data Deleted Successfully !",
               showConfirmButton: false,
               timer: 1000,
             });
@@ -100,47 +110,49 @@ const Review = () => {
               icon: "error",
             });
           });
-        setTimeout(() => window.location.reload(), 1000);
+        // setTimeout(() => window.location.reload(), 1000);
       }
     });
   };
 
-  const itemsPerPage = 10;
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = currentPage * rowsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-// Generate pagination buttons
+
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-   ){
-       paginationButtons.push(
-           <li
-             key={i}
-             className={`paginate_button page-item ${
-               currentPage === i ? "active" : ""
-             }`}
-           >
-             <button className="page-link" onClick={() => setCurrentPage(i)}>
-               {i}
-             </button>
-           </li>
-         );
-     } else if (
-       i === currentPage -2 || i === currentPage + 2
-     ){
-       paginationButtons.push(
-         <li key ={i} className={'page-item ellipsis'}>
-           <span className="ellipsis">...</span>
-         </li>
-       )
-     }  
- }
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
 
   return (
     <div>
@@ -227,7 +239,6 @@ const Review = () => {
                                   const file = e.target.files[0];
                                   setImage(file);
                                 }}
-                                // value={image}
                               />
                             </div>
                           </div>
@@ -258,15 +269,33 @@ const Review = () => {
                           >
                             <h3 className="card-title">Review List</h3>
                           </div>
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search.."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                          <div className="d-flex">
+                            <div
+                              className="rows-per-page d-flex"
+                              style={{ alignItems: "center" }}
+                            >
+                              <span style={{ fontWeight: "600",margin:"0 20px" }}>
+                                Rows Per Page :{" "}
+                              </span>
+                              <input
+                                type="number"
+                                min="1"
+                                max={filteredData.length}
+                                value={rowsPerPage}
+                                onChange={handleRowsPerPageChange}
+                                style={{ width: "60px" }}
+                              />
+                            </div>
+                            <div className="search-bar">
+                              <OutlinedInput
+                                type="text"
+                                variant="outlined"
+                                placeholder="Search.."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ height: "30px", margin: "10px 0" }}
+                              />
+                            </div>
                           </div>
                           <div className="card-body">
                             <table className="table table-bordered table-hover">
@@ -286,10 +315,14 @@ const Review = () => {
                                     <td>{ele.name}</td>
                                     <td>{ele.review}</td>
                                     <td>
-                                      <img 
-                                        src={ele.image} alt={ele.name}
-                                        style={{ height: "100px", width: "100px" }}
-                                        />
+                                      <img
+                                        src={ele.image}
+                                        alt={ele.name}
+                                        style={{
+                                          height: "100px",
+                                          width: "100px",
+                                        }}
+                                      />
                                     </td>
                                     <td className="align-middle">
                                       <Link

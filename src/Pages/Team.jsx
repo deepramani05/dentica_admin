@@ -16,6 +16,7 @@ const Team = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -61,7 +62,7 @@ const Team = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        setTimeout(() => window.location.reload(),1000)
+        setTimeout(() => window.location.reload(), 1000);
       })
       .catch((err) => {
         console.log(err);
@@ -80,12 +81,16 @@ const Team = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/team/delete`,{id},{
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .post(
+            `https://denticadentalstudio.com/api/team/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data.data.team);
             setData(data.filter((item) => item.id !== id));
@@ -104,35 +109,42 @@ const Team = () => {
     });
   };
 
-  const itemsPerPage = 10;
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
+
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-     if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-    ){
-        paginationButtons.push(
-            <li
-              key={i}
-              className={`paginate_button page-item ${
-                currentPage === i ? "active" : ""
-              }`}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(i)}>
-                {i}
-              </button>
-            </li>
-          );
-      } else if (
-        i === currentPage -2 || i === currentPage + 2
-      ){
-        paginationButtons.push(
-          <li key ={i} className={'page-item ellipsis'}>
-            <span className="ellipsis">...</span>
-          </li>
-        )
-      }  
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -248,15 +260,36 @@ const Team = () => {
                           >
                             <h3 className="card-title">Doctor's List</h3>
                           </div>
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search.."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                          <div className="d-flex" style={{alignItems:"center"}}>
+                            <div className="rows-per-page">
+                              <span
+                                style={{
+                                  fontWeight: "600",
+                                  textTransform: "capitalize",
+                                  margin:"0 20px"
+                                }}
+                              >
+                                rows per page :
+                              </span>
+                              <input
+                                type="number"
+                                min="1"
+                                max={data.length}
+                                value={rowsPerPage}
+                                onChange={handleRowsPerPageChange}
+                                style={{ width: "60px", marginRight: "5px" }}
+                              />
+                            </div>
+                            <div className="search-bar">
+                              <OutlinedInput
+                                type="text"
+                                variant="outlined"
+                                placeholder="Search.."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ height: "30px", margin: "10px 0" }}
+                              />
+                            </div>
                           </div>
                           <div className="table-container">
                             <div className="card-body">

@@ -12,12 +12,13 @@ const Career = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   let { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/career`,{
+      .get(`https://denticadentalstudio.com/api/career`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -44,12 +45,16 @@ const Career = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/career/delete`,{id},{
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .post(
+            `https://denticadentalstudio.com/api/career/delete`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             // Update the state by filtering out the deleted item
             setData((prevData) => prevData.filter((item) => item.id !== id));
@@ -74,52 +79,62 @@ const Career = () => {
     setCurrentPage(1); // Reset current page when search query changes
   };
 
-  const itemsPerPage = 10;
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === currentPage || i === totalPages || (i >= currentPage -1 && i <= currentPage +1)
-      ){
-              paginationButtons.push(
-            <li
-              key={i}
-              className={`paginate_button page-item ${
-                currentPage === i ? "active" : ""
-              }`}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(i)}>
-                {i}
-              </button>
-            </li>
-          );  
-        } else if(
-          i === currentPage -2 || i === currentPage +2
-        ){
-          paginationButtons.push(
-            <li key ={i} className={'page-item ellipsis'}>
-              <span className="ellipsis">...</span>
-            </li>
-          )
-        }
-    
-  }
-  const downloadPDF = (fileUrl) => {
-    const link = document.createElement('a');
-    window.open(fileUrl, '_blank');
-    link.download = 'file.pdf'; // You can specify the name of the downloaded file here
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when items per page changes
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = filteredData.slice(startIndex, endIndex);
-  
+  const displayedData = data
+    .filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(
+    data.filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ).length / itemsPerPage
+  );
+
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
+
+  const downloadPDF = (fileUrl) => {
+    const link = document.createElement("a");
+    window.open(fileUrl, "_blank");
+    link.download = "file.pdf"; // You can specify the name of the downloaded file here
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div>
@@ -158,15 +173,28 @@ const Career = () => {
                     >
                       <h3 className="card-title">User List</h3>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex" style={{alignItems:"center"}}>
+                      <div className="row mt-3 ml-2" style={{gap:"10px"}}>
+                        <label htmlFor="rowsPerPage">Rows per Page : </label>
+                        <input
+                          id="rowsPerPage"
+                          type="number"
+                          min="1"
+                          max={data.length}
+                          value={itemsPerPage}
+                          onChange={handleItemsPerPageChange}
+                        />
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search.."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     <div className="table-container">
                       <div className="card-body">
@@ -202,7 +230,7 @@ const Career = () => {
                                       backgroundColor: "white",
                                       border: "1px solid red",
                                     }}
-                                     onClick={() => downloadPDF(ele.file)}
+                                    onClick={() => downloadPDF(ele.file)}
                                   >
                                     <span
                                       style={{
@@ -247,8 +275,8 @@ const Career = () => {
                           aria-live="polite"
                         >
                           Showing {startIndex + 1} to{" "}
-                          {Math.min(endIndex, filteredData.length)} of{" "}
-                          {filteredData.length} entries
+                          {Math.min(endIndex, displayedData.length)} of{" "}
+                          {displayedData.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7 text-right">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 import "../css/style.css";
@@ -12,6 +12,7 @@ const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // New state for rows per page
 
   useEffect(() => {
     axios
@@ -105,39 +106,40 @@ const Contact = () => {
       )
     : [];
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-   // pagination buttons start
+  // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-     if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-    ){
-        paginationButtons.push(
-            <li
-              key={i}
-              className={`paginate_button page-item ${
-                currentPage === i ? "active" : ""
-              }`}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(i)}>
-                {i}
-              </button>
-            </li>
-          );
-      } else if (
-        i === currentPage -2 || i === currentPage + 2
-      ){
-        paginationButtons.push(
-          <li key ={i} className={'page-item ellipsis'}>
-            <span className="ellipsis">...</span>
-          </li>
-        )
-      }  
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
   }
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = currentPage * rowsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
@@ -178,15 +180,27 @@ const Contact = () => {
                     >
                       <h3 className="card-title">User List</h3>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex align-items-center">
+                      <div className="rows-per-page">
+                        <span style={{margin:"0 20px",fontWeight:"600"}}>Rows per page :</span>
+                        <input
+                          type="number"
+                          style={{width:"100px"}}
+                          min="1"
+                          value={rowsPerPage}
+                          onChange={(e) => setRowsPerPage(e.target.value)}
+                        />
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search.."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     <div className="table-container">
                       <div className="card-body">
@@ -207,7 +221,7 @@ const Contact = () => {
                             {displayedData.map((ele, id) => (
                               <tr key={id}>
                                 <td>
-                                  {(currentPage - 1) * itemsPerPage + id + 1}
+                                  {(currentPage - 1) * rowsPerPage + id + 1}
                                 </td>
                                 <td>{ele.name}</td>
                                 <td>
@@ -220,7 +234,8 @@ const Contact = () => {
                                 </td>
                                 <td>{ele.subject}</td>
                                 <td className="align-middle">
-                                  <button
+                                  <Link
+                                    to={`/contact/${ele.id}`}
                                     className="form-btn"
                                     style={{
                                       border: "1px solid #17a2b8",
@@ -231,7 +246,7 @@ const Contact = () => {
                                     <span style={{ color: "#17a2b8" }}>
                                       <FaRegEye />
                                     </span>
-                                  </button>
+                                  </Link>
                                   <button
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent default form submission behavior
@@ -241,7 +256,7 @@ const Contact = () => {
                                     style={{
                                       border: "1px solid red",
                                       backgroundColor: "white",
-                                      padding: "2px 5px",
+                                      padding: "1px 5px",
                                     }}
                                   >
                                     <span style={{ color: "red" }}>
@@ -263,10 +278,9 @@ const Contact = () => {
                           role="status"
                           aria-live="polite"
                         >
-                          Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
+                          Showing {currentPage * rowsPerPage - rowsPerPage + 1}{" "}
+                          to {Math.min(currentPage * rowsPerPage, data.length)}{" "}
+                          of {data.length} entries
                         </div>
                       </div>
                       <div className="col-sm-12 col-md-7">
@@ -283,7 +297,11 @@ const Contact = () => {
                             >
                               <button
                                 className="page-link"
-                                onClick={() => setCurrentPage(currentPage - 1)}
+                                onClick={() =>
+                                  setCurrentPage((prev) =>
+                                    prev === 1 ? prev : prev - 1
+                                  )
+                                }
                               >
                                 Previous
                               </button>
@@ -297,7 +315,11 @@ const Contact = () => {
                             >
                               <button
                                 className="page-link"
-                                onClick={() => setCurrentPage(currentPage + 1)}
+                                onClick={() =>
+                                  setCurrentPage((prev) =>
+                                    prev === totalPages ? prev : prev + 1
+                                  )
+                                }
                               >
                                 Next
                               </button>

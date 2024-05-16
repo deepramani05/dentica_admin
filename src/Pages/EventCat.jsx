@@ -16,6 +16,7 @@ const EventCat = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -65,12 +66,16 @@ const EventCat = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`https://denticadentalstudio.com/api/event_category/delete/`,{id}, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          })
+          .post(
+            `https://denticadentalstudio.com/api/event_category/delete/`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("token")}`,
+              },
+            }
+          )
           .then((res) => {
             console.log("Delete response:", res.data); // Check response from server
             // After successful deletion, update the state to remove the deleted item
@@ -140,7 +145,12 @@ const EventCat = () => {
     setCurrentPage(1);
   };
 
-  const itemsPerPage = 10;
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset current page when rows per page changes
+  };
+
+  const itemsPerPage = rowsPerPage;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -149,31 +159,33 @@ const EventCat = () => {
 
   // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-   ){
-       paginationButtons.push(
-           <li
-             key={i}
-             className={`paginate_button page-item ${
-               currentPage === i ? "active" : ""
-             }`}
-           >
-             <button className="page-link" onClick={() => setCurrentPage(i)}>
-               {i}
-             </button>
-           </li>
-         );
-     } else if (
-       i === currentPage -2 || i === currentPage + 2
-     ){
-       paginationButtons.push(
-         <li key ={i} className={'page-item ellipsis'}>
-           <span className="ellipsis">...</span>
-         </li>
-       )
-     }  
- }
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
 
   return (
     <div>
@@ -282,15 +294,33 @@ const EventCat = () => {
                           >
                             <h3 className="card-title">Event Category List</h3>
                           </div>
-                          <div className="search-bar">
-                            <OutlinedInput
-                              type="text"
-                              variant="outlined"
-                              placeholder="Search.."
-                              value={searchQuery}
-                              onChange={(e) => handleSearch(e.target.value)}
-                              style={{ height: "30px", margin: "10px 0" }}
-                            />
+                          <div className="d-flex" style={{alignItems:"center"}}>
+                            <div className="page-item">
+                              <span
+                                style={{ fontWeight: "600", margin: "0 20px" }}
+                              >
+                                Rows per page :
+                              </span>
+                              <input
+                                type="number"
+                                value={rowsPerPage}
+                                onChange={handleRowsPerPageChange}
+                                style={{
+                                  width: "70px",
+                                  marginRight: "5px",
+                                }}
+                              />
+                            </div>
+                            <div className="search-bar">
+                              <OutlinedInput
+                                type="text"
+                                variant="outlined"
+                                placeholder="Search.."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ height: "30px", margin: "10px 0" }}
+                              />
+                            </div>
                           </div>
                           <div className="table-container">
                             <div className="card-body">

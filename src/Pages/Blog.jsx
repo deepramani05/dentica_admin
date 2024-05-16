@@ -13,6 +13,7 @@ const Blog = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
 
   const { id } = useParams();
 
@@ -23,7 +24,7 @@ const Blog = () => {
 
   useEffect(() => {
     axios
-      .get("https://denticadentalstudio.com/api/blogs",{
+      .get("https://denticadentalstudio.com/api/blogs", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -80,61 +81,60 @@ const Blog = () => {
               icon: "error",
             });
           });
-        // setTimeout(() => window.location.reload(), 1000)
       }
     });
   };
+
   const stripHtmlTags = (html) => {
     const temp = document.createElement("div");
     temp.innerHTML = html;
     return temp.textContent || temp.innerText || "";
   };
 
-  const itemsPerPage = 5;
-  const filteredData = data.filter((post) =>
-    post.title.toLowerCase().includes(searchQuery)
-  );
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  // Generate pagination buttons
+  // Logic for pagination buttons
+  const totalPages = Math.ceil(data.length / rowsPerPage);
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
     ) {
-          paginationButtons.push(
-          <li
-            key={i}
-            className={`paginate_button page-item ${
-              currentPage === i ? "active" : ""
-            }`}
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <a
+            href="#"
+            aria-controls="example1"
+            data-dt-idx="0"
+            tabIndex="0"
+            className="page-link"
+            onClick={() => setCurrentPage(i)}
           >
-            <a
-              href="#"
-              aria-controls="example1"
-              data-dt-idx="0"
-              tabIndex="0"
-              className="page-link"
-              onClick={() => setCurrentPage(i)}
-            >
-              {i}
-            </a>
-          </li>
-        );
-      } else if(
-        i === currentPage -2 || i === currentPage + 2
-      ){
-        paginationButtons.push(
-          <li key ={i} className={'page-item ellipsis'}>
-            <span className="ellipsis">...</span>
-          </li>
-        )
-      }
-   
+            {i}
+          </a>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
   }
 
   // Slice the data array to show only the relevant entries based on pagination
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = currentPage * rowsPerPage;
+  const filteredData = data.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery)
+  );
   const displayedData = filteredData.slice(startIndex, endIndex);
   console.log("data", displayedData);
 
@@ -198,15 +198,30 @@ const Blog = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex" style={{alignItems:"center"}}>
+                      <div className="rows-per-page d-flex align-items-center">
+                        <label htmlFor="rowsPerPage" style={{margin:"0 20px"}}>Rows per Page : </label>
+                        <input
+                          id="rowsPerPage"
+                          className="p-0"
+                          type="number"
+                          value={rowsPerPage}
+                          onChange={(e) =>
+                            setRowsPerPage(parseInt(e.target.value))
+                          }
+                          style={{ width: "60px", marginLeft: "5px" }}
+                        />
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search.."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     <div className="card-body">
                       <table className="table table-bordered table-hover">
@@ -224,11 +239,16 @@ const Blog = () => {
                               <td>{startIndex + id + 1}</td>
                               <td>{ele.title}</td>
                               <td
-                                dangerouslySetInnerHTML={{ __html: ele.description }}
+                                dangerouslySetInnerHTML={{
+                                  __html: ele.description,
+                                }}
                               ></td>
                               <td width={"15%"}>
                                 <Link
-                                   to={`https://denticadentalstudio.com/blog/${ele.title.replace(/\s+/g, "-")}`}
+                                  to={`https://denticadentalstudio.com/blog/${ele.title.replace(
+                                    /\s+/g,
+                                    "-"
+                                  )}`}
                                   className="form-btn"
                                   style={{
                                     border: "1px solid #17a2b8",
@@ -272,78 +292,70 @@ const Blog = () => {
                           ))}
                         </tbody>
                       </table>
-                    </div>
-                    {/* pagination started */}
-                    <div className="row" style={{ display: "flex" }}>
-                      <div className="col-sm-12 col-md-5">
-                        <div
-                          className="dataTables_info"
-                          id="example1_info"
-                          role="status"
-                          aria-live="polite"
+                      <div className="pagination-container">
+                        <ul
+                          className="pagination"
+                          style={{
+                            display: "flex",
+                            listStyle: "none",
+                            justifyContent: "end",
+                            marginTop: "20px",
+                          }}
                         >
-                          Showing {startIndex + 1} to{" "}
-                          {Math.min(endIndex, filteredData.length)} of{" "}
-                          {filteredData.length} entries
-                        </div>
-                      </div>
-                      <div className="col-sm-12 col-md-7">
-                        <div
-                          className="dataTables_paginate paging_simple_numbers"
-                          id="example1_paginate"
-                        >
-                          <ul
-                            className="pagination"
-                            style={{
-                              justifyContent: "right",
-                              marginRight: "20px",
-                            }}
+                          <li
+                            className={`paginate_button page-item previous ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
                           >
-                            <li
-                              className={`paginate_button page-item previous ${
-                                currentPage === 1 ? "disabled" : ""
-                              }`}
-                              id="example1_previous"
+                            <a
+                              href="#"
+                              aria-controls="example1"
+                              data-dt-idx="0"
+                              tabIndex="0"
+                              className="page-link"
+                              onClick={() =>
+                                setCurrentPage((prev) => Math.max(prev - 1, 1))
+                              }
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                              >
-                                Previous
-                              </a>
-                            </li>
-                            {paginationButtons}
-                            <li
-                              className={`paginate_button page-item next ${
-                                currentPage === totalPages ? "disabled" : ""
-                              }`}
-                              id="example1_next"
+                              Previous
+                            </a>
+                          </li>
+                          {paginationButtons}
+                          <li
+                            className={`paginate_button page-item next ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                          >
+                            <a
+                              href="#"
+                              aria-controls="example1"
+                              data-dt-idx="7"
+                              tabIndex="0"
+                              className="page-link"
+                              onClick={() =>
+                                setCurrentPage((prev) =>
+                                  Math.min(prev + 1, totalPages)
+                                )
+                              }
                             >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                              >
-                                Next
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
+                              Next
+                            </a>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
+                  {/* /.card */}
                 </div>
+                {/* /.col */}
               </div>
+              {/* /.row */}
             </div>
+            {/* /.container-fluid */}
           </section>
+          {/* /.content */}
         </div>
+        {/* /.content-wrapper */}
       </div>
     </div>
   );

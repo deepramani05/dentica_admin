@@ -13,11 +13,17 @@ const Products = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { id } = useParams();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+  };
+
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setCurrentPage(1); // Reset to the first page when rows per page changes
   };
 
   useEffect(() => {
@@ -78,44 +84,45 @@ const Products = () => {
       });
   };
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(data.length / rowsPerPage);
 
   const filteredData = data.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = currentPage * itemsPerPage;
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = currentPage * rowsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   // pagination buttons start
   const paginationButtons = [];
-  for (let i = 1 ; i <= totalPages; i++) {
-    if ( i === 1 || i === currentPage || i ===totalPages || (i >= currentPage -1 && i <= currentPage +1)
-   ){
-       paginationButtons.push(
-           <li
-             key={i}
-             className={`paginate_button page-item ${
-               currentPage === i ? "active" : ""
-             }`}
-           >
-             <button className="page-link" onClick={() => setCurrentPage(i)}>
-               {i}
-             </button>
-           </li>
-         );
-     } else if (
-       i === currentPage -2 || i === currentPage + 2
-     ){
-       paginationButtons.push(
-         <li key ={i} className={'page-item ellipsis'}>
-           <span className="ellipsis">...</span>
-         </li>
-       )
-     }  
- }
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === currentPage ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      paginationButtons.push(
+        <li
+          key={i}
+          className={`paginate_button page-item ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          <button className="page-link" onClick={() => setCurrentPage(i)}>
+            {i}
+          </button>
+        </li>
+      );
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      paginationButtons.push(
+        <li key={i} className={"page-item ellipsis"}>
+          <span className="ellipsis">...</span>
+        </li>
+      );
+    }
+  }
 
   return (
     <div>
@@ -170,15 +177,28 @@ const Products = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="search-bar">
-                      <OutlinedInput
-                        type="text"
-                        variant="outlined"
-                        placeholder="Search.."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ height: "30px", margin: "10px 0" }}
-                      />
+                    <div className="d-flex" style={{alignItems:"center"}}>
+                      <div className="rows-per-page d-flex">
+                        <label htmlFor="rowsPerPage" style={{margin:"0 20px"}}>Rows per Page :</label>
+                        <input
+                          type="number"
+                          id="rowsPerPage"
+                          value={rowsPerPage}
+                          onChange={handleRowsPerPageChange}
+                          min="1"
+                          style={{ width: "50px"}}
+                        />
+                      </div>
+                      <div className="search-bar">
+                        <OutlinedInput
+                          type="text"
+                          variant="outlined"
+                          placeholder="Search.."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          style={{ height: "30px", margin: "10px 0" }}
+                        />
+                      </div>
                     </div>
                     {/* <!-- /.card-header --> */}
                     <div className="table-container">
@@ -197,9 +217,9 @@ const Products = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {displayedData.map((ele, id) => (
+                            {displayedData.map((ele, index) => (
                               <tr key={ele.id}>
-                                <td>{id + 1}</td>
+                                <td>{startIndex + index + 1}</td>
                                 <td>{ele.title}</td>
                                 <td style={{ width: "200px", height: "150px" }}>
                                   <img
@@ -218,8 +238,14 @@ const Products = () => {
                                   <Link
                                     to={
                                       ele.title === "Digital Dentristry"
-                                        ? `https://denticadentalstudio.com/digital-dentistry/${ele.title.replace(/\s+/g, "-")}`
-                                        : `https://denticadentalstudio.com/product/${ele.title.replace(/\s+/g, "-")}`
+                                        ? `https://denticadentalstudio.com/digital-dentistry/${ele.title.replace(
+                                            /\s+/g,
+                                            "-"
+                                          )}`
+                                        : `https://denticadentalstudio.com/product/${ele.title.replace(
+                                            /\s+/g,
+                                            "-"
+                                          )}`
                                     }
                                     className="form-btn"
                                     style={{
@@ -265,74 +291,37 @@ const Products = () => {
                           </tbody>
                         </table>
                       </div>
+                      <div className="pagination-container">
+                        <ul className="pagination">
+                          <li
+                            className={`paginate_button page-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                          >
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(currentPage - 1)}
+                            >
+                              Previous
+                            </button>
+                          </li>
+                          {paginationButtons}
+                          <li
+                            className={`paginate_button page-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                          >
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(currentPage + 1)}
+                            >
+                              Next
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                     {/* <!-- /.card-body --> */}
-                    {/* pagination started */}
-                    <div className="row" style={{ display: "flex" }}>
-                      <div className="col-sm-12 col-md-5">
-                        <div
-                          className="dataTables_info"
-                          id="example1_info"
-                          role="status"
-                          aria-live="polite"
-                        >
-                          Showing{" "}
-                          {currentPage * itemsPerPage - itemsPerPage + 1} to{" "}
-                          {Math.min(currentPage * itemsPerPage, data.length)} of{" "}
-                          {data.length} entries
-                        </div>
-                      </div>
-                      <div className="col-sm-12 col-md-7">
-                        <div
-                          className="dataTables_paginate paging_simple_numbers"
-                          id="example1_paginate"
-                        >
-                          <ul
-                            className="pagination"
-                            style={{
-                              justifyContent: "right",
-                              marginRight: "20px",
-                            }}
-                          >
-                            <li
-                              className={`paginate_button page-item previous ${
-                                currentPage === 1 ? "disabled" : ""
-                              }`}
-                              id="example1_previous"
-                            >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="10"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                              >
-                                Previous
-                              </a>
-                            </li>
-                            {paginationButtons}
-                            <li
-                              className={`paginate_button page-item next ${
-                                currentPage === totalPages ? "disabled" : ""
-                              }`}
-                              id="example1_next"
-                            >
-                              <a
-                                href="#"
-                                aria-controls="example1"
-                                data-dt-idx="0"
-                                tabIndex="0"
-                                className="page-link"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                              >
-                                Next
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
