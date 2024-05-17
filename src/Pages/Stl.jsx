@@ -18,9 +18,11 @@ const Stl = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
     // Filter the data based on the search query
-    const filtered = data.filter((item) =>
-      item.name.toLowerCase().includes(query.toLowerCase())
+    const filtered = data.filter(
+      (item) =>
+        item.fname && item.fname.toLowerCase().includes(query.toLowerCase())
     );
+
     setFilteredData(filtered);
     setCurrentPage(1); // Reset pagination to the first page
   };
@@ -192,7 +194,7 @@ const Stl = () => {
                     >
                       <h3 className="card-title">Stl Form List</h3>
                     </div>
-                    <div className="d-flex" style={{alignItems:"center"}}>
+                    <div className="d-flex" style={{ alignItems: "center" }}>
                       <div className="rows-per-page">
                         <span
                           style={{

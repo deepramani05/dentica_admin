@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
@@ -309,7 +308,7 @@ const Gallery = () => {
                               style={{
                                 alignItems: "center",
                                 gap: "10px",
-                                margin:"0 20px"
+                                margin: "0 20px",
                               }}
                             >
                               <label htmlFor="rowsPerPage">
@@ -363,18 +362,6 @@ const Gallery = () => {
                                         </td>
                                         <td>{ele.category}</td>
                                         <td className="align-middle">
-                                          <Link
-                                            className="form-btn"
-                                            style={{
-                                              border: "1px solid #17a2b8",
-                                              backgroundColor: "white",
-                                              padding: "2px 5px",
-                                            }}
-                                          >
-                                            <span style={{ color: "#17a2b8" }}>
-                                              <FaRegEye />
-                                            </span>
-                                          </Link>
                                           <Link
                                             to={`/gallery/edit/${ele.id}`}
                                             className="form-btn"

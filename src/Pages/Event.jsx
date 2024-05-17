@@ -72,6 +72,13 @@ const Event = () => {
           })
           .catch((err) => {
             console.log(err);
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Error !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
           });
       }
     });
@@ -79,8 +86,8 @@ const Event = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = data.filter((item) =>
-      item.cat.toLowerCase().includes(query.toLowerCase())
+    const filtered = data.filter(
+      (item) => item.category_id && item.category_id.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
@@ -182,9 +189,11 @@ const Event = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="d-flex" style={{alignItems:"center"}}>
+                    <div className="d-flex" style={{ alignItems: "center" }}>
                       <div className="page-item">
-                        <span style={{margin:"0 20px",fontWeight:"600"}}>Rows Per Page :</span>
+                        <span style={{ margin: "0 20px", fontWeight: "600" }}>
+                          Rows Per Page :
+                        </span>
                         <input
                           type="number"
                           value={rowsPerPage}
@@ -194,7 +203,6 @@ const Event = () => {
                             marginRight: "5px",
                           }}
                         />
-                        
                       </div>
                       <div className="search-bar">
                         <OutlinedInput
@@ -225,7 +233,7 @@ const Event = () => {
                             {displayedData.map((ele, index) => (
                               <tr key={index}>
                                 <td>{startIndex + index + 1}</td>
-                                <td>{ele.categoery_id}</td>
+                                <td>{ele.category_id}</td>
                                 <td width={"200px"} height={"100px"}>
                                   <img
                                     src={ele.image}
