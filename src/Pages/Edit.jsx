@@ -1,67 +1,113 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import img from "../images/home_about-center.png";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
+import Cookies from "js-cookie";
 
 const Edit = () => {
-  const [data, setData] = useState([]);
+  const { id } = useParams("");
   const [formData, setFormData] = useState({
     title: "",
-    sdesc: "",
-    mtitle: "",
-    keyword: "",
-    mdesc: "",
-    image: "",
-    desc: "",
-    haddress: "",
+    short_description: "",
+    meta_title: "",
+    meta_keyword: "",
+    meta_description: "",
+    image: null,
+    description: "",
+    header_address: "",
     address: "",
-    num1: "",
-    num2: "",
-    mail: "",
-    mon: "",
-    sun: "",
+    phone_number1: "",
+    phone_number2: "",
+    email: "",
+    monday_saturday: "",
+    sunday: "",
   });
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/aboutEdit")
-      .then((res) => {
-        console.log(res.data);
-        setData(res.data);
-        // Populate formData with fetched data
-        if (res.data.length > 0) {
-          setFormData(res.data[0]); // Assuming the first item contains the data
+      .post("https://denticadentalstudio.com/api/show/about",{ id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
         }
+      )
+      .then((res) => {
+        console.log(res.data.data.about);
+        // setData(res.data.data.about);
+        // // Populate formData with fetched data
+        // if (res.data.length > 0) {
+        //   setFormData(res.data[0]); // Assuming the first item contains the data
+        // }
+        const{
+          title,
+          short_description,
+          meta_title,
+          meta_keyword,
+          meta_description,
+          image,
+          description,
+          header_address,
+          address,
+          phone_number1,
+          phone_number2,
+          email,
+          monday_saturday,
+          sunday
+        } = res.data.data.about;
+
+        setFormData({
+          title,
+          short_description,
+          meta_title,
+          meta_keyword,
+          meta_description,
+          image,
+          description,
+          header_address,
+          address,
+          phone_number1,
+          phone_number2,
+          email,
+          monday_saturday,
+          sunday
+        })
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
-    // Check if the event comes from React Quill (description field)
-    if (e?.target?.name) {
-      const { name, value } = e.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    } else {
-      // Handle React Quill editor change (description field)
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        desc: e,
-      }));
-    }
+    const {name, value } = e.target;
+    const file = e.target.files?e.target.files[0]: null;
+    setFormData({
+      ...formData,
+      [name]: value,
+      image: file,
+      imageUrl: file ? URL.createObjectURL(file): null,
+    });
   };
 
+  const handleChange1 = (value)=>{
+    setFormData({
+     ...formData,
+      description: value
+    })
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedFormData = new FormData();
+    updatedFormData.append=(id)
 
     axios
-      .patch(`http://localhost:5000/aboutEdit/${data[0].id}`, formData)
+      .post(`https://denticadentalstudio.com/api/about/update`, updatedFormData,{
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -73,7 +119,7 @@ const Edit = () => {
         }).then(() => {
           window.location.href = "/about-us";
         });
-        // setTimeout(() => window.location.reload(), 1000)
+         setTimeout(() => window.location.reload(), 1000)
       })
       .catch((err) => {
         console.log(err);
@@ -119,9 +165,7 @@ const Edit = () => {
                       <h3 className="card-title">About</h3>
                     </div>
 
-                    {data.map((item, index) => (
                       <form
-                        key={index}
                         className="text-left"
                         onSubmit={handleSubmit}
                       >
@@ -147,9 +191,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputShortDescription"
                               placeholder="Discover the finest in dental lab products"
-                              name="sdesc"
+                              name="short_description"
                               onChange={handleChange}
-                              value={formData.sdesc}
+                              value={formData.short_description}
                             />
                           </div>
                           <div className="form-group">
@@ -161,9 +205,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputMetaTitle"
                               placeholder="about"
-                              name="mtitle"
+                              name="meta_title"
                               onChange={handleChange}
-                              value={formData.mtitle}
+                              value={formData.meta_title}
                             />
                           </div>
                           <div className="form-group">
@@ -175,9 +219,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputMetaKeyword"
                               placeholder="about"
-                              name="keyword"
+                              name="meta_keyword"
                               onChange={handleChange}
-                              value={formData.keyword}
+                              value={formData.meta_keyword}
                             />
                           </div>
                           <div className="form-group">
@@ -189,9 +233,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputMetaDescription"
                               placeholder="about"
-                              name="mdesc"
+                              name="meta_description"
                               onChange={handleChange}
-                              value={formData.mdesc}
+                              value={formData.meta_description}
                             />
                           </div>
                           <div className="form-group">
@@ -229,8 +273,8 @@ const Edit = () => {
                               rows="10"
                               placeholder="Place Some Text Here"
                               name="desc"
-                              onChange={handleChange}
-                              value={formData.desc}
+                              onChange={handleChange1}
+                              value={formData.description}
                               modules={{
                                 toolbar: [
                                   [
@@ -282,16 +326,16 @@ const Edit = () => {
                           </div>
                           <div className="form-group">
                             <label htmlFor="exampleInputHeaderAddress">
-                              Header Address{" "}
+                              Header Address
                               <span style={{ color: "red" }}>*</span>
                             </label>
                             <textarea
                               className="form-control"
                               rows="1"
                               placeholder="Enter ..."
-                              name="haddress"
+                              name="header_address"
                               onChange={handleChange}
-                              value={formData.haddress}
+                              value={formData.header_address}
                             ></textarea>
                           </div>
                           <div className="form-group">
@@ -316,9 +360,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputPhoneNumber1"
                               placeholder="Enter Number ..."
-                              name="num1"
+                              name=" phone_number1"
                               onChange={handleChange}
-                              value={formData.num1}
+                              value={formData. phone_number1}
                             />
                           </div>
                           <div className="form-group">
@@ -330,9 +374,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputPhoneNumber2"
                               placeholder="Enter Number ..."
-                              name="num2"
+                              name="phone_number2"
                               onChange={handleChange}
-                              value={formData.num2}
+                              value={formData.phone_number2}
                             />
                           </div>
                           <div className="form-group">
@@ -342,9 +386,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputEmail"
                               placeholder="E-mail Address ..."
-                              name="mail"
+                              name="email"
                               onChange={handleChange}
-                              value={formData.mail}
+                              value={formData.email}
                             />
                           </div>
                           <div
@@ -362,9 +406,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputMondayToSaturday"
                               placeholder="Enter Time"
-                              name="mon"
+                              name=" monday_saturday"
                               onChange={handleChange}
-                              value={formData.mon}
+                              value={formData. monday_saturday}
                             />
                           </div>
                           <div className="form-group">
@@ -374,9 +418,9 @@ const Edit = () => {
                               className="form-control"
                               id="exampleInputSunday"
                               placeholder="Enter Time."
-                              name="sun"
+                              name="sunday"
                               onChange={handleChange}
-                              value={formData.sun}
+                              value={formData.sunday}
                             />
                           </div>
                         </div>
@@ -390,7 +434,7 @@ const Edit = () => {
                           </button>
                         </div>
                       </form>
-                    ))}
+                    
                   </div>
                 </div>
               </div>
