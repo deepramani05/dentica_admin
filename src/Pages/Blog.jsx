@@ -245,7 +245,7 @@ const Blog = () => {
                               ></td>
                               <td width={"15%"}>
                                 <Link
-                                  to={`https://denticadentalstudio.com/blog/${ele.title.replace(
+                                  to={`https://denticadentalstudio.com/blog/${ele.slug.replace(
                                     /\s+/g,
                                     "-"
                                   )}`}
