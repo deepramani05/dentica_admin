@@ -40,6 +40,13 @@ const EventAdd = () => {
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error !",
+          showConfirmButton: false,
+          timer: 1000,
+        })
       });
   };
 
