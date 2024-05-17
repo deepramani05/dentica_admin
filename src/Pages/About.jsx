@@ -234,7 +234,7 @@ const About = () => {
                                     </span>
                                   </Link>
                                   <Link
-                                    to="/about/edit"
+                                    to={`/about/edit/${ele.id}`}
                                     className="form-btn"
                                     style={{
                                       border: "1px solid #17a2b8",

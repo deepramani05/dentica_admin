@@ -40,6 +40,7 @@ const Allroutes = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<About />} />
+        <Route path="/about/edit/:id" element={<Edit />} />
         <Route path="/gallery" element={<Gallary />} />
         <Route path="/contact" element={<Contacts />} />
         <Route path="/contact/:id" element={<ContactView />} />
