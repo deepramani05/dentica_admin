@@ -99,8 +99,11 @@ const Edit = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedFormData = new FormData();
-    updatedFormData.append=(id)
+    const updatedFormData ={
+      ...formData,
+      id: id
+    }
+   
 
     axios
       .post(`https://denticadentalstudio.com/api/about/update`, updatedFormData,{
