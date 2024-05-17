@@ -9,14 +9,15 @@ import { useLocation } from 'react-router-dom';
 
 function App() {
   const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
   const isDashboardPage = location.pathname === "/dashboard";
 
   return (
     <div className="App">
-      <Header/>
-      <SideNav/>
+      {!isLoginPage && <Header/>}
+      {!isLoginPage && <SideNav/>}
       <Allroutes/>
-      <Footer isDashboardPage={isDashboardPage} />
+      {!isLoginPage && <Footer isDashboardPage={isDashboardPage} />}
     </div>
   );
 }
