@@ -20,54 +20,56 @@ const ProductAdd = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const handleImageChange = (e) =>{
+  const handleImageChange = (e) => {
     const filesArray = Array.from(e.target.files);
-    setImages(filesArray);
-  }
+    setImages([...images, ...filesArray]);
+  };
 
   useEffect(() => {
     setLoading(false);
-  },[])
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('sdescription',sdesc);
-    formData.append('meta_title', mtitle);
-    formData.append('meta_description', mdesc);
-    formData.append('meta_keyword', keyword);
-    formData.append('product_type',cat);
-    formData.append('headerimage', headerimage);
-    formData.append('background_image', bgimage);
-    formData.append('image', featuredimage);
-    formData.append('description',desc);
-    images.forEach((image, index) => { 
+    formData.append("title", title);
+    formData.append("sdescription", sdesc);
+    formData.append("meta_title", mtitle);
+    formData.append("meta_description", mdesc);
+    formData.append("meta_keyword", keyword);
+    formData.append("product_type", cat);
+    formData.append("headerimage", headerimage);
+    formData.append("background_image", bgimage);
+    formData.append("image", featuredimage);
+    formData.append("description", desc);
+    images.forEach((image, index) => {
       formData.append(`productimage${index + 1}`, image);
     });
 
-
-    axios
-      .post(`https://denticadentalstudio.com/api/product/store`, formData,{
-        headers:{
-          Authorization: `Bearer ${Cookies.get("token")}`,
+    try {
+      const response = await axios.post(
+        `https://denticadentalstudio.com/api/product/store`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
-      })
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Data Added Successfully !",
-          showConfirmButton: false,
-          timer: 1000,
-        }).then(() => {
-          window.location.href = "/product";
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+      );
+      console.log(response.data);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Data Added Successfully !",
+        showConfirmButton: false,
+        timer: 1000,
+      }).then(() => {
+        window.location.href = "/product";
       });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -81,9 +83,7 @@ const ProductAdd = () => {
         </div>
       )}
       <div className="wrapper">
-        {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
-          {/* Content Header (Page header) */}
           <section className="content-header">
             <div className="container-fluid">
               <div className="row mb-2">
@@ -105,7 +105,6 @@ const ProductAdd = () => {
                 </div>
               </div>
             </div>
-            {/* /.container-fluid */}
           </section>
 
           <section className="content col-md-12">
@@ -189,19 +188,18 @@ const ProductAdd = () => {
                             value={keyword}
                           />
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputProductType">
                             Product Type
                           </label>
-                          <br />
                           <select
+                            className="form-control"
+                            id="exampleInputProductType"
                             name="product_type"
-                            id=""
-                            className="w-100 p-2"
                             onChange={(e) => setCat(e.target.value)}
                             value={cat}
                           >
-                            <option value="Select Type">Select Type</option>
+                            <option>Select Type</option>
                             <option value="Digital Dentistry">
                               Digital Dentistry
                             </option>
@@ -209,89 +207,104 @@ const ProductAdd = () => {
                           </select>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">Header Image</label>
+                          <label htmlFor="exampleInputHeaderImage">
+                            Header Image
+                          </label>
                           <div className="custom-file">
                             <input
                               type="file"
                               className="custom-file-input"
-                              id="exampleInputFile"
+                              id="exampleInputHeaderImage"
                               name="headerimage"
-                              onChange={(e) => {
-                                const file = e.target.files[0];
-                                setHeaderimage(file);
-                              }}
-                              
+                              onChange={(e) =>
+                                setHeaderimage(e.target.files[0])
+                              }
                             />
                             <label
                               className="custom-file-label"
-                              htmlFor="exampleInputFile"
+                              htmlFor="exampleInputHeaderImage"
                             >
                               Choose file
                             </label>
                           </div>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">
+                          <label htmlFor="exampleInputBackgroundImage">
                             Background Image
                           </label>
                           <div className="custom-file">
                             <input
                               type="file"
                               className="custom-file-input"
-                              id="exampleInputFile"
+                              id="exampleInputBackgroundImage"
                               name="background_image"
-                              onChange={(e) => {
-                                const file = e.target.files[0];
-                                setBgimage(file)}}
+                              onChange={(e) => setBgimage(e.target.files[0])}
                             />
                             <label
                               className="custom-file-label"
-                              htmlFor="exampleInputFile"
+                              htmlFor="exampleInputBackgroundImage"
                             >
                               Choose file
                             </label>
                           </div>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">
+                          <label htmlFor="exampleInputFeaturedImage">
                             Featured Image
                           </label>
                           <div className="custom-file">
                             <input
                               type="file"
                               className="custom-file-input"
-                              id="exampleInputFile"
+                              id="exampleInputFeaturedImage"
                               name="image"
-                              onChange={(e) =>{ 
-                                const file = e.target.files[0];
-                                setFeaturedimage(file)}}
-                              
+                              onChange={(e) =>
+                                setFeaturedimage(e.target.files[0])
+                              }
                             />
                             <label
                               className="custom-file-label"
-                              htmlFor="exampleInputFile"
+                              htmlFor="exampleInputFeaturedImage"
                             >
                               Choose file
                             </label>
                           </div>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFile">Images</label>
+                          <label htmlFor="exampleInputImages">Images</label>
                           <div className="custom-file">
                             <input
                               type="file"
                               className="custom-file-input"
-                              id="exampleInputFile"
+                              id="exampleInputImages"
                               name="productimage"
                               onChange={handleImageChange}
+                              multiple
                             />
                             <label
                               className="custom-file-label"
-                              htmlFor="exampleInputFile"
+                              htmlFor="exampleInputImages"
                             >
                               Choose file
                             </label>
                           </div>
+                          {/* Render newly uploaded images */}
+                          {images.length > 0 && (
+                            <div className="mt-3">
+                              <h5>Uploaded Images:</h5>
+                              <div className="row">
+                                {images.map((image, index) => (
+                                  <div className="col-md-3" key={index}>
+                                    <img
+                                      src={URL.createObjectURL(image)}
+                                      alt={`newly-uploaded-${index}`}
+                                      className="img-fluid mb-3"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputDescription">
@@ -302,9 +315,7 @@ const ProductAdd = () => {
                             rows="10"
                             placeholder="Place Some Text Here"
                             name="description"
-                            // onChange={(e) => setDesc(e.target.value)}
                             onChange={setDesc}
-                            // value={desc}
                             modules={{
                               toolbar: [
                                 [
@@ -320,12 +331,7 @@ const ProductAdd = () => {
                                   "strike",
                                   "blockquote",
                                 ],
-                                [
-                                  { list: "ordered" },
-                                  { list: "bullet" },
-                                  { indent: "-1" },
-                                  { indent: "+1" },
-                                ],
+                                [{ list: "ordered" }, { list: "bullet" }],
                                 ["link", "image", "video"],
                                 ["clean"],
                               ],
@@ -341,7 +347,6 @@ const ProductAdd = () => {
                               "blockquote",
                               "list",
                               "bullet",
-                              "indent",
                               "link",
                               "image",
                               "video",
