@@ -12,6 +12,8 @@ const MetaEdit = () => {
     meta_keyword: "",
     meta_description: "",
   });
+
+  const [loading, setLoading] = useState(true);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +22,7 @@ const MetaEdit = () => {
       [name]: value,
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedMetaData = {
@@ -72,11 +75,22 @@ const MetaEdit = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, [id]); // Fetching meta data when the id changes
-  // console.log("meta data",metaData.meta_url);
+
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div class="wrapper">
         {/* Content Wrapper. Contains page content */}
         <div class="content-wrapper">

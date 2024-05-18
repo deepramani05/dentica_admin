@@ -15,6 +15,8 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
 
   const handleSearch = (query) => {
@@ -40,6 +42,9 @@ const Products = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -126,6 +131,14 @@ const Products = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">
@@ -177,16 +190,21 @@ const Products = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="d-flex" style={{alignItems:"center"}}>
+                    <div className="d-flex" style={{ alignItems: "center" }}>
                       <div className="rows-per-page d-flex">
-                        <label htmlFor="rowsPerPage" style={{margin:"0 20px"}}>Rows per Page :</label>
+                        <label
+                          htmlFor="rowsPerPage"
+                          style={{ margin: "0 20px" }}
+                        >
+                          Rows per Page :
+                        </label>
                         <input
                           type="number"
                           id="rowsPerPage"
                           value={rowsPerPage}
                           onChange={handleRowsPerPageChange}
                           min="1"
-                          style={{ width: "50px"}}
+                          style={{ width: "50px" }}
                         />
                       </div>
                       <div className="search-bar">

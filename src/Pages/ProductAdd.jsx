@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -18,10 +18,16 @@ const ProductAdd = () => {
   const [images, setImages] = useState([]);
   const [desc, setDesc] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   const handleImageChange = (e) =>{
     const filesArray = Array.from(e.target.files);
     setImages(filesArray);
   }
+
+  useEffect(() => {
+    setLoading(false);
+  },[])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,6 +72,14 @@ const ProductAdd = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">

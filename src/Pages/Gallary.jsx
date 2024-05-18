@@ -16,6 +16,8 @@ const Gallery = () => {
   let [category, setCat] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
 
+  const [loading, setLoading] = useState(true);
+
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,7 +94,9 @@ const Gallery = () => {
       fetchData();
       setDataFetched(true);
     }
-  }, [dataFetched]);
+
+    setLoading(false)
+  }, []);
 
   const handleDelete = async (id) => {
     try {
@@ -173,6 +177,14 @@ const Gallery = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

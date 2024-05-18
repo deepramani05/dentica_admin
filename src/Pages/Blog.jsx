@@ -15,6 +15,8 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
 
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
 
   const handleSearch = (query) => {
@@ -36,7 +38,10 @@ const Blog = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   const handledelete = (id) => {
@@ -140,6 +145,14 @@ const Blog = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">

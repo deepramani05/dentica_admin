@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 const ContactView = () => {
   const [contactDetail, setContectDetail] = useState({}); // Change initial state to object
 
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -26,11 +28,22 @@ const ContactView = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

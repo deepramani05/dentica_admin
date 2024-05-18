@@ -14,6 +14,8 @@ const Contact = () => {
   const [data, setData] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10); // New state for rows per page
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get(`https://denticadentalstudio.com/api/contactus`, {
@@ -29,7 +31,10 @@ const Contact = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   // Assuming 'id' is defined somewhere in your code or passed as an argument to handleDelete function
@@ -144,6 +149,14 @@ const Contact = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

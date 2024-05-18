@@ -13,6 +13,8 @@ const Meta = () => {
   const [keyword, setKeyword] = useState("");
   const [desc, setDesc] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,6 +79,9 @@ const Meta = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -175,6 +180,14 @@ const Meta = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">
@@ -295,7 +308,7 @@ const Meta = () => {
                                 style={{
                                   fontWeight: "600",
                                   textTransform: "capitalize",
-                                  margin:"0 20px"
+                                  margin: "0 20px",
                                 }}
                               >
                                 rows per page :

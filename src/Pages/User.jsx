@@ -15,6 +15,8 @@ const User = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const token = Cookies.get("token");
     if (!token) {
@@ -43,6 +45,9 @@ const User = () => {
           title: "Error!",
           text: "Failed to fetch user data",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -148,227 +153,241 @@ const User = () => {
   }
 
   return (
-    <div className="wrapper">
-      <div className="content-wrapper">
-        <section className="content-header">
-          <div className="container-fluid">
-            <div className="row mb-2 text-left">
-              <div className="col-sm-6">
-                <h1>General Form</h1>
-              </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li
-                    className="breadcrumb-item active"
-                    style={{ color: "#ca629d" }}
-                  >
-                    User
-                  </li>
-                </ol>
+    <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
+      <div className="wrapper">
+        <div className="content-wrapper">
+          <section className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2 text-left">
+                <div className="col-sm-6">
+                  <h1>General Form</h1>
+                </div>
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
+                      <Link to="/">Home</Link>
+                    </li>
+                    <li
+                      className="breadcrumb-item active"
+                      style={{ color: "#ca629d" }}
+                    >
+                      User
+                    </li>
+                  </ol>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="content">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-4">
-                <div className="card">
-                  <div
-                    className="card-header"
-                    style={{ backgroundColor: "rgb(37, 111, 152)" }}
-                  >
-                    <h3 className="card-title text-white">Add User</h3>
+          <section className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="card">
+                    <div
+                      className="card-header"
+                      style={{ backgroundColor: "rgb(37, 111, 152)" }}
+                    >
+                      <h3 className="card-title text-white">Add User</h3>
+                    </div>
+                    <form onSubmit={handleUserSubmit}>
+                      <div className="card-body text-left">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputName">
+                            Name <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="exampleInputName"
+                            placeholder="Enter your name ..."
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail">
+                            Email <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            id="exampleInputEmail"
+                            placeholder="Enter your email ..."
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword">
+                            Password <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            id="exampleInputPassword"
+                            placeholder="Password ..."
+                            onChange={(e) => setPass(e.target.value)}
+                            value={pass}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="card-footer text-left">
+                        <button
+                          type="submit"
+                          className="btn text-white form-dlt-btn"
+                          style={{ backgroundColor: "#ca629d" }}
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                  <form onSubmit={handleUserSubmit}>
-                    <div className="card-body text-left">
-                      <div className="form-group">
-                        <label htmlFor="exampleInputName">
-                          Name <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="exampleInputName"
-                          placeholder="Enter your name ..."
-                          onChange={(e) => setName(e.target.value)}
-                          value={name}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputEmail">
-                          Email <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="exampleInputEmail"
-                          placeholder="Enter your email ..."
-                          onChange={(e) => setEmail(e.target.value)}
-                          value={email}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputPassword">
-                          Password <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          id="exampleInputPassword"
-                          placeholder="Password ..."
-                          onChange={(e) => setPass(e.target.value)}
-                          value={pass}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="card-footer text-left">
-                      <button
-                        type="submit"
-                        className="btn text-white form-dlt-btn"
-                        style={{ backgroundColor: "#ca629d" }}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </form>
                 </div>
-              </div>
-              <div className="col-8">
-                <div className="card">
-                  <div
-                    className="card-header text-light"
-                    style={{ backgroundColor: "rgb(37, 111, 152)" }}
-                  >
-                    <h3 className="card-title">User List</h3>
-                  </div>
-                  <div className="search-bar"></div>
-                  <div className="table-container">
-                    <div className="card-body">
-                      <div
-                        className="form-group d-flex align-items-center"
-                        style={{ gap: "10px" }}
-                      >
-                        <label htmlFor="rowsPerPage">Rows Per Page:</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="rowsPerPage"
-                          min="1"
-                          onChange={handleRowsPerPageChange}
-                          value={rowsPerPage}
-                          style={{ width: "100px" }}
-                        />
-                      </div>
-                      <table
-                        className="table table-bordered table-hover"
-                        style={{ overflowX: "auto" }}
-                      >
-                        <thead>
-                          <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Email Address</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedData.map((user, index) => (
-                            <tr key={user.id}>
-                              <td>{startIndex + index + 1}</td>
-                              <td>{user.name}</td>
-                              <td>{user.email}</td>
-                              <td>
-                                <Link
-                                  to={`/users/edit/${user.id}`}
-                                  className="form-btn"
-                                  style={{
-                                    border: "1px solid #17a2b8",
-                                    padding: "5px",
-                                    backgroundColor: "white",
-                                  }}
-                                >
-                                  <span style={{ color: "#17a2b8" }}>
-                                    <BiSolidEdit />
-                                  </span>
-                                </Link>
-                                <button
-                                  onClick={() => handleDelete(user.id)}
-                                  className="form-btn-dlt"
-                                  style={{
-                                    border: "1px solid red",
-                                    padding: "4px",
-                                    backgroundColor: "white",
-                                    color: "red",
-                                  }}
-                                >
-                                  <MdDelete />
-                                </button>
-                              </td>
+                <div className="col-8">
+                  <div className="card">
+                    <div
+                      className="card-header text-light"
+                      style={{ backgroundColor: "rgb(37, 111, 152)" }}
+                    >
+                      <h3 className="card-title">User List</h3>
+                    </div>
+                    <div className="search-bar"></div>
+                    <div className="table-container">
+                      <div className="card-body">
+                        <div
+                          className="form-group d-flex align-items-center"
+                          style={{ gap: "10px" }}
+                        >
+                          <label htmlFor="rowsPerPage">Rows Per Page:</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            id="rowsPerPage"
+                            min="1"
+                            onChange={handleRowsPerPageChange}
+                            value={rowsPerPage}
+                            style={{ width: "100px" }}
+                          />
+                        </div>
+                        <table
+                          className="table table-bordered table-hover"
+                          style={{ overflowX: "auto" }}
+                        >
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Name</th>
+                              <th>Email Address</th>
+                              <th>Actions</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div className="row" style={{ display: "flex" }}>
-                    <div className="col-sm-12 col-md-5">
-                      <div
-                        className="dataTables_info"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        Showing {startIndex + 1} to{" "}
-                        {Math.min(endIndex, data.length)} of {data.length}{" "}
-                        entries
+                          </thead>
+                          <tbody>
+                            {displayedData.map((user, index) => (
+                              <tr key={user.id}>
+                                <td>{startIndex + index + 1}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>
+                                  <Link
+                                    to={`/users/edit/${user.id}`}
+                                    className="form-btn"
+                                    style={{
+                                      border: "1px solid #17a2b8",
+                                      padding: "5px",
+                                      backgroundColor: "white",
+                                    }}
+                                  >
+                                    <span style={{ color: "#17a2b8" }}>
+                                      <BiSolidEdit />
+                                    </span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handleDelete(user.id)}
+                                    className="form-btn-dlt"
+                                    style={{
+                                      border: "1px solid red",
+                                      padding: "4px",
+                                      backgroundColor: "white",
+                                      color: "red",
+                                    }}
+                                  >
+                                    <MdDelete />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-                    <div className="col-sm-12 col-md-7">
-                      <div className="dataTables_paginate paging_simple_numbers">
-                        <ul className="pagination">
-                          <li
-                            className={`page-item ${
-                              currentPage === 1 ? "disabled" : ""
-                            }`}
-                          >
-                            <button
-                              className="page-link"
-                              onClick={() => setCurrentPage((prev) => prev - 1)}
-                              disabled={currentPage === 1}
+                    <div className="row" style={{ display: "flex" }}>
+                      <div className="col-sm-12 col-md-5">
+                        <div
+                          className="dataTables_info"
+                          role="status"
+                          aria-live="polite"
+                        >
+                          Showing {startIndex + 1} to{" "}
+                          {Math.min(endIndex, data.length)} of {data.length}{" "}
+                          entries
+                        </div>
+                      </div>
+                      <div className="col-sm-12 col-md-7">
+                        <div className="dataTables_paginate paging_simple_numbers">
+                          <ul className="pagination">
+                            <li
+                              className={`page-item ${
+                                currentPage === 1 ? "disabled" : ""
+                              }`}
                             >
-                              Previous
-                            </button>
-                          </li>
-                          {paginationButtons.map((button) => button)}
-                          <li
-                            className={`page-item ${
-                              currentPage === totalPages ? "disabled" : ""
-                            }`}
-                          >
-                            <button
-                              className="page-link"
-                              onClick={() => setCurrentPage((prev) => prev + 1)}
-                              disabled={currentPage === totalPages}
+                              <button
+                                className="page-link"
+                                onClick={() =>
+                                  setCurrentPage((prev) => prev - 1)
+                                }
+                                disabled={currentPage === 1}
+                              >
+                                Previous
+                              </button>
+                            </li>
+                            {paginationButtons.map((button) => button)}
+                            <li
+                              className={`page-item ${
+                                currentPage === totalPages ? "disabled" : ""
+                              }`}
                             >
-                              Next
-                            </button>
-                          </li>
-                        </ul>
+                              <button
+                                className="page-link"
+                                onClick={() =>
+                                  setCurrentPage((prev) => prev + 1)
+                                }
+                                disabled={currentPage === totalPages}
+                              >
+                                Next
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );

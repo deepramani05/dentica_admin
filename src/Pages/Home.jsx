@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
 const Home = () => {
-
   let [title, setTitle] = useState("");
   let [subtitle, setSubtitle] = useState("");
   let [desc, setDesc] = useState("");
@@ -14,15 +13,17 @@ const Home = () => {
   let [insta, setInsta] = useState("");
   let [fb, setFb] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   const handleFormsubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
     formData.append("subtitle", subtitle);
     formData.append("description", desc);
-    formData.append("image", image); 
+    formData.append("image", image);
     axios
-      .post(`https://denticadentalstudio.com/api/home/store`, formData,{
+      .post(`https://denticadentalstudio.com/api/home/store`, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -37,10 +38,10 @@ const Home = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        setTitle("")
-        setSubtitle("")
-        setDesc("")
-        setImage("")
+        setTitle("");
+        setSubtitle("");
+        setDesc("");
+        setImage("");
       })
       .catch((err) => {
         console.log(err);
@@ -63,9 +64,8 @@ const Home = () => {
       facebook: fb || undefined,
     };
 
-
     axios
-      .post(`https://denticadentalstudio.com/api/socialmedia/store`, formData,{
+      .post(`https://denticadentalstudio.com/api/socialmedia/store`, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -98,8 +98,8 @@ const Home = () => {
     // setTimeout(() => window.location.reload(), 1000);
   };
 
-  const fetchData = async () =>{
-    try{
+  const fetchData = async () => {
+    try {
       const response = await axios.get(
         `https://denticadentalstudio.com/api/home`
       );
@@ -109,21 +109,32 @@ const Home = () => {
         setTitle(homeData.title);
         setSubtitle(homeData.subtitle);
         setDesc(homeData.description);
-        setImage(homeData.image);  
+        setImage(homeData.image);
         setWp(response.data.data.whatsapp_url);
         setInsta(response.data.data.instagram_url);
         setFb(response.data.data.facebook_url);
-
-      } 
-    } catch(error){
+      }
+    } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchData();
+
+    setLoading(false);
   }, []);
+
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div class="wrapper">
         {/* <!-- Content Wrapper. Contains page content --> */}
         <div class="content-wrapper">

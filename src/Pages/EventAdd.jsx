@@ -12,6 +12,8 @@ const EventAdd = () => {
 
   let [data, setData] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const layout = document.querySelector('input[name="layout"]:checked').value;
@@ -64,11 +66,22 @@ const EventAdd = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div class="wrapper">
         {/* <!-- Content Wrapper. Contains page content --> */}
         <div class="content-wrapper">

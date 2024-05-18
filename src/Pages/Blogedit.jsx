@@ -23,6 +23,8 @@ const Blogedit = () => {
 
   const { id } = useParams("");
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .post(
@@ -61,7 +63,10 @@ const Blogedit = () => {
       })
       .catch((err) => {
         console.error(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, [id]);
 
   const handleChange = (e) => {
@@ -145,6 +150,14 @@ const Blogedit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

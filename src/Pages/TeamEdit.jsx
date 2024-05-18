@@ -12,6 +12,8 @@ const TeamEdit = () => {
     post: "",
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .post(
@@ -30,7 +32,10 @@ const TeamEdit = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, [id]);
 
   const handleSubmit = (e) => {
@@ -84,6 +89,14 @@ const TeamEdit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

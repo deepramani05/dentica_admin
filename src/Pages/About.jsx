@@ -14,6 +14,8 @@ const About = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10); // State for rows per page
 
+  const [loading, setLoading] = useState(true);
+
   let { id } = useParams();
 
   useEffect(() => {
@@ -34,7 +36,10 @@ const About = () => {
       })
       .catch((err) => {
         console.log("Error fetching data:", err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   };
 
   const handleDelete = (id) => {
@@ -128,6 +133,14 @@ const About = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

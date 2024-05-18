@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 const EventCatEdit = () => {
   const { id } = useParams(); // Assuming you have an id parameter for the event category
   const [data, setData] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
   // State variables to hold form data
   const [formData, setFormData] = useState({
     name: "",
@@ -45,6 +48,9 @@ const EventCatEdit = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id]);
 
@@ -118,6 +124,14 @@ const EventCatEdit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

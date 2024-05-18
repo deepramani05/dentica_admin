@@ -6,33 +6,53 @@ const Dashboard = () => {
   const [stlFilesCount, setStlFilesCount] = useState(0);
   const [reviewed, setReviewed] = useState(0);
 
-  useEffect(()=>{
-    const fetchData = async () =>{
-      try{
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         const token = Cookies.get("token");
-        const response = await fetch("https://denticadentalstudio.com/api/dashboard",{
-          method: "GET",
-          headers:{
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://denticadentalstudio.com/api/dashboard",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.ok) {
-          const data  = await response.json();    
-            const { unreviewedCount, reviewedCount } = data.data;
-            setStlFilesCount (unreviewedCount);
-            setReviewed (reviewedCount);
-        }else{
-          console.error("Something went wrong",response.statusText,response.statusMessage);
+          const data = await response.json();
+          const { unreviewedCount, reviewedCount } = data.data;
+          setStlFilesCount(unreviewedCount);
+          setReviewed(reviewedCount);
+        } else {
+          console.error(
+            "Something went wrong",
+            response.statusText,
+            response.statusMessage
+          );
         }
-      }catch (error){
-        console.error("Something went wrong",error);
+      } catch (error) {
+        console.error("Something went wrong", error);
       }
-    }
-    fetchData()
-  },[]);
+    };
+    fetchData();
+
+    setLoading(false);
+  }, []);
+
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
         <div className="content-header">
@@ -46,7 +66,12 @@ const Dashboard = () => {
                   <li className="breadcrumb-item">
                     <Link to="/">Home</Link>
                   </li>
-                  <li className="breadcrumb-item active" style={{ color: "#ca629d" }}>Dashboard</li>
+                  <li
+                    className="breadcrumb-item active"
+                    style={{ color: "#ca629d" }}
+                  >
+                    Dashboard
+                  </li>
                 </ol>
               </div>
             </div>

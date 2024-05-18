@@ -25,6 +25,8 @@ const Edit = () => {
     sunday: "",
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .post("https://denticadentalstudio.com/api/show/about",{ id },
@@ -77,7 +79,10 @@ const Edit = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, [id]);
 
   const handleChange = (e) => {
@@ -131,6 +136,14 @@ const Edit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

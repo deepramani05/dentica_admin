@@ -14,6 +14,8 @@ const Career = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
+  const [loading, setLoading] = useState(true);
+
   let { id } = useParams();
 
   useEffect(() => {
@@ -30,7 +32,10 @@ const Career = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   const handleDelete = (id) => {
@@ -138,6 +143,14 @@ const Career = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

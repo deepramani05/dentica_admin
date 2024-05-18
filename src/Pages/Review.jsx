@@ -13,6 +13,8 @@ const Review = () => {
   const [review, setReview] = useState("");
   const [image, setImage] = useState(null);
 
+  const [loading, setLoading] = useState(true);
+
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +69,10 @@ const Review = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   const handleDelete = (id) => {
@@ -156,6 +161,14 @@ const Review = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

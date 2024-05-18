@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 const GalleryEdit = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     title: "",
     meta_title: "",
@@ -44,6 +47,9 @@ const GalleryEdit = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id]);
 
@@ -107,6 +113,14 @@ const GalleryEdit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

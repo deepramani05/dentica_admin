@@ -18,6 +18,8 @@ const Team = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
 
+  const [loading, setLoading] = useState(true);
+
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -36,7 +38,10 @@ const Team = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, []);
 
   const handleSubmit = (e) => {
@@ -159,6 +164,14 @@ const Team = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         <div className="content-wrapper">
           <section className="content-header">

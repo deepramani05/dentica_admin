@@ -21,6 +21,8 @@ const EventCat = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const obj = {
     name: name,
     image: image,
@@ -126,6 +128,9 @@ const EventCat = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -189,6 +194,14 @@ const EventCat = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
@@ -294,7 +307,10 @@ const EventCat = () => {
                           >
                             <h3 className="card-title">Event Category List</h3>
                           </div>
-                          <div className="d-flex" style={{alignItems:"center"}}>
+                          <div
+                            className="d-flex"
+                            style={{ alignItems: "center" }}
+                          >
                             <div className="page-item">
                               <span
                                 style={{ fontWeight: "600", margin: "0 20px" }}

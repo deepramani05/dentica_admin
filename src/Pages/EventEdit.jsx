@@ -9,11 +9,13 @@ import Cookies from "js-cookie";
 
 const EventEdit = () => {
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(true);
+
   const [data, setData] = useState([]);
   const [formData, setFormData] = useState({
-    category: "",
+    cat: "",
     image: "",
-    dimension: "",
   });
 
   useEffect(() => {
@@ -31,7 +33,10 @@ const EventEdit = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
 
     // Fetch event data for the specified ID
     axios
@@ -44,14 +49,16 @@ const EventEdit = () => {
       .then((res) => {
         const eventData = res.data;
         setFormData({
-          category: eventData.category_id,
+          cat: eventData.cat,
           image: eventData.image,
-          dimension: eventData.dimension,
         });
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }, [id]);
 
   const handleChange = (e) => {
@@ -73,10 +80,9 @@ const EventEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    formDataToSend.append("category", formData.category);
+    formDataToSend.append("category", formData.cat);
     formDataToSend.append("image", formData.image);
     formDataToSend.append("id", id);
-    formDataToSend.append("dimension",formData.dimension);
     // Send PUT request to update the event data
     axios
       .post(`https://denticadentalstudio.com/api/event/update`, formDataToSend,{
@@ -96,7 +102,7 @@ const EventEdit = () => {
         })
           // Handle success, maybe redirect or show a success message
           .then(() => {
-            //  window.location.href = "/event";
+             window.location.href = "/event";
           });
       })
       .catch((err) => {
@@ -191,7 +197,7 @@ const EventEdit = () => {
                                   name="layout"
                                   value="1"
                                   onChange={handleChange}
-                                  checked={formData.dimension === "1"}
+                                  checked={formData.layout === "1"}
                                   required
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
@@ -204,7 +210,7 @@ const EventEdit = () => {
                                   name="layout"
                                   value="0"
                                   onChange={handleChange}
-                                  checked={formData.dimension === "0"}
+                                  checked={formData.layout === "0"}
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
                                   <span><BiMoveHorizontal /></span> Horizontal

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ReactQuill from "react-quill";
@@ -17,8 +17,9 @@ const Blogadd = () => {
   const [keyword, setKeyword] = useState("");
   const [tags, setTags] = useState([]);
   const [currentTag, setCurrentTag] = useState("");
-  console.log("imagedata",image);
-  
+
+  const [loading, setLoading] = useState(true);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -33,10 +34,10 @@ const Blogadd = () => {
     formData.append("tags", tags.join(","));
 
     axios
-      .post(`https://denticadentalstudio.com/api/blog/store`, formData,{
-        headers:{
+      .post(`https://denticadentalstudio.com/api/blog/store`, formData, {
+        headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
-        }
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -45,8 +46,8 @@ const Blogadd = () => {
           icon: "success",
           title: "Added Successfully ! ",
           showConfirmButton: false,
-          timer: 1000
-        }).then(()=>{
+          timer: 1000,
+        }).then(() => {
           window.location.href = "/blog";
         });
       })
@@ -57,10 +58,14 @@ const Blogadd = () => {
           icon: "error",
           title: "Error ! ",
           showConfirmButton: false,
-          timer: 1000
+          timer: 1000,
         });
       });
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const handleTag = (e) => {
     if (e.key === "Enter") {
@@ -79,6 +84,14 @@ const Blogadd = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div className="wrapper">
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
@@ -123,10 +136,10 @@ const Blogadd = () => {
                       className="text-left"
                       onSubmit={handleSubmit}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                           e.preventDefault();
-                          }
-                        }}   
+                        }
+                      }}
                     >
                       <div className="card-body">
                         <div className="form-group">
