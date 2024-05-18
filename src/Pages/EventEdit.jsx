@@ -6,7 +6,6 @@ import { TbArrowsVertical } from "react-icons/tb";
 import { BiMoveHorizontal } from "react-icons/bi";
 import Cookies from "js-cookie";
 
-
 const EventEdit = () => {
   const { id } = useParams();
 
@@ -16,12 +15,13 @@ const EventEdit = () => {
   const [formData, setFormData] = useState({
     cat: "",
     image: "",
+    dimension: "",
   });
 
   useEffect(() => {
     // Fetch event categories
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`,{
+      .get(`https://denticadentalstudio.com/api/event_category`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -36,21 +36,26 @@ const EventEdit = () => {
       })
       .finally(() => {
         setLoading(false);
-      })
+      });
 
     // Fetch event data for the specified ID
     axios
-      .post(`https://denticadentalstudio.com/api/show/event`,{id},{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/show/event`,
+        { id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         const eventData = res.data;
         setFormData({
           cat: eventData.cat,
           image: eventData.image,
+          dimension: eventData.dimension,
         });
       })
       .catch((err) => {
@@ -58,23 +63,27 @@ const EventEdit = () => {
       })
       .finally(() => {
         setLoading(false);
-      })
+      });
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value,files } = e.target;
-    if (name === "image"){
-       setFormData({
+    const { name, value, type } = e.target;
+    if (type === "radio") {
+      setFormData({
         ...formData,
-         [name]: files[0],
-       }) 
-    } else{
+        [name]: value,
+      });
+    } else if (name === "image") {
+      setFormData({
+        ...formData,
+        [name]: e.target.files[0],
+      });
+    } else {
       setFormData({
         ...formData,
         [name]: value,
       });
     }
-    
   };
 
   const handleSubmit = (e) => {
@@ -83,14 +92,19 @@ const EventEdit = () => {
     formDataToSend.append("category", formData.cat);
     formDataToSend.append("image", formData.image);
     formDataToSend.append("id", id);
+    formDataToSend.append("dimension", formData.dimension);
     // Send PUT request to update the event data
     axios
-      .post(`https://denticadentalstudio.com/api/event/update`, formDataToSend,{
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      })
+      .post(
+        `https://denticadentalstudio.com/api/event/update`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         Swal.fire({
@@ -102,7 +116,7 @@ const EventEdit = () => {
         })
           // Handle success, maybe redirect or show a success message
           .then(() => {
-             window.location.href = "/event";
+            //  window.location.href = "/event";
           });
       })
       .catch((err) => {
@@ -187,33 +201,42 @@ const EventEdit = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
-                            Image Dimention <span style={{ color: "red" }}>*</span>
+                            Image Dimention{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </label>
                           <div class="input-group">
                             <div class="custom-file" style={{ gap: "20px" }}>
                               <div className="radio-1 d-flex">
                                 <input
                                   type="radio"
-                                  name="layout"
+                                  name="dimension"
                                   value="1"
-                                  onChange={handleChange}
-                                  checked={formData.layout === "1"}
+                                  onChange={() =>
+                                    setFormData({ ...formData, dimension: "1" })
+                                  }
+                                  checked={formData.dimension === "1"}
                                   required
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
-                                 <span><TbArrowsVertical /></span> Vertical
+                                  <span>
+                                    <TbArrowsVertical />
+                                  </span>{" "}
+                                  Vertical
                                 </label>
-                              </div>
-                              <div className="radio-2 d-flex">
                                 <input
                                   type="radio"
-                                  name="layout"
+                                  name="dimension"
                                   value="0"
-                                  onChange={handleChange}
-                                  checked={formData.layout === "0"}
+                                  onChange={() =>
+                                    setFormData({ ...formData, dimension: "0" })
+                                  }
+                                  checked={formData.dimension === "0"}
                                 />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
-                                  <span><BiMoveHorizontal /></span> Horizontal
+                                  <span>
+                                    <BiMoveHorizontal />
+                                  </span>{" "}
+                                  Horizontal
                                 </label>
                               </div>
                             </div>

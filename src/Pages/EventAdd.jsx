@@ -37,7 +37,7 @@ const EventAdd = () => {
           showConfirmButton: false,
           timer: 1000,
         }).then(() => {
-          window.location.href = "/event";
+          // window.location.href = "/event";
         });
       })
       .catch((err) => {
