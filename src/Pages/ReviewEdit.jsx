@@ -10,7 +10,7 @@ const ReviewEdit = () => {
     name: "",
     moblie: "",
     review: "",
-    image: "",
+    image: null,
   });
 
   useEffect(() => {
@@ -54,6 +54,7 @@ const ReviewEdit = () => {
     axios
       .post(`https://denticadentalstudio.com/api/review/update`, updatedFormData, {
         headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
@@ -65,8 +66,9 @@ const ReviewEdit = () => {
           title: "Review updated Successfully !",
           showConfirmButton: false,
           timer: 1000,
-        }).then(() => {
-           window.location.href = "/review";
+        })
+        .then(() => {
+            window.location.href = "/review";
         });
       })
       .catch((err) => {
@@ -80,6 +82,7 @@ const ReviewEdit = () => {
           timer: 1000,
         });
       });
+      console.log("payload",updatedFormData);
   };
 
   return (

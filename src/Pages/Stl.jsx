@@ -45,13 +45,6 @@ const Stl = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
-
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -95,7 +88,7 @@ const Stl = () => {
               icon: "error",
             });
           });
-        setTimeout(() => window.location.reload(), 1000);
+        // setTimeout(() => window.location.reload(), 1000);
       }
     });
   };
