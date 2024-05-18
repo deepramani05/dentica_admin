@@ -13,7 +13,7 @@ const EventEdit = () => {
 
   const [data, setData] = useState([]);
   const [formData, setFormData] = useState({
-    cat: "",
+    category_id: "",
     image: "",
     dimension: "",
   });
@@ -51,12 +51,13 @@ const EventEdit = () => {
         }
       )
       .then((res) => {
-        const eventData = res.data;
+        const eventData = res.data.data.event;
         setFormData({
-          cat: eventData.cat,
+          category_id: eventData.category_id,
           image: eventData.image,
           dimension: eventData.dimension,
         });
+        console.log(eventData);
       })
       .catch((err) => {
         console.log(err);
@@ -68,20 +69,24 @@ const EventEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    if (type === "radio") {
+    if (type === "radio" || name === "dimension") {
+      // For radio buttons and dimension field
       setFormData({
         ...formData,
         [name]: value,
       });
     } else if (name === "image") {
+      // For file input
       setFormData({
         ...formData,
-        [name]: e.target.files[0],
+        [name]: e.target.files[0], // Store the file object directly
       });
-    } else {
+    } else if (name === "category_id") {
+      // For category select input
+      const categoryId = e.target.value; // Extract the value of the selected option
       setFormData({
         ...formData,
-        [name]: value,
+        category_id: categoryId, // Update category_id
       });
     }
   };
@@ -89,10 +94,11 @@ const EventEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    formDataToSend.append("category", formData.cat);
+    formDataToSend.append("category", formData.category_id); // Updated to category_id
     formDataToSend.append("image", formData.image);
     formDataToSend.append("id", id);
     formDataToSend.append("dimension", formData.dimension);
+    console.log(formData);
     // Send PUT request to update the event data
     axios
       .post(
@@ -171,14 +177,14 @@ const EventEdit = () => {
                           </label>
                           <br />
                           <select
-                            name="category"
+                            name="category_id"
                             className="w-100 p-2"
                             onChange={handleChange}
-                            value={formData.cat}
+                            value={formData.category_id}
                           >
                             <option value="">Select a Option</option>
                             {data.map((ele) => (
-                              <option key={ele.id} value={ele.name}>
+                              <option key={ele.id} value={ele.id}>
                                 {ele.name}
                               </option>
                             ))}
@@ -194,14 +200,31 @@ const EventEdit = () => {
                                 type="file"
                                 name="image"
                                 onChange={handleChange}
-                                // value={formData.image}
+                                // Do not set value attribute for file input
                               />
                             </div>
                           </div>
+                          {formData.image &&
+                            typeof formData.image !== "string" && (
+                              <img
+                                src={URL.createObjectURL(formData.image)}
+                                alt="Uploaded Image"
+                                style={{ maxWidth: "100px", marginTop: "10px" }}
+                              />
+                            )}
+                          {formData.image &&
+                            typeof formData.image === "string" && (
+                              <img
+                                src={formData.image}
+                                alt="Pre-saved Image"
+                                style={{ maxWidth: "100px", marginTop: "10px" }}
+                              />
+                            )}
                         </div>
+
                         <div class="form-group">
                           <label for="exampleInputFile">
-                            Image Dimention{" "}
+                            Image Dimension{" "}
                             <span style={{ color: "red" }}>*</span>
                           </label>
                           <div class="input-group">

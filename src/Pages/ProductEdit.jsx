@@ -59,9 +59,11 @@ const ProductEdit = () => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files && files.length > 0) {
+      // Handle multiple files
+      const fileList = Array.from(files);
       setFormData({
         ...formData,
-        [name]: files[0],
+        [name]: fileList,
       });
     } else {
       setFormData({
@@ -80,10 +82,17 @@ const ProductEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedProductData = {
-      ...formData,
-      id: id,
-    };
+    const updatedProductData = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((file, index) => {
+          updatedProductData.append(`${key}_${index}`, file);
+        });
+      } else {
+        updatedProductData.append(key, value);
+      }
+    });
+    updatedProductData.append("id", id);
     axios
       .post(
         `https://denticadentalstudio.com/api/product/update`,
@@ -91,6 +100,7 @@ const ProductEdit = () => {
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "multipart/form-data", // Add this line for FormData
           },
         }
       )
@@ -293,6 +303,7 @@ const ProductEdit = () => {
                             id="exampleInputImages"
                             name="productimage"
                             onChange={handleChange}
+                            multiple // Add this line to allow multiple file selection
                           />
                         </div>
                         <div className="form-group">

@@ -7,7 +7,7 @@ import { BiMoveHorizontal } from "react-icons/bi";
 import Cookies from "js-cookie";
 
 const EventAdd = () => {
-  let [cat, setCat] = useState("");
+  let [category_id, setCategory_id] = useState("");
   let [image, setImage] = useState(null);
 
   let [data, setData] = useState([]);
@@ -18,14 +18,14 @@ const EventAdd = () => {
     e.preventDefault();
     const layout = document.querySelector('input[name="layout"]:checked').value;
     const formData = new FormData();
-    formData.append("category", cat);
+    formData.append("category", category_id);
     formData.append("image", image);
     formData.append("dimension", layout);
     console.log("formdata", formData);
     axios
-      .post(`https://denticadentalstudio.com/api/event/store`, formData,{
+      .post(`https://denticadentalstudio.com/api/event/store`, formData, {
         headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
@@ -37,7 +37,7 @@ const EventAdd = () => {
           showConfirmButton: false,
           timer: 1000,
         }).then(() => {
-          // window.location.href = "/event";
+          window.location.href = "/event";
         });
       })
       .catch((err) => {
@@ -48,13 +48,13 @@ const EventAdd = () => {
           title: "Error !",
           showConfirmButton: false,
           timer: 1000,
-        })
+        });
       });
   };
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`,{
+      .get(`https://denticadentalstudio.com/api/event_category`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -69,7 +69,7 @@ const EventAdd = () => {
       })
       .finally(() => {
         setLoading(false);
-      })
+      });
   }, []);
 
   return (
@@ -137,14 +137,16 @@ const EventAdd = () => {
                             name="category"
                             id=""
                             className="w-100 p-2"
-                            onChange={(e) => setCat(e.target.value)}
-                            value={cat}
+                            onChange={(e) => setCategory_id(e.target.value)}
+                            value={category_id}
                           >
                             <option value="Select a Option">
                               Select a Option
                             </option>
                             {data.map((item) => (
-                              <option key={item._id} value={item.name}>
+                              <option key={item.id} value={item.id}>
+                                {" "}
+                                {/* Pass item.id instead of item.name */}
                                 {item.name}
                               </option>
                             ))}
@@ -169,7 +171,8 @@ const EventAdd = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFile">
-                            Image Dimension <span style={{ color: "red" }}>*</span>
+                            Image Dimension{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </label>
                           <div class="input-group">
                             <div class="custom-file" style={{ gap: "20px" }}>
@@ -188,11 +191,7 @@ const EventAdd = () => {
                                 </label>
                               </div>
                               <div className="radio-2 d-flex">
-                                <input
-                                  type="radio"
-                                  name="layout"
-                                  value="1"
-                                />
+                                <input type="radio" name="layout" value="1" />
                                 <label htmlFor="" style={{ marginLeft: "5px" }}>
                                   <span>
                                     <BiMoveHorizontal />
