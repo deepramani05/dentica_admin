@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/style.css";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
@@ -88,10 +88,32 @@ const Products = () => {
         alert("Error deleting Product post !");
       });
   };
+  const handleSort = (key) => {
+    // If the same column is clicked again, toggle the direction
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+  };
+  
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key] < b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? -1:1;
+        }
+        if (a[setSortConfig.key] > b[sortConfig.key]){
+          return sortConfig.direction === "asc"? 1:-1;
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data, sortConfig])
 
-  const filteredData = data.filter((item) =>
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
+
+  const filteredData = sortedData.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -128,6 +150,17 @@ const Products = () => {
       );
     }
   }
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
+  };
+
 
   return (
     <div>
@@ -227,11 +260,15 @@ const Products = () => {
                         >
                           <thead>
                             <tr>
-                              <th style={{ width: "2%" }}>SL</th>
-                              <th style={{ width: "13%" }}>Title</th>
+                              <th style={{ width: "5%", cursor:"pointer" }}
+                                onclick = {() => handleSort("id")}
+                              >SL {getSortIcon("id")}</th>
+                              <th style={{ width: "13%", cursor:"pointer" }}
+                                onClick={()=> handleSort("title")}
+                              >Title {getSortIcon("title")}</th>
                               <th style={{ width: "25%" }}>Image</th>
                               <th style={{ width: "45%" }}>Description</th>
-                              <th style={{ width: "15%" }}>Action</th>
+                              <th style={{ width: "12%" }}>Action</th>
                             </tr>
                           </thead>
                           <tbody>
