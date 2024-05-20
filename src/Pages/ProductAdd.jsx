@@ -200,10 +200,10 @@ const ProductAdd = () => {
                             value={cat}
                           >
                             <option>Select Type</option>
-                            <option value="Digital Dentistry">
+                            <option value="1">
                               Digital Dentistry
                             </option>
-                            <option value="Products">Products</option>
+                            <option value="2">Products</option>
                           </select>
                         </div>
                         <div className="form-group">

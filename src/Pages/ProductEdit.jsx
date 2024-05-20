@@ -7,7 +7,19 @@ import Cookies from "js-cookie";
 import logo from "../images/Logo.png";
 
 const ProductEdit = () => {
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    header_image: [],
+    background_image: [],
+    image: [],
+    product_images: [],
+    title: "",
+    sdescription: "",
+    meta_title: "",
+    meta_description: "",
+    meta_keyword: "",
+    product_type: "",
+    description: "",
+  });
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
@@ -33,10 +45,6 @@ const ProductEdit = () => {
           meta_description: data.meta_description,
           meta_keyword: data.meta_keyword,
           product_type: data.product_type,
-          headerimage: data.headerimage,
-          background_image: data.background_image,
-          image: data.image,
-          productimage: data.productimage,
           description: data.description,
         };
         setFormData(productData);
@@ -73,7 +81,7 @@ const ProductEdit = () => {
     }
   };
 
-  const handleChange1 = (content, delta, source, editor) => {
+  const handleChange1 = (content) => {
     setFormData({
       ...formData,
       description: content,
@@ -83,16 +91,36 @@ const ProductEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedProductData = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((file, index) => {
-          updatedProductData.append(`${key}_${index}`, file);
-        });
-      } else {
-        updatedProductData.append(key, value);
+
+    const appendFileData = (formDataArray, key, formDataObject) => {
+      if (formDataArray && formDataArray.length > 0) {
+        formDataObject.append(key, formDataArray[0]);
       }
-    });
+    };
+
+    appendFileData(formData.header_image, "header_image", updatedProductData);
+    appendFileData(
+      formData.background_image,
+      "background_image",
+      updatedProductData
+    );
+    appendFileData(formData.image, "image", updatedProductData);
+    appendFileData(
+      formData.product_images,
+      "product_images",
+      updatedProductData
+    );
+
+    // Append other form data fields
+    updatedProductData.append("title", formData.title);
+    updatedProductData.append("sdescription", formData.sdescription);
+    updatedProductData.append("meta_title", formData.meta_title);
+    updatedProductData.append("meta_description", formData.meta_description);
+    updatedProductData.append("meta_keyword", formData.meta_keyword);
+    updatedProductData.append("product_type", formData.product_type);
+    updatedProductData.append("description", formData.description);
     updatedProductData.append("id", id);
+
     axios
       .post(
         `https://denticadentalstudio.com/api/product/update`,
@@ -100,7 +128,7 @@ const ProductEdit = () => {
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
-            "Content-Type": "multipart/form-data", // Add this line for FormData
+            "Content-Type": "multipart/form-data",
           },
         }
       )
@@ -113,7 +141,7 @@ const ProductEdit = () => {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          window.location.href = "/product";
+          // window.location.href = "/product";
         });
       })
       .catch((err) => {
@@ -183,7 +211,7 @@ const ProductEdit = () => {
                             placeholder="Enter title"
                             name="title"
                             onChange={handleChange}
-                            value={formData.title}
+                            value={formData.title || ""}
                           />
                         </div>
                         <div className="form-group">
@@ -197,7 +225,7 @@ const ProductEdit = () => {
                             placeholder="Enter Short Description"
                             name="sdescription"
                             onChange={handleChange}
-                            value={formData.sdescription}
+                            value={formData.sdescription || ""}
                           />
                         </div>
                         <div className="form-group">
@@ -211,7 +239,7 @@ const ProductEdit = () => {
                             placeholder="Enter meta title"
                             name="meta_title"
                             onChange={handleChange}
-                            value={formData.meta_title}
+                            value={formData.meta_title || ""}
                           />
                         </div>
                         <div className="form-group">
@@ -225,7 +253,7 @@ const ProductEdit = () => {
                             placeholder="Enter meta Description"
                             name="meta_description"
                             onChange={handleChange}
-                            value={formData.meta_description}
+                            value={formData.meta_description || ""}
                           />
                         </div>
                         <div className="form-group">
@@ -239,7 +267,7 @@ const ProductEdit = () => {
                             placeholder="Enter meta keyword"
                             name="meta_keyword"
                             onChange={handleChange}
-                            value={formData.meta_keyword}
+                            value={formData.meta_keyword || ""}
                           />
                         </div>
                         <div className="form-group">
@@ -249,14 +277,12 @@ const ProductEdit = () => {
                           <select
                             className="form-control"
                             onChange={handleChange}
-                            value={formData.product_type}
+                            value={formData.product_type || ""}
                             name="product_type"
                           >
                             <option value="">Select Type</option>
-                            <option value="Digital Dentistry">
-                              Digital Dentistry
-                            </option>
-                            <option value="Products">Products</option>
+                            <option value="1">Digital Dentistry</option>
+                            <option value="2">Products</option>
                           </select>
                         </div>
                         <div className="form-group">
@@ -267,7 +293,7 @@ const ProductEdit = () => {
                             type="file"
                             className="form-control-file"
                             id="exampleInputHeaderImage"
-                            name="headerimage"
+                            name="header_image"
                             onChange={handleChange}
                           />
                         </div>
@@ -301,7 +327,7 @@ const ProductEdit = () => {
                             type="file"
                             className="form-control-file"
                             id="exampleInputImages"
-                            name="productimage"
+                            name="product_images"
                             onChange={handleChange}
                             multiple // Add this line to allow multiple file selection
                           />
@@ -315,7 +341,7 @@ const ProductEdit = () => {
                             rows="10"
                             placeholder="Place Some Text Here"
                             onChange={handleChange1}
-                            value={formData.description}
+                            value={formData.description || ""}
                             modules={{
                               toolbar: [
                                 [

@@ -28,11 +28,11 @@ const EventEdit = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.data.event_category);
-        setData(res.data.data.event_category);
+        console.log("Category data:", res.data.data.event_category);
+        setData(res.data.data.event_category); // Update state with category data
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error fetching categories:", err);
       })
       .finally(() => {
         setLoading(false);
@@ -83,10 +83,10 @@ const EventEdit = () => {
       });
     } else if (name === "category_id") {
       // For category select input
-      const categoryId = e.target.value; // Extract the value of the selected option
+      const category_id = e.target.value; // Extract the value of the selected option
       setFormData({
         ...formData,
-        category_id: categoryId, // Update category_id
+        category_id: category_id, // Update category_id
       });
     }
   };
@@ -180,7 +180,7 @@ const EventEdit = () => {
                             name="category_id"
                             className="w-100 p-2"
                             onChange={handleChange}
-                            value={formData.category_id}
+                            value={formData.category_id} // Ensure this value is correctly bound
                           >
                             <option value="">Select a Option</option>
                             {data.map((ele) => (
