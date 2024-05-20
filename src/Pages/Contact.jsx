@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
-import { FaRegEye } from "react-icons/fa";
+import { FaRegEye, FaSortDown, FaSortUp, FaSort } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
@@ -12,6 +12,7 @@ const Contact = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [rowsPerPage, setRowsPerPage] = useState(10); // New state for rows per page
 
   const [loading, setLoading] = useState(true);
@@ -93,14 +94,33 @@ const Contact = () => {
       }
     });
   };
+  const handleSort = (key)=>{
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc'? 'desc': 'asc';
+    setSortConfig({key, direction});
+  }
+
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key]< b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        if (a[setSortConfig.key]> b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? -1: 1;
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data, sortConfig])
 
   const handleSearch = (query) => {
     setSearchQuery(query);
     setCurrentPage(1); // Reset current page when search query changes
   };
 
-  const filteredData = data
-    ? data.filter(
+  const filteredData = sortedData.filter(
         (item) =>
           (item.name &&
             item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -109,7 +129,6 @@ const Contact = () => {
           (item.sub &&
             item.sub.toLowerCase().includes(searchQuery.toLowerCase()))
       )
-    : [];
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
@@ -146,7 +165,16 @@ const Contact = () => {
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = currentPage * rowsPerPage;
   const displayedData = filteredData.slice(startIndex, endIndex);
-
+  const getSortIcon = (key) =>{
+    if (sortConfig.key === key){
+      if (sortConfig.direction === 'asc'){
+        return <FaSortUp />;
+      } else if (sortConfig.direction === 'desc'){
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
+  }
   return (
     <div>
       {loading && (
@@ -223,11 +251,19 @@ const Contact = () => {
                         >
                           <thead>
                             <tr>
-                              <th>SL</th>
-                              <th>Customer's Name</th>
-                              <th>Contact Info</th>
-                              <th>Subject</th>
-                              <th>Action</th>
+                              <th style = {{width: "5%",cursor:"pointer"}} onClick = {() => handleSort("id")}>
+                                SL {getSortIcon("id")}
+                              </th>
+                              <th style = {{width: "30%",cursor:"pointer"}} onClick = {() => handleSort("name")}>
+                                Customer's Name {getSortIcon("name")}
+                              </th>
+                              <th style = {{width: "30%",cursor:"pointer"}} onClick = {() => handleSort("mobile_number")}>
+                                Contact Info {getSortIcon("mobile_number")}
+                              </th>
+                              <th style = {{width: "25%",cursor:"pointer"}} onClick = {() => handleSort("subject")}>
+                                Subject {getSortIcon("subject")}
+                              </th>
+                              <th style={{ width: "10%" }}>Action</th>
                             </tr>
                           </thead>
                           <tbody>

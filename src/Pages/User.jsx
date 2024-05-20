@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {FaSort, FaSortDown, FaSortUp} from "react-icons/fa";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -14,7 +15,7 @@ const User = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -126,6 +127,27 @@ const User = () => {
     });
   };
 
+  const handleSort = (key) => {
+    // If the same column is clicked again, toggle the direction
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });      
+    }
+    return sortableData;
+  }, [data, sortConfig])
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(parseInt(e.target.value)); // Update rows per page
     setCurrentPage(1); // Reset current page when changing rows per page
@@ -136,7 +158,7 @@ const User = () => {
   const endIndex = currentPage * itemsPerPage;
   const displayedData = data.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
@@ -151,6 +173,16 @@ const User = () => {
       </li>
     );
   }
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
+  };
 
   return (
     <div>
@@ -287,15 +319,19 @@ const User = () => {
                         >
                           <thead>
                             <tr>
-                              <th>No</th>
-                              <th>Name</th>
+                              <th style={{ cursor: "pointer"}}
+                                onClick = {()=> handleSort('id')}
+                              >No {getSortIcon("id")}</th>
+                              <th style={{ cursor: "pointer"}}
+                                onClick = {()=> handleSort('name')}
+                                >Name{getSortIcon("name")}</th>
                               <th>Email Address</th>
                               <th>Actions</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {displayedData.map((user, index) => (
-                              <tr key={user.id}>
+                            {sortedData.slice(startIndex, endIndex).map((user, index) => (
+                              <tr key={user.id}>  
                                 <td>{startIndex + index + 1}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>

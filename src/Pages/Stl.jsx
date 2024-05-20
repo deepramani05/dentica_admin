@@ -1,6 +1,7 @@
 import axios from "axios";
 import "../css/style.css";
 import React, { useEffect, useState } from "react";
+import { FaEye, FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -14,7 +15,7 @@ const Stl = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   const handleSearch = (query) => {
@@ -93,7 +94,7 @@ const Stl = () => {
               icon: "error",
             });
           });
-        // setTimeout(() => window.location.reload(), 1000);
+        setTimeout(() => window.location.reload(), 1000);
       }
     });
   };
@@ -107,18 +108,51 @@ const Stl = () => {
     document.body.removeChild(link);
   };
 
+  const handleSort = (key) => {
+    // If the same column is clicked again, toggle the direction
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key] < b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? -1:1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]){
+          return sortConfig.direction === "asc"? 1:-1;
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data, sortConfig])
+
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
+  };
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(parseInt(e.target.value));
     setCurrentPage(1); // Reset current page when rows per page changes
   };
 
   const itemsPerPage = rowsPerPage;
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = filteredData.slice(startIndex, endIndex);
+  const displayedData = sortedData.slice(startIndex, endIndex);
 
   // pagination buttons start
   const paginationButtons = [];
@@ -240,10 +274,18 @@ const Stl = () => {
                         >
                           <thead>
                             <tr>
-                              <th>SL</th>
-                              <th>FullName</th>
-                              <th>Phone Number</th>
-                              <th>Message</th>
+                              <th style={{ cursor:"pointer"}} onClick={()=>handleSort("id")}>
+                                SL {getSortIcon("id")}
+                              </th>
+                              <th style={{ cursor:"pointer"}} onClick={()=>handleSort("fname")}>
+                                FullName {getSortIcon("fname")}
+                              </th>
+                              <th style={{ cursor:"pointer"}} onClick={()=>handleSort("phone_number")}>
+                                Phone Number {getSortIcon("phone_number")}
+                              </th>
+                              <th style={{ cursor:"pointer"}} onClick={()=>handleSort("message")}>
+                                Message {getSortIcon("message")}
+                              </th>
                               <th>Action</th>
                             </tr>
                           </thead>

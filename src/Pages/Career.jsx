@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import "../css/style.css";
@@ -13,7 +14,7 @@ const Career = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   let { id } = useParams();
@@ -79,6 +80,27 @@ const Career = () => {
     });
   };
 
+ const handleSort = (key) =>{
+  const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+  setSortConfig({ key, direction})
+ };
+
+ const sortedData = React.useMemo(()=>{
+  let sortableData = [...data];
+  if (sortConfig.key !== null){
+    sortableData.sort((a,b) =>{
+      if (a[sortConfig.key] < b [sortConfig.key]){
+        return sortConfig.direction === "asc" ? -1: 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]){
+        return sortConfig.direction === "asc" ? 1: -1; 
+      } 
+      return 0;
+    })
+  }
+  return sortableData;
+ }, [data, sortConfig])
+
   const handleSearch = (query) => {
     setSearchQuery(query);
     setCurrentPage(1); // Reset current page when search query changes
@@ -91,14 +113,14 @@ const Career = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-  const displayedData = data
+  const displayedData = sortedData
     .filter((item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(
-    data.filter((item) =>
+    sortedData.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     ).length / itemsPerPage
   );
@@ -139,6 +161,16 @@ const Career = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
   };
 
   return (
@@ -217,10 +249,18 @@ const Career = () => {
                         >
                           <thead>
                             <tr>
-                              <th>SL</th>
-                              <th>Customer Name</th>
-                              <th>Contact Info</th>
-                              <th>Subject</th>
+                              <th style={{cursor:"pointer"}} onClick={()=> handleSort("id")}>
+                                SL {getSortIcon("id")}
+                              </th>
+                              <th style={{cursor:"pointer"}} onClick={()=> handleSort("name")}>
+                                Customer Name {getSortIcon("name")}
+                              </th>
+                              <th style={{cursor:"pointer"}} onClick={()=> handleSort("phone")}>
+                                Contact Info {getSortIcon("phone")}
+                              </th>
+                              <th style={{cursor:"pointer"}} onClick={()=> handleSort("subject")}>
+                                Subject {getSortIcon("subject")}
+                              </th>
                               <th>Action</th>
                             </tr>
                           </thead>
