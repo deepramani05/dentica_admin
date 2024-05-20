@@ -246,7 +246,7 @@ const Event = () => {
                             {displayedData.map((ele, index) => (
                               <tr key={index}>
                                 <td>{startIndex + index + 1}</td>
-                                <td>{ele.category_id}</td>
+                                <td>{ele.slug}</td>
                                 <td width={"200px"} height={"100px"}>
                                   <img
                                     src={ele.image}

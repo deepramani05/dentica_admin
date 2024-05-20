@@ -122,7 +122,7 @@ const EventEdit = () => {
         })
           // Handle success, maybe redirect or show a success message
           .then(() => {
-            //  window.location.href = "/event";
+             window.location.href = "/event";
           });
       })
       .catch((err) => {
