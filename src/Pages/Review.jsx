@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
@@ -12,7 +13,7 @@ const Review = () => {
   const [num, setNum] = useState("");
   const [review, setReview] = useState("");
   const [image, setImage] = useState(null);
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   const [data, setData] = useState([]);
@@ -115,12 +116,33 @@ const Review = () => {
               icon: "error",
             });
           });
-        // setTimeout(() => window.location.reload(), 1000);
+         setTimeout(() => window.location.reload(), 1000);
       }
     });
   };
 
-  const filteredData = data.filter((item) =>
+  const handleSort = (key) =>{
+    const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({key, direction});
+  }
+
+  const sortedData = React.useMemo(()=>{
+    let sortableData =[...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key] < b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? -1:1;
+        }
+        if (a[sortConfig.key] > b [sortConfig.key]){
+          return sortConfig.direction === "asc" ? 1:-1
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data,sortConfig])
+
+  const filteredData = sortedData.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -157,6 +179,16 @@ const Review = () => {
         </li>
       );
     }
+  }
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
   }
 
   return (
@@ -314,9 +346,15 @@ const Review = () => {
                             <table className="table table-bordered table-hover">
                               <thead>
                                 <tr>
-                                  <th>No</th>
-                                  <th>Name</th>
-                                  <th>Review</th>
+                                  <th style= {{ cursor :"pointer"}} onClick={()=>handleSort("id")}>
+                                    No{getSortIcon("id")}
+                                  </th>
+                                  <th style= {{ cursor :"pointer"}} onClick={()=>handleSort("name")}>
+                                    Name{getSortIcon("name")}
+                                  </th>
+                                  <th style= {{ cursor :"pointer"}} onClick={()=>handleSort("review")}>
+                                    Review{getSortIcon('review')}
+                                  </th>
                                   <th>Image</th>
                                   <th>Action</th>
                                 </tr>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/style.css";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaSortUp, FaSortDown, FaSort} from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5); // State for rows per page
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
@@ -90,14 +90,35 @@ const Blog = () => {
     });
   };
 
-  const stripHtmlTags = (html) => {
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
-    return temp.textContent || temp.innerText || "";
-  };
+  const handleSort = (key) =>{
+    const direction = sortConfig.key === key && sortConfig.direction === "asc"? "desc": "asc";
+    setSortConfig({key, direction});
+  }
+
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key  !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key] < b[sortConfig.key]){
+          return sortConfig.direction === 'asc' ? -1: 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]){
+          return sortConfig.direction === 'asc' ? 1:-1;
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data, sortConfig])
+
+  // const stripHtmlTags = (html) => {
+  //   const temp = document.createElement("div");
+  //   temp.innerHTML = html;
+  //   return temp.textContent || temp.innerText || "";
+  // };
 
   // Logic for pagination buttons
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     if (
@@ -137,12 +158,21 @@ const Blog = () => {
   // Slice the data array to show only the relevant entries based on pagination
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = currentPage * rowsPerPage;
-  const filteredData = data.filter((post) =>
+  const filteredData = sortedData.filter((post) =>
     post.title.toLowerCase().includes(searchQuery)
   );
   const displayedData = filteredData.slice(startIndex, endIndex);
-  console.log("data", displayedData);
-
+  // console.log("data", displayedData);
+  const getSortIcon = (key)=>{
+    if (sortConfig.key === key){
+      if (sortConfig.direction === "asc"){
+        return <FaSortUp/>;
+      }else if (sortConfig.direction === "desc"){
+        return <FaSortDown/>;
+      }
+    }
+    return <FaSort/>;
+  }
   return (
     <div>
       {loading && (
@@ -240,8 +270,12 @@ const Blog = () => {
                       <table className="table table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th>SL</th>
-                            <th>Title</th>
+                            <th style={{cursor:"pointer"}} onClick={()=> handleSort("id")}>
+                              SL{getSortIcon("id")}
+                            </th>
+                            <th style={{cursor:"pointer"}} onClick={()=> handleSort("title")}>
+                              Title{getSortIcon("title")}
+                            </th>
                             <th>Description</th>
                             <th>Action</th>
                           </tr>

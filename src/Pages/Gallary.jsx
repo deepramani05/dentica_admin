@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
@@ -17,7 +18,7 @@ const Gallery = () => {
   const [dataFetched, setDataFetched] = useState(false);
 
   const [loading, setLoading] = useState(true);
-
+  const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -134,12 +135,42 @@ const Gallery = () => {
       alert("Error occurred while deleting !");
     }
   };
+  const handleSort = (key) => {
+    // If the same column is clicked again, toggle the direction
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+  };
+  const sortedData = React.useMemo(()=>{
+    let sortableData = [...data];
+    if (sortConfig.key !== null){
+      sortableData.sort((a,b)=>{
+        if (a[sortConfig.key] < b[sortConfig.key]){
+          return sortConfig.direction === "asc" ? -1:1;
+        }
+        if (a[setSortConfig.key] > b[sortConfig.key]){
+          return sortConfig.direction === "asc"? 1:-1;
+        }
+        return 0;
+      })
+    }
+    return sortableData;
+  }, [data, sortConfig])
 
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        return <FaSortUp />;
+      } else if (sortConfig.direction === "desc") {
+        return <FaSortDown />;
+      }
+    }
+    return <FaSort />;
+  };
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
-  const filteredData = data.filter((item) => {
+  const filteredData = sortedData.filter((item) => {
     const category = item.category
       ? item.category.toString().toLowerCase()
       : "";
@@ -149,7 +180,7 @@ const Gallery = () => {
       title.includes(searchQueryLower) || category.includes(searchQueryLower)
     );
   });
-
+  
   // Calculate startIndex and endIndex for pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
@@ -158,7 +189,7 @@ const Gallery = () => {
   const displayedData = filteredData.slice(startIndex, endIndex);
 
   // Generate pagination buttons
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const paginationButtons = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationButtons.push(
@@ -354,9 +385,15 @@ const Gallery = () => {
                               <table className="table table-bordered table-hover">
                                 <thead>
                                   <tr>
-                                    <th>SL</th>
+                                    <th style={{ cursor:"pointer"}}
+                                      onClick={() => handleSort("id")}>
+                                        SL{getSortIcon("id")}
+                                    </th>
                                     <th>Image</th>
-                                    <th>Category</th>
+                                    <th style={{ cursor:"pointer"}}
+                                      onClick={() => handleSort("id")}>
+                                        Category {getSortIcon("category")}
+                                    </th>
                                     <th>Action</th>
                                   </tr>
                                 </thead>

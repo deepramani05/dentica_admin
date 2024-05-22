@@ -43,7 +43,7 @@ const ProductAdd = () => {
     formData.append("image", featuredimage);
     formData.append("description", desc);
     images.forEach((image, index) => {
-      formData.append(`productimage${index + 1}`, image);
+      formData.append(`productimage[${index}]`, image);
     });
 
     try {
