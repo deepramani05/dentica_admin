@@ -48,7 +48,7 @@ const ProductAdd = () => {
 
     try {
       const response = await axios.post(
-        `https://denticadentalstudio.com/api/product/store`,
+        `https://denticadentalstudio.com/webapp/api/product/store`,
         formData,
         {
           headers: {
@@ -57,7 +57,7 @@ const ProductAdd = () => {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       Swal.fire({
         position: "top-end",
         icon: "success",

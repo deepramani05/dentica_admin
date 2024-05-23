@@ -4,7 +4,6 @@ import ReactQuill from "react-quill";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
-import logo from "../images/Logo.png";
 
 const ProductEdit = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +26,7 @@ const ProductEdit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/product`,
+        `https://denticadentalstudio.com/webapp/api/show/product`,
         { id },
         {
           headers: {
@@ -36,7 +35,7 @@ const ProductEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data.product);
+        // console.log(res.data.data.product);
         const data = res.data.data.product;
         const productData = {
           title: data.title,
@@ -133,7 +132,7 @@ const ProductEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -141,7 +140,7 @@ const ProductEdit = () => {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          // window.location.href = "/product";
+           window.location.href = "/product";
         });
       })
       .catch((err) => {

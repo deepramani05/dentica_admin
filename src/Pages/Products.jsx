@@ -3,7 +3,7 @@ import "../css/style.css";
 import { FaEye, FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
@@ -17,8 +17,6 @@ const Products = () => {
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
-  const { id } = useParams();
-
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -30,14 +28,14 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("https://denticadentalstudio.com/api/product", {
+      .get("https://denticadentalstudio.com/webapp/api/product", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data.data.product);
       })
       .catch((err) => {
@@ -51,7 +49,7 @@ const Products = () => {
   const handledelete = (id) => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/product/delete`,
+        `https://denticadentalstudio.com/webapp/api/product/delete`,
         { id },
         {
           headers: {
@@ -61,7 +59,7 @@ const Products = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
