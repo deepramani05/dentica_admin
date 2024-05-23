@@ -121,7 +121,7 @@ const EventEdit = () => {
         })
           // Handle success, maybe redirect or show a success message
           .then(() => {
-             window.location.href = "/event";
+            window.location.href = "/event";
           });
       })
       .catch((err) => {
@@ -132,6 +132,14 @@ const EventEdit = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="preloaderContainer">
+          <div className="preloaderBg">
+            <div className="preloader"></div>
+            <div className="preloader2"></div>
+          </div>
+        </div>
+      )}
       <div class="wrapper">
         <div class="content-wrapper">
           <section class="content-header">
