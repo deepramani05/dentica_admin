@@ -7,9 +7,7 @@ import Cookies from "js-cookie";
 const GalleryEdit = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
-
   const [loading, setLoading] = useState(true);
-
   const [formData, setFormData] = useState({
     title: "",
     meta_title: "",
@@ -23,7 +21,7 @@ const GalleryEdit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/gallery`,
+        `https://denticadentalstudio.com/webapp/api/show/gallery`,
         { id: id },
         {
           headers: {
@@ -33,7 +31,7 @@ const GalleryEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const fetchedData = res.data.data;
         if (fetchedData && fetchedData.gallery) {
           setData(fetchedData.gallery);
@@ -84,7 +82,7 @@ const GalleryEdit = () => {
 
     axios
       .post(
-        "https://denticadentalstudio.com/api/gallery/update",
+        "https://denticadentalstudio.com/webapp/api/gallery/update",
         formDataToUpdate,
         {
           headers: {

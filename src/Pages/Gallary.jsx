@@ -16,7 +16,6 @@ const Gallery = () => {
   let [image, setImage] = useState(null);
   let [category, setCat] = useState("");
   const [dataFetched, setDataFetched] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [data, setData] = useState([]);
@@ -37,7 +36,7 @@ const Gallery = () => {
       formData.append("categoery", category);
 
       const res = await axios.post(
-        `https://denticadentalstudio.com/api/gallery/store`,
+        `https://denticadentalstudio.com/webapp/api/gallery/store`,
         formData,
         {
           headers: {
@@ -47,7 +46,7 @@ const Gallery = () => {
         }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -72,7 +71,7 @@ const Gallery = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://denticadentalstudio.com/api/gallery`,
+        `https://denticadentalstudio.com/webapp/api/gallery`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -112,7 +111,7 @@ const Gallery = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const res = await axios.post(
-            `https://denticadentalstudio.com/api/gallery/delete`,
+            `https://denticadentalstudio.com/webapp/api/gallery/delete`,
             { id: id },
             {
               headers: {
@@ -120,7 +119,7 @@ const Gallery = () => {
               },
             }
           );
-          console.log(res.data);
+          // console.log(res.data);
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",

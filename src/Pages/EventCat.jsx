@@ -17,10 +17,8 @@ const EventCat = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
-
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   const obj = {
@@ -32,14 +30,14 @@ const EventCat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`https://denticadentalstudio.com/api/event_category/store`, obj, {
+      .post(`https://denticadentalstudio.com/webapp/api/event_category/store`, obj, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "center",
           icon: "success",
@@ -69,7 +67,7 @@ const EventCat = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/event_category/delete/`,
+            `https://denticadentalstudio.com/webapp/api/event_category/delete/`,
             { id },
             {
               headers: {
@@ -79,7 +77,7 @@ const EventCat = () => {
             }
           )
           .then((res) => {
-            console.log("Delete response:", res.data); // Check response from server
+            // console.log("Delete response:", res.data); // Check response from server
             // After successful deletion, update the state to remove the deleted item
             setData(data.filter((item) => item.id !== id));
             setFilteredData(filteredData.filter((item) => item.id !== id));
@@ -93,7 +91,7 @@ const EventCat = () => {
           })
           .catch((err) => {
             console.error("Delete error:", err); // Log error if delete request fails
-            let errorMessage = "Error deleting data";
+            const errorMessage = "Error deleting data";
             if (
               err.response &&
               err.response.data &&
@@ -113,7 +111,7 @@ const EventCat = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`, {
+      .get(`https://denticadentalstudio.com/webapp/api/event_category`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -121,7 +119,7 @@ const EventCat = () => {
       })
       .then((response) => {
         if (response.data.status === "success") {
-          console.log(response.data.data.event_category);
+          // console.log(response.data.data.event_category);
           setData(response.data.data.event_category);
           setFilteredData(response.data.data.event_category);
         }
@@ -134,12 +132,6 @@ const EventCat = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
-  }, []);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
