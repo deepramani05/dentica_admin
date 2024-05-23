@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit =(e) =>{
       e.preventDefault();
 
-      axios.post("https://denticadentalstudio.com/api/login",{email, password})
+      axios.post("https://denticadentalstudio.com/webapp/api/login",{email, password})
           .then((res)=>{
             // console.log("token-id", res.data.data.token);
             const token = res.data.data.token;

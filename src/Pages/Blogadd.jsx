@@ -34,7 +34,7 @@ const Blogadd = () => {
     formData.append("tags", tags.join(","));
 
     axios
-      .post(`https://denticadentalstudio.com/api/blog/store`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/blog/store`, formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },

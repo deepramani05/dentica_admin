@@ -28,7 +28,7 @@ const Blogedit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/blog`,
+        `https://denticadentalstudio.com/webapp/api/show/blog`,
         { id },
         {
           headers: {
@@ -37,7 +37,7 @@ const Blogedit = () => {
         }
       )
       .then((res) => {
-        console.log("Response", res.data.data.blog);
+        // console.log("Response", res.data.data.blog);
         const {
           title,
           image,
@@ -98,7 +98,7 @@ const Blogedit = () => {
 
     axios
       .post(
-        `https://denticadentalstudio.com/api/blog/update`,
+        `https://denticadentalstudio.com/webapp/api/blog/update`,
         updatedFormData,
         {
           headers: {
@@ -107,7 +107,7 @@ const Blogedit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",

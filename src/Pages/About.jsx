@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { FaRegEye } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
@@ -16,22 +16,20 @@ const About = () => {
 
   const [loading, setLoading] = useState(true);
 
-  let { id } = useParams();
-
   useEffect(() => {
     fetchData(); // Fetch data initially
   }, []);
 
   const fetchData = () => {
     axios
-      .get(`https://denticadentalstudio.com/api/abouts`, {
+      .get(`https://denticadentalstudio.com/webapp/api/abouts`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log("API Response Data:", res.data.data.about); // Log the fetched data
+        // console.log("API Response Data:", res.data.data.about); // Log the fetched data
         setData(res.data.data.about || []); // Update data with response if available, or empty array
       })
       .catch((err) => {
@@ -55,7 +53,7 @@ const About = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/about/delete`,
+            `https://denticadentalstudio.com/webapp/api/about/delete`,
             { id },
             {
               headers: {
@@ -65,7 +63,7 @@ const About = () => {
             }
           )
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             fetchData(); // Refresh data after deletion
             Swal.fire("Deleted!", "Your file has been deleted.", "success");
           })

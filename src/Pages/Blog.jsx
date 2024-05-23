@@ -3,7 +3,7 @@ import "../css/style.css";
 import { FaEye, FaSortUp, FaSortDown, FaSort} from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
@@ -17,8 +17,6 @@ const Blog = () => {
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
-  const { id } = useParams();
-
   const handleSearch = (query) => {
     setSearchQuery(query.toLowerCase());
     setCurrentPage(1); // Reset current page when search query changes
@@ -26,14 +24,14 @@ const Blog = () => {
 
   useEffect(() => {
     axios
-      .get("https://denticadentalstudio.com/api/blogs", {
+      .get("https://denticadentalstudio.com/webapp/api/blogs", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data.data.blog);
       })
       .catch((err) => {
@@ -57,7 +55,7 @@ const Blog = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/blog/delete`,
+            `https://denticadentalstudio.com/webapp/api/blog/delete`,
             { id },
             {
               headers: {
@@ -67,7 +65,7 @@ const Blog = () => {
             }
           )
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             Swal.fire({
               position: "center",
               icon: "success",
