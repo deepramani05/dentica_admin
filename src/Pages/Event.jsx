@@ -24,14 +24,14 @@ const Event = () => {
 
   const fetchData = () => {
     axios
-      .get(`https://denticadentalstudio.com/api/event`, {
+      .get(`https://denticadentalstudio.com/webapp/api/event`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data.data.event);
+        // console.log(res.data.data.event);
         setData(res.data.data.event);
         setFilteredData(res.data.data.event);
       })
@@ -56,7 +56,7 @@ const Event = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/event/delete`,
+            `https://denticadentalstudio.com/webapp/api/event/delete`,
             { id },
             {
               headers: {
@@ -66,6 +66,7 @@ const Event = () => {
             }
           )
           .then((res) => {
+            // console.log(res.data);
             setData(data.filter((item) => item.id !== id));
             setFilteredData(filteredData.filter((item) => item.id !== id));
             Swal.fire({

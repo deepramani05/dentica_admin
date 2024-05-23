@@ -13,7 +13,7 @@ const ContactView = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/contactus`,
+        `https://denticadentalstudio.com/webapp/api/show/contactus`,
         { id },
         {
           headers: {
@@ -23,7 +23,7 @@ const ContactView = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data.contact);
+        // console.log(res.data.data.contact);
         setContectDetail(res.data.data.contact);
       })
       .catch((err) => {

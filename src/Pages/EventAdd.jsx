@@ -7,11 +7,9 @@ import { BiMoveHorizontal } from "react-icons/bi";
 import Cookies from "js-cookie";
 
 const EventAdd = () => {
-  let [category_id, setCategory_id] = useState("");
-  let [image, setImage] = useState(null);
-
-  let [data, setData] = useState([]);
-
+  const [category_id, setCategory_id] = useState("");
+  const [image, setImage] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleSubmit = (e) => {
@@ -21,15 +19,15 @@ const EventAdd = () => {
     formData.append("category", category_id);
     formData.append("image", image);
     formData.append("dimension", layout);
-    console.log("formdata", formData);
+    // console.log("formdata", formData);
     axios
-      .post(`https://denticadentalstudio.com/api/event/store`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/event/store`, formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -54,14 +52,14 @@ const EventAdd = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`, {
+      .get(`https://denticadentalstudio.com/webapp/api/event_category`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data.data.event_category);
+        // console.log(res.data.data.event_category);
         setData(res.data.data.event_category); // Update the data state with the fetched data
       })
       .catch((err) => {

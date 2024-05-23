@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { OutlinedInput } from "@mui/material";
 import "../css/style.css";
 import Swal from "sweetalert2";
@@ -17,18 +17,16 @@ const Career = () => {
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
-  let { id } = useParams();
-
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/career`, {
+      .get(`https://denticadentalstudio.com/webapp/api/career`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data.data.career);
+        // console.log(res.data.data.career);
         setData(res.data.data.career);
       })
       .catch((err) => {
@@ -52,7 +50,7 @@ const Career = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/career/delete`,
+            `https://denticadentalstudio.com/webapp/api/career/delete`,
             { id },
             {
               headers: {
@@ -157,7 +155,7 @@ const Career = () => {
   const downloadPDF = (fileUrl) => {
     const link = document.createElement("a");
     window.open(fileUrl, "_blank");
-    link.download = "file.pdf"; // You can specify the name of the downloaded file here
+    link.download = "file.pdf"; 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

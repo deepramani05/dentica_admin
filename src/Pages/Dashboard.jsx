@@ -13,7 +13,7 @@ const Dashboard = () => {
       try {
         const token = Cookies.get("token");
         const response = await fetch(
-          "https://denticadentalstudio.com/api/dashboard",
+          "https://denticadentalstudio.com/webapp/api/dashboard",
           {
             method: "GET",
             headers: {
@@ -39,7 +39,6 @@ const Dashboard = () => {
       }
     };
     fetchData();
-
     setLoading(false);
   }, []);
 

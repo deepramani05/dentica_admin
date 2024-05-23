@@ -30,7 +30,7 @@ const Edit = () => {
   useEffect(() => {
     axios
       .post(
-        "https://denticadentalstudio.com/api/show/about",
+        "https://denticadentalstudio.com/webapp/api/show/about",
         { id },
         {
           headers: {
@@ -39,7 +39,7 @@ const Edit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data.about);
+        // console.log(res.data.data.about);
         setFormData(res.data.data.about);
       })
       .catch((err) => {
@@ -76,7 +76,7 @@ const Edit = () => {
 
     axios
       .post(
-        `https://denticadentalstudio.com/api/about/update`,
+        `https://denticadentalstudio.com/webapp/api/about/update`,
         formDataToSend,
         {
           headers: {
@@ -86,7 +86,7 @@ const Edit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",

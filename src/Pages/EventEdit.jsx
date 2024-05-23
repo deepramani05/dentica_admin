@@ -21,14 +21,14 @@ const EventEdit = () => {
   useEffect(() => {
     // Fetch event categories
     axios
-      .get(`https://denticadentalstudio.com/api/event_category`, {
+      .get(`https://denticadentalstudio.com/webapp/api/event_category`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log("Category data:", res.data.data.event_category);
+        // console.log("Category data:", res.data.data.event_category);
         setData(res.data.data.event_category); // Update state with category data
       })
       .catch((err) => {
@@ -41,7 +41,7 @@ const EventEdit = () => {
     // Fetch event data for the specified ID
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/event`,
+        `https://denticadentalstudio.com/webapp/api/show/event`,
         { id },
         {
           headers: {
@@ -57,7 +57,7 @@ const EventEdit = () => {
           image: eventData.image,
           dimension: eventData.dimension,
         });
-        console.log(eventData);
+        // console.log(eventData);
       })
       .catch((err) => {
         console.log(err);
@@ -98,11 +98,10 @@ const EventEdit = () => {
     formDataToSend.append("image", formData.image);
     formDataToSend.append("id", id);
     formDataToSend.append("dimension", formData.dimension);
-    console.log(formData);
-    // Send PUT request to update the event data
+    // console.log(formData);
     axios
       .post(
-        `https://denticadentalstudio.com/api/event/update`,
+        `https://denticadentalstudio.com/webapp/api/event/update`,
         formDataToSend,
         {
           headers: {
@@ -112,7 +111,7 @@ const EventEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",

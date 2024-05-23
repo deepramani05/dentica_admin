@@ -19,16 +19,16 @@ const Contact = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/contactus`, {
+      .get(`https://denticadentalstudio.com/webapp/api/contactus`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data); // Log response data
+        // console.log(res.data); // Log response data
         setData(res.data.data.contact);
-        console.log(data);
+        // console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -59,7 +59,7 @@ const Contact = () => {
         // Proceed with the deletion
         axios
           .post(
-            `https://denticadentalstudio.com/api/contactus/delete`,
+            `https://denticadentalstudio.com/webapp/api/contactus/delete`,
             { id },
             {
               headers: {
