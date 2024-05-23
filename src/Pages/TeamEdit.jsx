@@ -11,13 +11,12 @@ const TeamEdit = () => {
     image: null,
     post: "",
   });
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/team`,
+        `https://denticadentalstudio.com/webapp/api/show/team`,
         { id },
         {
           headers: {
@@ -27,7 +26,7 @@ const TeamEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data.team);
+        // console.log(res.data.data.team);
         setTeamData(res.data.data.team);
       })
       .catch((err) => {
@@ -49,14 +48,14 @@ const TeamEdit = () => {
     }
 
     axios
-      .post(`https://denticadentalstudio.com/api/team/update`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/team/update`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
