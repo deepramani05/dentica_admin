@@ -16,7 +16,7 @@ const UserEdit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/user`,
+        `https://denticadentalstudio.com/webapp/api/show/user`,
         { id },
         {
           headers: {

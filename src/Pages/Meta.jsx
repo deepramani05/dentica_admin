@@ -13,9 +13,7 @@ const Meta = () => {
   const [title, setTitle] = useState("");
   const [keyword, setKeyword] = useState("");
   const [desc, setDesc] = useState("");
-
   const [loading, setLoading] = useState(true);
-
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,14 +31,14 @@ const Meta = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`https://denticadentalstudio.com/api/meta/store`, obj, {
+      .post(`https://denticadentalstudio.com/webapp/api/meta/store`, obj, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "center",
           icon: "success",
@@ -65,7 +63,7 @@ const Meta = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/meta`, {
+      .get(`https://denticadentalstudio.com/webapp/api/meta`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -75,7 +73,7 @@ const Meta = () => {
         if (response.data.status === "success") {
           setData(response.data.data.meta);
           setFilteredData(response.data.data.meta); // Ensure filteredData is also updated
-          console.log(data);
+          // console.log(data);
         }
       })
       .catch((error) => {
@@ -99,7 +97,7 @@ const Meta = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/meta/delete`,
+            `https://denticadentalstudio.com/webapp/api/meta/delete`,
             { id },
             {
               headers: {

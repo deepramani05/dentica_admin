@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { FaEye, FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OutlinedInput } from "@mui/material";
@@ -13,7 +13,6 @@ const Team = () => {
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const [data, setData] = useState([]);
-  const { id } = useParams();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,14 +26,14 @@ const Team = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/team`, {
+      .get(`https://denticadentalstudio.com/webapp/api/team`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data.data.team);
+        // console.log(res.data.data.team);
         setData(res.data.data.team);
       })
       .catch((err) => {
@@ -54,7 +53,7 @@ const Team = () => {
     formData.append("post", post);
 
     axios
-      .post(`https://denticadentalstudio.com/api/team/store`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/team/store`, formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -88,7 +87,7 @@ const Team = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/team/delete`,
+            `https://denticadentalstudio.com/weapp/api/team/delete`,
             { id },
             {
               headers: {
@@ -98,7 +97,7 @@ const Team = () => {
             }
           )
           .then((res) => {
-            console.log(res.data.data.team);
+            // console.log(res.data.data.team);
             setData(data.filter((item) => item.id !== id));
             Swal.fire({
               position: "center",

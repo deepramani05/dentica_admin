@@ -18,7 +18,7 @@ const ReviewEdit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/review`,
+        `https://denticadentalstudio.com/webapp/api/show/review`,
         { id },
         {
           headers: {
@@ -27,7 +27,7 @@ const ReviewEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setFormData(res.data.data.review);
       })
       .catch((err) => {
@@ -57,7 +57,7 @@ const ReviewEdit = () => {
     e.preventDefault();
     const updatedFormData = {...formData,id: id}
     axios
-      .post(`https://denticadentalstudio.com/api/review/update`, updatedFormData, {
+      .post(`https://denticadentalstudio.com/webapp/api/review/update`, updatedFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -87,7 +87,7 @@ const ReviewEdit = () => {
           timer: 1000,
         });
       });
-      console.log("payload",updatedFormData);
+      // console.log("payload",updatedFormData);
   };
 
   return (

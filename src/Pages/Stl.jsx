@@ -32,14 +32,14 @@ const Stl = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/stl`, {
+      .get(`https://denticadentalstudio.com/webapp/api/stl`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data.data.stl);
         setFilteredData(res.data.data.stl); // Set filtered data initially with all data
       })
@@ -64,7 +64,7 @@ const Stl = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/stl/delete`,
+            `https://denticadentalstudio.com/webapp/api/stl/delete`,
             { id },
             {
               headers: {

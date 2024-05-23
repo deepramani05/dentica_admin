@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 const EventCatEdit = () => {
   const { id } = useParams(); // Assuming you have an id parameter for the event category
   const [data, setData] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   // State variables to hold form data
@@ -20,7 +19,7 @@ const EventCatEdit = () => {
   useEffect(() => {
     axios
       .post(
-        `https://denticadentalstudio.com/api/show/event_category`,
+        `https://denticadentalstudio.com/webapp/api/show/event_category`,
         { id: id },
         {
           headers: {
@@ -30,7 +29,7 @@ const EventCatEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.data.event_category);
+        // console.log(res.data.data.event_category);
         setData(res.data.data.event_category);
 
         if (Array.isArray(res.data)) {
@@ -96,7 +95,7 @@ const EventCatEdit = () => {
     // Send updated data to server
     axios
       .post(
-        `https://denticadentalstudio.com/api/event_category/update/`,
+        `https://denticadentalstudio.com/webapp/api/event_category/update/`,
         formDataToUpdate,
         {
           headers: {
@@ -105,7 +104,7 @@ const EventCatEdit = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",

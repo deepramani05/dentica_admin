@@ -5,14 +5,13 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
 const Home = () => {
-  let [title, setTitle] = useState("");
-  let [subtitle, setSubtitle] = useState("");
-  let [desc, setDesc] = useState("");
-  let [image, setImage] = useState(null);
-  let [wp, setWp] = useState("");
-  let [insta, setInsta] = useState("");
-  let [fb, setFb] = useState("");
-
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [image, setImage] = useState(null);
+  const [wp, setWp] = useState("");
+  const [insta, setInsta] = useState("");
+  const [fb, setFb] = useState("");
   const [loading, setLoading] = useState(true);
 
   const handleFormsubmit = (e) => {
@@ -23,7 +22,7 @@ const Home = () => {
     formData.append("description", desc);
     formData.append("image", image);
     axios
-      .post(`https://denticadentalstudio.com/api/home/store`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/home/store`, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -53,7 +52,7 @@ const Home = () => {
           timer: 1000,
         });
       });
-    // setTimeout(() => window.location.reload(), 1000);
+     setTimeout(() => window.location.reload(), 1000);
   };
 
   const handleSocialsubmit = (e) => {
@@ -65,14 +64,14 @@ const Home = () => {
     };
 
     axios
-      .post(`https://denticadentalstudio.com/api/socialmedia/store`, formData, {
+      .post(`https://denticadentalstudio.com/webapp/api/socialmedia/store`, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -95,13 +94,13 @@ const Home = () => {
           timer: 1000,
         });
       });
-    // setTimeout(() => window.location.reload(), 1000);
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://denticadentalstudio.com/api/home`
+        `https://denticadentalstudio.com/webapp/api/home`
       );
       if (response.data.status === "success") {
         console.log(response.data);
@@ -121,7 +120,6 @@ const Home = () => {
 
   useEffect(() => {
     fetchData();
-
     setLoading(false);
   }, []);
 

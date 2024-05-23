@@ -18,18 +18,9 @@ const User = () => {
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      window.location.href = "/login";
-    } else {
-      fetchData();
-    }
-  }, []);
-
   const fetchData = () => {
     axios
-      .get("https://denticadentalstudio.com/api/users", {
+      .get("https://denticadentalstudio.com/webapp/api/users", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -37,7 +28,7 @@ const User = () => {
       })
       .then((res) => {
         setData(res.data.data.users);
-        console.log(res.data.data.users);
+        // console.log(res.data.data.users);
       })
       .catch((err) => {
         console.error(err);
@@ -50,14 +41,18 @@ const User = () => {
       .finally(() => {
         setLoading(false);
       });
+      setEmail("")
+      setPass("")
   };
-
+  useEffect(()=>{
+    fetchData();
+  },[]);
   const handleUserSubmit = (e) => {
     e.preventDefault();
     const newUser = { name, email, password: pass };
 
     axios
-      .post("https://denticadentalstudio.com/api/user/store", newUser, {
+      .post("https://denticadentalstudio.com/webapp/api/user/store", newUser, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -70,7 +65,7 @@ const User = () => {
           text: "User data saved successfully!",
         });
         fetchData();
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => {
         console.error(err);
@@ -99,7 +94,7 @@ const User = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            "https://denticadentalstudio.com/api/user/delete",
+            "https://denticadentalstudio.com/webapp/api/user/delete",
             { id },
             {
               headers: {

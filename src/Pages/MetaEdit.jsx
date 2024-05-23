@@ -30,7 +30,7 @@ const MetaEdit = () => {
       id: id // Include the id in the metaData object
     };
     axios
-      .post(`https://denticadentalstudio.com/api/meta/update/` ,
+      .post(`https://denticadentalstudio.com/webapp/api/meta/update/` ,
       updatedMetaData,{
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ const MetaEdit = () => {
 
   useEffect(() => {
     axios
-      .post(`https://denticadentalstudio.com/api/show/meta`,{ id },{
+      .post(`https://denticadentalstudio.com/webapp/api/show/meta`,{ id },{
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,

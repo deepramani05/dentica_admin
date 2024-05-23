@@ -15,7 +15,6 @@ const Review = () => {
   const [image, setImage] = useState(null);
   const [sortConfig, setSortConfig] = useState({key:null, direction:"asc"});
   const [loading, setLoading] = useState(true);
-
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,9 +38,9 @@ const Review = () => {
     formData.append("review", review);
     formData.append("image", image);
     axios
-      .post(`https://denticadentalstudio.com/api/review/store`, formData)
+      .post(`https://denticadentalstudio.com/webapp/api/review/store`, formData)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Swal.fire({
           position: "center",
           icon: "success",
@@ -58,14 +57,14 @@ const Review = () => {
 
   useEffect(() => {
     axios
-      .get(`https://denticadentalstudio.com/api/review`, {
+      .get(`https://denticadentalstudio.com/webapp/api/review`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data.data.review);
       })
       .catch((err) => {
@@ -89,7 +88,7 @@ const Review = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://denticadentalstudio.com/api/review/delete`,
+            `https://denticadentalstudio.com/webapp/api/review/delete`,
             { id },
             {
               headers: {
