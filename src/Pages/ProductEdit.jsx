@@ -122,7 +122,7 @@ const ProductEdit = () => {
 
     axios
       .post(
-        `https://denticadentalstudio.com/api/product/update`,
+        `https://denticadentalstudio.com/webapp/api/product/update`,
         updatedProductData,
         {
           headers: {
